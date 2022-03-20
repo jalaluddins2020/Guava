@@ -2,18 +2,18 @@ from flask import Flask, request, jsonify #Import flask and initialises applicat
 from flask_sqlalchemy import SQLAlchemy #Import flask version of SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/book' #Specify database URL & use mysql+mysqlconnector prefix to instruct which database engine and connector to use
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/customer' #Specify database URL & use mysql+mysqlconnector prefix to instruct which database engine and connector to use
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app) #Initialise connection to database
 
-class Customer(db.model):
+class Customer(db.Model):
     __tablename__ = 'customer'
     
-    customerID = db.Column(db.Integer(1000), primary_key=True)
-    name = db.Column(db.String(64), nullable=False)
-    contactNumber = db.Column(db.String(64), nullable=False)
-    contactEmail = db.Column(db.String(64), nullable=False)
+    customerID = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(300), nullable=False)
+    contactNumber = db.Column(db.Integer(), nullable=False)
+    contactEmail = db.Column(db.String(300), nullable=False)
 
     def __init__(self, isbn13, title, price, availability):
         self.customerID = customerID
@@ -60,7 +60,7 @@ def find_by_customerID(customerID):
             "message": "Customer not found."
         }
     ), 404
-    
+
 """class Book(db.Model):   #Creates new class Book -> Creates a table called book (if we run db.create_all() function)
     __tablename__ = 'book' #Specified table name as book (but possible to create/use existing table with different name from class)
 
