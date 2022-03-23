@@ -16,7 +16,8 @@ app = Flask(__name__)
 CORS(app)
 
 listing_url = "http://localhost:5003/listing"
-# payment_records_url = "http://localhost:5002/records"
+payment_records_url = "http://localhost:5002/records"
+listing_update_url = "http://localhost:5003/listing"
 
 
 paypalrestsdk.configure({
@@ -44,9 +45,8 @@ def start():
 
 @app.route("/payment/create") 
 def create():
-    global price, name, customer_id, details, listing_id, payment_records_url
+    global price, name, customer_id, details, listing_id
 
-    payment_records_url = "http://localhost:5002/records"
     #payment creation to send to paypal
     payment = paypalrestsdk.Payment({
         "intent": "sale",
@@ -103,6 +103,12 @@ def execute():
             print("Sent to payment_records microservice")
         else:
             print("Record failed")
+
+        # update_status = invoke_http(listing_update_url + "/" + listing_id, method="put",json={"listing_id": listing_id, "payment_status": "Paid"})
+        # if update_status["code"] == 201:
+        #     print("Sent to listing microservice")
+        # else:
+        #     print("Put failed")
 
     #payment.id will be transaction id for logging purposes in payment records
     return jsonify({"status": payment.success(), "payment": body})
