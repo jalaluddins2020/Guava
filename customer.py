@@ -24,6 +24,7 @@ class Customer(db.Model):
     def json(self):
         return {"customerID": self.customerID, "name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail}
 
+#View All Customer Data
 @app.route("/customer")
 def get_all_customer():
     customerlist = Customer.query.all()
@@ -43,7 +44,7 @@ def get_all_customer():
         }
     ), 404
 
-
+#View One Customer Data By CustomerID
 @app.route("/customer/<string:customerID>") #Map URL route /book/isbn13 to find_by_isbn13 function, where isbn13 is a path variable of string type
 def find_by_customerID(customerID):
     customer = Customer.query.filter_by(customerID=customerID).first() #Retrieve only the book with isbn13 specified in the path variable (similar to WHERE clause in SQL SELECT expression). since it returns a list of 1 book, first() is used to return 1 book/None (if no matching), which is similar to LIMIT 1 clause in SQL
@@ -60,6 +61,44 @@ def find_by_customerID(customerID):
             "message": "Customer not found."
         }
     ), 404
+
+#Create a New Customer Record
+@app.route("/customer/<string:customerID>", methods=['POST'])  #Map URL route /book/isbn13 to create_book function, where isbn13 is a path variable of string type. GET is the default method, have to specify other methods by passing in via methods parameter
+def create_customer(customerID):=
+    if (Customer.query.filter_by(customerID=customerID).first()): #Check if bok already exist in table. If yes, return an error message in JSON with HTTP status code 400 BAD REQUEST
+        return jsonify(
+            {
+                "code": 400,
+                "data": {
+                    "customerID": customerID
+                },
+                "message": "Customer already exists."
+            }
+        ), 400
+
+    data = request.get_json() #Get data from the request received
+    customer = Customer(customerID, **data) #Create an instance of a book class using isbn13 and attributes sent in the request (**data)
+
+    try:
+        db.session.add(customer) #Try add the book to the table and commit the change
+        db.session.commit()
+    except: #Returns error message in JSON with HTTP status code 500 - INTERNAL SERVER ERROR if excpetion occurs
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "customerID": customerID
+                },
+                "message": "An error occurred creating the customer."
+            }
+        ), 500
+
+    return jsonify( #Return JSON representation of the book that is added with HTTP status code 201 - CREATED
+        {
+            "code": 201,
+            "data": customer.json()
+        }
+    ), 201    
 
 """class Book(db.Model):   #Creates new class Book -> Creates a table called book (if we run db.create_all() function)
     __tablename__ = 'book' #Specified table name as book (but possible to create/use existing table with different name from class)
@@ -118,7 +157,7 @@ def find_by_isnb13(isbn13):
 
 
 """@app.route("/book/<string:isbn13>", methods=['POST'])  #Map URL route /book/isbn13 to create_book function, where isbn13 is a path variable of string type. GET is the default method, have to specify other methods by passing in via methods parameter
-def create_book(isbn13):
+def create_book(isbn13):=
     if (Book.query.filter_by(isbn13=isbn13).first()): #Check if bok already exist in table. If yes, return an error message in JSON with HTTP status code 400 BAD REQUEST
         return jsonify(
             {
