@@ -73,7 +73,6 @@ def create():
     else:
         print(payment.error)
 
-    #this will be transaction id for loggin purposes
     return jsonify({"paymentID": payment.id})
 
 #for onApproval
@@ -105,6 +104,7 @@ def execute():
         else:
             print("Record failed")
 
+    #payment.id will be transaction id for logging purposes in payment records
     return jsonify({"status": payment.success(), "payment": body})
 
 if __name__ == "__main__":
