@@ -1,12 +1,15 @@
+import os
 from flask import Flask, request, jsonify #Import flask and initialises application
 from flask_sqlalchemy import SQLAlchemy #Import flask version of SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/customer' #Specify database URL & use mysql+mysqlconnector prefix to instruct which database engine and connector to use
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
 db = SQLAlchemy(app) #Initialise connection to database
 
+#Declare Model
 class Customer(db.Model):
     __tablename__ = 'customer'
     
@@ -14,15 +17,17 @@ class Customer(db.Model):
     name = db.Column(db.String(300), nullable=False)
     contactNumber = db.Column(db.Integer(), nullable=False)
     contactEmail = db.Column(db.String(300), nullable=False)
+    contactTele = db.Column(db.String(300), nullable=True)
 
     def __init__(self, isbn13, title, price, availability):
         self.customerID = customerID
         self.name = name
         self.contactNumber = contactNumber
         self.contactEmail = contactEmail
+        self.contactTele = contactTele
 
     def json(self):
-        return {"customerID": self.customerID, "name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail}
+        return {"customerID": self.customerID, "name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail, "contactTele": self.contactTele}
 
 #View All Customer Data
 @app.route("/customer")
@@ -64,7 +69,7 @@ def find_by_customerID(customerID):
 
 #Create a New Customer Record
 @app.route("/customer/<string:customerID>", methods=['POST'])  #Map URL route /book/isbn13 to create_book function, where isbn13 is a path variable of string type. GET is the default method, have to specify other methods by passing in via methods parameter
-def create_customer(customerID):=
+def create_customer(customerID):
     if (Customer.query.filter_by(customerID=customerID).first()): #Check if bok already exist in table. If yes, return an error message in JSON with HTTP status code 400 BAD REQUEST
         return jsonify(
             {
@@ -99,6 +104,8 @@ def create_customer(customerID):=
             "data": customer.json()
         }
     ), 201    
+
+
 
 """class Book(db.Model):   #Creates new class Book -> Creates a table called book (if we run db.create_all() function)
     __tablename__ = 'book' #Specified table name as book (but possible to create/use existing table with different name from class)
@@ -195,4 +202,6 @@ def create_book(isbn13):=
 
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True) #Ensures file only start if we run this file explicitly
+    print("This is flask for " + os.path.basename(__file__) + ": manage customers ...")
+    app.run(host='0.0.0.0', port=5010, debug=True)
+   
