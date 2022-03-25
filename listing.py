@@ -17,7 +17,6 @@ Missing Functions:
     1. Get listing by ID
     2. Get listings that are only available (to show to talent)
     3. idk what else
-    
 """
 
 class Listing(db.Model):
