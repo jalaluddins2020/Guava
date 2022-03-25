@@ -46,25 +46,6 @@ class Listing(db.Model):
     def json(self):
         return {"listingID": self.listingID, "customerID": self.customerID, "talentID": self.talentID, "name": self.name, "details": self.details, "status": self.status, "price": self.price, "paymentStatus": self.paymentStatus}
 
-@app.route("/listing")
-def get_all_customer():
-    listingList = Listing.query.all()
-    if len(listingList):
-        return jsonify(
-            {
-                "code": 200,
-                "data":{
-                    "listings": [listing.json() for listing in listingList]
-                }
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "There are no listing records."
-        }
-    ), 404
-
     """order_id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.String(32), nullable=False)
     status = db.Column(db.String(10), nullable=False)
