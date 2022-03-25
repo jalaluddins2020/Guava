@@ -16,14 +16,14 @@ CORS(app)
 #URL
 listing_URL = "http://localhost:5001/listing"
 
-@app.route("/accept_listing", methods=['PUT'])
-def accept_listing():
+@app.route("/accept_listing/<string:listingID>/<string:talentID>")
+def accept_listing(listingID,talentID):
     if request.is_json:
         try:
-            listing_involved = request.get_json()
-            print("\nAccepting a listing:", listing_involved)
+            statusChange = request.get_json()
+            print("\nAccepting a listing:", statusChange)
 
-            result = processAcceptListing(listing_involved)
+            result = processAcceptListing(statusChange,listingID,talentID)
             print('\n------------------------')
             print('\nresult: ', result)
             return jsonify(result), result["code"]
@@ -46,17 +46,17 @@ def accept_listing():
     }), 400
 
 
-def processAcceptListing(listing_involved):
+def processAcceptListing(statusChange,listingID,talentID):
     print('\n-----Invoking Listing microservice-----')
-    accept_result = invoke_http(listing_URL, method='POST', json=listing_involved)
+    accept_result = invoke_http(listing_URL+"/"+listingID+"/"+talentID, method='PUT', json=statusChange)
     print('accept_result:', accept_result)
-    
 
-    print('\n\n-----Publishing the (Accept info) message with routing_key=accept.notification-----')
+    """print('\n\n-----Publishing the (Accept info) message with routing_key=accept.notification-----')
     message = json.dumps(accept_result)
-    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="accept.notification", body=message, properties=pika.BasicProperties(delivery_mode = 2)  )
+    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="accept.notification", body=message, properties=pika.BasicProperties(delivery_mode = 2)  )"""
 
-    print("\nNotification published to RabbitMQ Exchange.\n")
+    """print("\nNotification published to RabbitMQ Exchange.\n")"""
+    return accept_result
 
 if __name__ == "__main__":
     print("This is flask "+ os.path.basename(__file__) +" accepting an listing")
