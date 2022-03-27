@@ -32,16 +32,25 @@ def start():
     # listing_id = request.json.get("listing_id", None)
 
     # #invoke listing microservice
-    # listing = invoke_http(listing_url + "listing_id", method='GET')
+    # listing = invoke_http(listing_url + "/" + listing_id, method='GET')
+    # code = listing["code"]
     # print("listing")
 
     # #listing microservice price, name & details
-    # price = str(listing["price"])
-    # name = str(listing["name"])
-    # customer_id = str(listing["customerID"])
-    # details = str(listing["details"])
-
+    # if code in range(200, 300):
+        # price = str(listing["price"])
+        # name = str(listing["name"])
+        # customer_id = str(listing["customerID"])
+        # details = str(listing["details"])
     return render_template("index.html")
+
+    # else:
+        # return {
+        #     "code": 500,
+        #     "data": {"result": listing},
+        #     "message": "Failed to invoke listing microservice"
+        # }
+    
 
 @app.route("/payment/create") 
 def create():
@@ -92,23 +101,24 @@ def execute():
 
     #if status is true, add to payment_records db
     # if status:
-    #     invoke_http(payment_records_url, method="post", json=jsonify({"payment_id": payment.id, "listing_id": listing_id, "customer_id": customer_id, "price": price}))
+    #     body = {"payment_id": payment.id, "listing_id": listing_id, "customer_id": customer_id, "price": price}
+    #     invoke_http(payment_records_url, method="post", json=body)
 
     if status:
         body = {"payment_id": payment.id, "listing_id": 12, "customer_id": 5, "price": 15.00}
         record_status = invoke_http(payment_records_url, method="post", json=body)
         print(record_status)
 
-        if record_status["code"] == 201:
+        if record_status["code"] in range (200, 300):
             print("Sent to payment_records microservice")
         else:
             print("Record failed")
 
         # update_status = invoke_http(listing_update_url + "/" + listing_id, method="put",json={"listing_id": listing_id, "payment_status": "Paid"})
-        # if update_status["code"] == 201:
+        # if update_status["code"] in range (200, 300):
         #     print("Sent to listing microservice")
         # else:
-        #     print("Put failed")
+        #     print("Update to listing microservice failed")
 
     #payment.id will be transaction id for logging purposes in payment records
     return jsonify({"status": payment.success(), "payment": body})
