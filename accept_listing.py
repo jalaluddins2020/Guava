@@ -11,7 +11,7 @@ app = Flask(__name__)
 CORS(app)
 
 #URL
-listing_URL = "http://localhost:5001/listing"
+listing_URL = "http://localhost:5001/listing/update"
 
 @app.route("/accept_listing/<string:listingID>/<string:talentID>")
 def accept_listing(listingID,talentID):

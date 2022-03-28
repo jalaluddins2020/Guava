@@ -2,10 +2,10 @@ import os
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-import facebook
+#import facebook
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/listing'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/listing'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
@@ -59,7 +59,7 @@ def get_all_listing():
     ), 404
 
 #Update a listing
-@app.route("/listing/<string:listingID>/<string:talentID>", methods=['PUT'])
+@app.route("/listing/update/<string:listingID>/<string:talentID>", methods=['PUT'])
 def update_listing(listingID,talentID):
     try:
         listing = Listing.query.filter_by(listingID=listingID).first()

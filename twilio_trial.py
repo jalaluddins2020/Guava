@@ -1,10 +1,13 @@
 # Download the helper library from https://www.twilio.com/docs/python/install
 import os
 from twilio.rest import Client
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Find your Account SID and Auth Token at twilio.com/console
 # and set the environment variables. See http://twil.io/secure
-account_sid = os.environ['TWILIO_ACCOUNT_SID']
+"""account_sid = os.environ['TWILIO_ACCOUNT_SID']
 auth_token = os.environ['TWILIO_AUTH_TOKEN']
 client = Client(account_sid, auth_token)
 
@@ -15,4 +18,8 @@ message = client.messages.create(
          to='+6596739311'
      )
 
-print(message.sid)
+print(message.sid)"""
+accountSID = os.getenv("TWILIO_ACCOUNT_SID")
+authToken = os.getenv("TWILIO_AUTH_TOKEN")
+print(accountSID)
+print(authToken)
