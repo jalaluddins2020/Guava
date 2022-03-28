@@ -48,11 +48,11 @@ def processAcceptListing(statusChange,listingID,talentID):
     accept_result = invoke_http(listing_URL+"/"+listingID+"/"+talentID, method='PUT', json=statusChange)
     print('accept_result:', accept_result)
 
-    """print('\n\n-----Publishing the (Accept info) message with routing_key=accept.notification-----')
+    print('\n\n-----Publishing the (Accept info) message with routing_key=accept.notification-----')
     message = json.dumps(accept_result)
-    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="accept.notification", body=message, properties=pika.BasicProperties(delivery_mode = 2)  )"""
+    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="accept.notification", body=message, properties=pika.BasicProperties(delivery_mode = 2))
 
-    """print("\nNotification published to RabbitMQ Exchange.\n")"""
+    print("\nNotification published to RabbitMQ Exchange.\n")
     return accept_result
 
 if __name__ == "__main__":
