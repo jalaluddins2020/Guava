@@ -4,20 +4,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/listing'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/listing'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
 db = SQLAlchemy(app)
 
 CORS(app)  
-
-"""
-Missing Functions:
-    1. Get listing by ID
-    2. Get listings that are only available (to show to talent)
-    3. idk what else
-"""
 
 class Listing(db.Model):
     __tablename__ = 'listing'
@@ -102,6 +95,81 @@ def update_listing(listingID,talentID):
                 "message": "An error occurred while updating the listing. " + str(e)
             }
         ), 500
+
+#Get one listing by listingID
+@app.route("/listing/<string:listingID>")
+def find_by_listingID(listingID):
+    listing = Listing.query.filter_by(listingID=listingID).first()
+    if listing:
+        return jsonify(
+            {
+                "code": 200,
+                "data": listing.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Listing not found."
+        }
+    ), 404
+
+#Get all AVAILABLE listings only
+@app.route("/listing/available")
+def get_available_listing():
+    listingList = Listing.query.all()
+    if len(listingList):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "listings": [listing.json() for listing in listingList if listing.status == "available"]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no listings."
+        }
+    ), 404
+
+#create listing
+@app.route("/listing/<string:listingID>", methods=['POST'])  
+def create_listing(listingID):
+    if (Listing.query.filter_by(listingID=listingID).first()): 
+        return jsonify(
+            {
+                "code": 400,
+                "data": {
+                    "listingID": listingID
+                },
+                "message": "Listing already exists."
+            }
+        ), 400
+    data = request.get_json()
+    listing = Listing(**data) 
+
+    try:
+        db.session.add(listing)
+        db.session.commit()
+    except: 
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "listingID": listingID
+                },
+                "message": "An error occurred creating the listing."
+            }
+        ), 500
+
+    return jsonify(
+        {
+            "code": 201,
+            "data": listing.json()
+        }
+    ), 201    
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage listing ...")
