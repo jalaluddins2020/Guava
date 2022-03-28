@@ -1,0 +1,211 @@
+{
+	"info": {
+		"_postman_id": "dc72f005-d037-4f7a-a021-68e58021c5b8",
+		"name": "Guava",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Customer - get all",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5010/customer",
+					"host": [
+						"localhost"
+					],
+					"port": "5010",
+					"path": [
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer - get one",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5010/customer/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5010",
+					"path": [
+						"customer",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listing - Get all",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5010/customer",
+					"host": [
+						"localhost"
+					],
+					"port": "5010",
+					"path": [
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listing - update listing",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"status\": \"PROCESSING\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5001/order/1",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"order",
+						"1"
+					]
+				},
+				"description": "Please check that the order id exists in your database"
+			},
+			"response": []
+		},
+		{
+			"name": "Customer - create customer [Failure]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customerID\": \"\",\n    \"name\": \"Gadman Tang\",\n    \"contactNumber\": \"99887766\"\n    \"contactEmail\": \"gadman.tang.2020@smu.edu.sg\",\n    \"contactTele\": \"121792469\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5010/customer/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5010",
+					"path": [
+						"customer",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer - create  customer [Success]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customerID\": \"\",\n    \"name\": \"Thiang Lay Foo\",\n    \"contactNumber\": \"6828 0266\"\n    \"contactEmail\": \"lfthiang@smu.edu.sg\",\n    \"contactTele\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5010/customer/l",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5010",
+					"path": [
+						"customer",
+						"l"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Telegram",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customerID\": \"1\",\n    \"name\": \"Gadman\",\n    \"contactNumber\": \"11223344\"\n    \"contactEmail\": \"gadman.tang.2020@smu.edu.sg\",\n    \"contactTele\": \"121792469\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5010/customer/l",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5010",
+					"path": [
+						"customer",
+						"l"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accept Listing",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5010/customer",
+					"host": [
+						"localhost"
+					],
+					"port": "5010",
+					"path": [
+						"customer"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
