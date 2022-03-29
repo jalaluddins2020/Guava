@@ -47,9 +47,7 @@ def retrieve():
 
     return jsonify({
         "code":  "404",
-        "data": {
-            "message": "Customer does not have a listing"
-        }
+        "message": "Customer does not have a listing"
     })
 
 if __name__ == "__main__":
