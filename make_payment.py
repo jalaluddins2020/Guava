@@ -18,12 +18,14 @@ CORS(app)
 listing_url = "http://localhost:5003/listing"
 payment_records_url = "http://localhost:5002/records"
 listing_update_url = "http://localhost:5003/listing"
+client_id = os.getenv("PAYPAL_CLIENT_ID")
+client_secret = os.getenv("PAYPAL_CLIENT_SECRET")
 
 
 paypalrestsdk.configure({
     "mode": "sandbox", # sandbox or production
-    "client_id": "AT2PB40zeSiziVMaCuxMdg9pafOBAMYXu36luQKlpsZLEWsIuReMMD53-BGrSq9vlgqCGujOAb9aomwH",
-    "client_secret": "ELx7FSv-nQTDeHkNHJ9pmtaZLQzcDVLFa8cmIBUWN5aw795LeSOB6_ZV4VUB5qwX9WPq0HkoaCCjgon-" })
+    "client_id": client_id,
+    "client_secret": client_secret })
 
 @app.route("/payment") #, methods=["post"]
 def start():
