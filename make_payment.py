@@ -15,9 +15,9 @@ import paypalrestsdk
 app = Flask(__name__)
 CORS(app)
 
-listing_url = "http://localhost:5003/listing"
-payment_records_url = "http://localhost:5002/records"
-listing_update_url = "http://localhost:5003/listing"
+listing_url = "http://localhost:5001/listing"
+payment_records_url = "http://localhost:5006/records"
+listing_update_url = "http://localhost:5001/listing"
 client_id = os.getenv("PAYPAL_CLIENT_ID")
 client_secret = os.getenv("PAYPAL_CLIENT_SECRET")
 
