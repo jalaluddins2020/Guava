@@ -17,7 +17,7 @@ api sid: SKb4375983f45890ef403a7420194ad386
 api secret key: iuiDRUGO0Pg7A2Z1TmhFKDFxq854B0x9
 
 ## Paypal Sandbox Accounts
-## Log in at https://www.sandbox.paypal.com/signin?returnUri=https%3A%2F%2Fwww.sandbox.paypal.com%2Fmep%2F
+Log in at https://www.sandbox.paypal.com/signin?returnUri=https%3A%2F%2Fwww.sandbox.paypal.com%2Fmep%2F
 Buyer: 	ryan_buyer@paypalsb.com
 Buyer password: IpioB+1=
 Merchant: esdmerchant@paypalsb.com
