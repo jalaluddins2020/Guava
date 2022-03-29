@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 listing_url = "http://localhost:5003/listing"
-talen_url = "http://localhost:5004/talent"
+talent_url = "http://localhost:5004/talent"
 
 @app.route("/check", methods=["post"])
 def retrieve():
@@ -24,15 +24,15 @@ def retrieve():
 
     #listing microservice listingId, talentId, price, status
     if code in range (200, 300):
-        listing_id = str(listing["listingID"])
-        talent_id = str(listing["talentID"])
-        price = str(listing["price"])
-        status = str(listing["paymentStatus"])
+        listing_id = str(listing["data"]["listingID"])
+        talent_id = str(listing["data"]["talentID"])
+        price = str(listing["data"]["price"])
+        status = str(listing["data"]["paymentStatus"])
 
         talent = invoke_http(listing_url + "/" + talent_id, method='GET')
-        name = str(talent["name"])
-        contact = str(talent["contactDetails"])
-        email = str(talent["email"])
+        name = str(talent["data"]["name"])
+        contact = str(talent["data"]["contactDetails"])
+        email = str(talent["data"]["email"])
 
         return jsonify({
             "code": 200,
