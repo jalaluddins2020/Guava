@@ -117,4 +117,4 @@ def create_payment():
 
 if __name__ == '__main__':
     print("Initiating" + os.path.basename(__file__) + " - the payments microservice")
-    app.run(host='0.0.0.0', port=5002, debug=True)
+    app.run(host='0.0.0.0', port=5006, debug=True)
