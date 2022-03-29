@@ -1,17 +1,21 @@
 import os
 import json
+from pickle import GET
 import requests
 import amqp_setup
+from invokes import invoke_http
 from dotenv import load_dotenv  
 load_dotenv()
 
 twilioAccountSID = os.getenv("TWILIO_ACCOUNT_SID")
 twilioAuthToken = os.getenv("TWILIO_AUTH_TOKEN")
+twilioUrl = "https://"+twilioAccountSID+":"+twilioAuthToken+"@api.twilio.com/2010-04-01/Accounts/"+twilioAccountSID+"/Messages.json"
 monitorBindingKey='*.notify'
+
+customer_URL = "http://localhost:5010/customer"
 
 def receiveNotification():
     amqp_setup.check_setup()
-    
     queue_name = "Notification"  
 
     # Set up a consumer and start to wait for coming messages
@@ -31,7 +35,14 @@ def processNotification(notificationMsg):
         notification = json.loads(notificationMsg)
         print("\n-- JSON RECEIVED:", notification)
         acceptedListingID = str(notification["data"]["listingID"])
-        sendSMS(acceptedListingID)
+        customerID = str(notification["data"]["customerID"])
+        
+        customerNumberResult = getCustomerNumber(customerID)
+        if(customerNumberResult):
+            sendSMS(customerNumberResult,acceptedListingID)
+        else:
+            print("**Error**: Listing has been updated, but unable to send message to customer.")
+
         print("\n\n**************** End of Notification ****************")
 
     except Exception as e:
@@ -39,12 +50,11 @@ def processNotification(notificationMsg):
         print("\n--DATA:", notificationMsg)
     print()
 
-def sendSMS(acceptedListingID):
-    twilioUrl = "https://"+twilioAccountSID+":"+twilioAuthToken+"@api.twilio.com/2010-04-01/Accounts/"+twilioAccountSID+"/Messages.json"
+def sendSMS(customerNumber,acceptedListingID):
     smsContent = {
-                    "To": "+6596739311", 
+                    "To": customerNumber, 
                     "From": "+17579822788", 
-                    "Body": "Hi! Your listing has been accepted, do check it out: http://0000:5001/listing/"+acceptedListingID
+                    "Body": "Hi! Your listing has been accepted, do check it out: http://localhost:5001/listing/"+acceptedListingID
                 }
     response = requests.post(twilioUrl,data=smsContent)
     smsStatusCode = response.status_code
@@ -52,6 +62,14 @@ def sendSMS(acceptedListingID):
         print("\nSMS sent successfully!")
     else:
         print("\nIssue with sending the SMS...")
+
+def getCustomerNumber(customerID):
+    response = invoke_http(customer_URL+"/"+customerID, method='GET')
+    if(response["code"] not in range(200,300)):
+        return False
+    else:
+        customerNumber = response["data"]["contactNumber"]
+        return "+65"+str(customerNumber)
 
 if __name__ == "__main__":  # execute this program only if it is run as a script (not by 'import')    
     print("\nThis is " + os.path.basename(__file__), end='')
