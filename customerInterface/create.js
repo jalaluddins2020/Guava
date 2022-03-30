@@ -11,3 +11,4 @@ function printing(){
     var guess = getAll();
     alert(guess);
 }
+
