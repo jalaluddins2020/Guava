@@ -13,14 +13,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link href="../interface/overall.css" rel="stylesheet">
-    <script src="create.js"></script>
+    <link href="../talentUI/overall.css" rel="stylesheet">
+    <link rel="stylesheet" href="all.css">
+
+
 </head>
 
 <body>
     <!--header-->
     <script>
-        const codedCustomerID = 1;
+        var codedCustomerID = localStorage.getItem('customerID');
         $(async () => {
             var listingURL = "http://localhost:5001/listing/customer/" + codedCustomerID
             try {
@@ -52,7 +54,7 @@
             }
         });
     </script>
-
+    <!--Navigation Bar-->
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light bg-none">
             <div class="container-fluid">
@@ -64,27 +66,19 @@
                 <div class="collapse navbar-collapse" id="navbar">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="../customerInterface/customer.html"
-                                href="#">Listings</a>
+                            <a class="nav-link active" aria-current="../customerUI/listings.html" href="#">Listings</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../customerInterface/create.html">Create</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="../customerInterface/customerProfile.html">Profile</a>
+                            <a class="nav-link" href="../customerUI/profile.html">Profile</a>
                         </li>
                     </ul>
-                    <a class="btn btn-outline-dark" data-mdb-ripple-color="dark" href='../interface/listing.html'>Go To
-                        Talent Accout</a>
+                    <a class="btn btn-outline-dark" data-mdb-ripple-color="dark" href='../talentUI/listing.html'>Go to Talent</a>
                 </div>
             </div>
         </nav>
     </div>
     <hr>
-    <!--navigation bar-->
     <!--content-->
-    <div class="testing" id="testing" onclick="printing()">
-    </div>
 
     <div class="container py-5">
         <div class="row">
