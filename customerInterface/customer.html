@@ -31,19 +31,17 @@
                     await fetch(
                         listingURL, { method: 'GET' }
                     );
-
                 if (!response.ok) {
                     //Print some error
-                    $("#listingResults").text("No results returned.")
+                    $("#listingResults").append("<tr><td class='text-muted'>No results returned</td></tr>")
                 } else {
                     //Success
                     var row = "";
                     const listings = await response.json();
-                    const allUserListings = listings["data"]["listings"];
-                    //console.log(allUserListings)
+                    const allUserListings = listings["data"];
                     if(allUserListings){
                         for(let i = 0; i < allUserListings.length; i++){
-                            console.log(allUserListings[i])
+                            //console.log(allUserListings[i])
                             row += "<tr>";
                             row += "<td>"+(i+1)+".</td>"+"<td>"+allUserListings[i]["name"]+"</td>"+"<td>"+allUserListings[i]["customerID"]+"</td>";
                             row += "</tr>";
@@ -90,11 +88,6 @@
                 </tr>
             </thead>
             <tbody id="listingResults">
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Gadman</td>
-                    <td>Tang</td>
-                </tr>
             </tbody>
         </table>
     </div>

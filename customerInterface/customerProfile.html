@@ -11,8 +11,8 @@
         <title>Talent UI</title>
 
         <link href="../interface/overall.css" rel="stylesheet">
-        <script src="listing.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        <!--<script src="listing.js"></script>-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
         <script>
 
@@ -32,6 +32,40 @@
     </style>
 
     <body>
+        <script>
+            const codedCustomerID = 1;
+            $(async () => {
+                var customerURL = "http://localhost:5010/customer/"+codedCustomerID
+                try {
+                    const response =
+                        await fetch(
+                            customerURL, { method: 'GET' }
+                        );
+                    //console.log(response)
+                    if (!response.ok) {
+                        //Print some error
+                        //$("#listingResults").append("<tr><td class='text-muted'>No results returned</td></tr>")
+                    } else {
+                        //Success
+                        const customer = await response.json();
+                        //console.log(customer["data"])
+                        var customerDetail = customer["data"]
+                        var customerID = customerDetail["customerID"]
+                        var customerName = customerDetail["name"]
+                        var customerNumber = customerDetail["contactNumber"]
+                        var customerEmail = customerDetail["contactEmail"]
+
+                        $("#customerName").text(customerName);
+                        $("#customerNumber").text(customerNumber);
+                        $("#customerEmail").text(customerEmail);
+                        console.log(customerDetail)
+                    }
+                } catch (error) {
+                    // Error, print something
+                    $("#listingResults").text("Error in calling the service, "+error);
+                }
+            });
+        </script>
         <!--header-->
         <!--header-->
         <div class="header">
@@ -54,10 +88,19 @@
         <!--content-->
         <div class="profile card">
             <form action="profile.js">
-                <img src="../resources/customerProfile.png" alt="" style="width:17em;" >
-                <p style="margin-top:30px;">Name: Customer </p>
-                <p>Contact: 123</p>
-                <p>Email: customername@gmail.com</p>
+                <img src="../resources/gadman.png" alt="" style="width:17em;" >
+                <p style="margin-top:30px;">
+                    <b>Name:</b>
+                    <span id="customerName"></span>
+                </p>
+                <p>
+                    <b>Contact:</b>
+                    <span id="customerNumber"></span>
+                </p>
+                <p>
+                    <b>Email:</b>Email: 
+                    <span id="customerEmail"></span>
+                </p>
             </form>
             
         </div>

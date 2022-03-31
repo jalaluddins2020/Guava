@@ -1,13 +1,17 @@
 import os
 from flask import Flask, request, jsonify #Import flask and initialises application
 from flask_sqlalchemy import SQLAlchemy #Import flask version of SQLAlchemy
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/customer' #Specify database URL & use mysql+mysqlconnector prefix to instruct which database engine and connector to use
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
+
 db = SQLAlchemy(app) #Initialise connection to database
+
+CORS(app)  
 
 #Declare Model
 class Customer(db.Model):
