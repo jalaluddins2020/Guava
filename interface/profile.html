@@ -5,14 +5,15 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/png" sizes="16x16" href="./../resources/favicon-96x96.png">
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
         <title>Talent UI</title>
 
         <link href="../interface/overall.css" rel="stylesheet">
-        <script src="listing.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        <!--<script src="listing.js"></script>-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
         <script>
 
@@ -32,31 +33,83 @@
     </style>
 
     <body>
-        <!--header-->
-        <div class="header">
-            <span class="logo"  onclick="location.href='listing.html'">Pentagon</span>
-            <img src="../resources/notif.png" alt="notif" class="notif" onclick="location.href='notifications.html'">
-            <span class="toggling">
-                <button type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark" onclick="location.href='../customerInterface/customer.html'">Customer</button>
-            </span>
-        </div>
+        <script>
+            const codedTalentID = 1;
+            $(async () => {
+                var customerURL = "http://localhost:5011/talent/"+codedTalentID
+                try {
+                    const response =
+                        await fetch(
+                            customerURL, { method: 'GET' }
+                        );
+                    //console.log(response)
+                    if (!response.ok) {
+                        //Print some error
+                        //$("#listingResults").append("<tr><td class='text-muted'>No results returned</td></tr>")
+                    } else {
+                        //Success
+                        const customer = await response.json();
+                        //console.log(customer["data"])
+                        var talentDetail = customer["data"]
+                        var talentID = talentDetail["talentID"]
+                        var talentName = talentDetail["name"]
+                        var talentNumber = talentDetail["contactNumber"]
+                        var talentEmail = talentDetail["contactEmail"]
 
-        <!--navigation bar-->
-        <div class="navigation container">           
-            <div class="row" style="text-align:center;">
-                <div class="col-4 navi-indiv" onclick="location.href='listing.html'">Listings</div>
-                <div class="col-4 navi-indiv" onclick="location.href='accepted.html'">Accepted</div>
-                <div class="col-4 navi-indiv" onclick="location.href='profile.html'">Profile</div>
-            </div>
+                        $("#talentName").text(talentName);
+                        $("#talentNumber").text(talentNumber);
+                        $("#talentEmail").text(talentEmail);
+                        //console.log(customerDetail)
+                    }
+                } catch (error) {
+                    // Error, print something
+                    $("#listingResults").text("Error in calling the service, "+error);
+                }
+            });
+        </script>
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light bg-none">
+                <div class="container-fluid">
+                    <a class="navbar-brand logo" href="#">Pentagon &copy</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbar">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="../interface/listing.html" href="#">Find New Job</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../interface/accepted.html">Accepted Jobs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../interface/profile.html">Talent Profile</a>
+                            </li>
+                        </ul>
+                        <a class="btn btn-outline-dark" data-mdb-ripple-color="dark" href='../interface/listing.html'>Go to Customer</a>
+                    </div>
+                </div>
+            </nav>
         </div>
         <hr>
         <!--content-->
         <div class="profile card">
             <form action="profile.js">
-                <img src="../resources/talentProfile.png" alt="" style="width:17em;" >
-                <p style="margin-top:30px;">Name: Jackson Yee</p>
-                <p>Contact: 999</p>
-                <p>Email: jacksonyee@gmail.com</p>
+                <img src="../resources/bean.jpeg" alt="" style="width:17em;" >
+                <p style="margin-top:30px;">
+                    <b>Name:</b>
+                    <span id="talentName"></span>
+                </p>
+                <p>
+                    <b>Contact:</b>
+                    <span id="talentNumber"></span>
+                </p>
+                <p>
+                    <b>Email:</b>
+                    <span id="talentEmail"></span>
+                </p>
             </form>
             
         </div>
@@ -65,10 +118,6 @@
         <hr>
         <div class="footer">© Pentagon</div>
         
-        
-
-
-
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     </body>
     </html>

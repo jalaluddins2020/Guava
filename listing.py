@@ -2,17 +2,17 @@ import os
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-#import facebook
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/listing'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
-db = SQLAlchemy(app)
+db = SQLAlchemy(app) #Initialise connection to database
 
 CORS(app)  
 
+#Declare Model
 class Listing(db.Model):
     __tablename__ = 'listing'
 
@@ -100,7 +100,7 @@ def update_listing(listingID,talentID):
         ), 500
 
 #Get one listing by listingID
-@app.route("/listing/<string:listingID>")
+@app.route("/listing/<int:listingID>")
 def find_by_listingID(listingID):
     listing = Listing.query.filter_by(listingID=listingID).first()
     if listing:
