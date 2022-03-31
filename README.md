@@ -6,9 +6,10 @@
 1. Listing: 5001
 2. Telebot: 5002
 3. Customer: 5010
-4. make_payment: 5005
-5. payment_records: 5006
-6. check_listing: 5007
+4. Talent: 5011
+5. make_payment: 5005
+6. payment_records: 5006
+7. check_listing: 5007
 
 ## Twilio Credentials
 Email: gadman.tang.2020@smu.edu.sg
