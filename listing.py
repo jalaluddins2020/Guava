@@ -24,8 +24,9 @@ class Listing(db.Model):
     status = db.Column(db.String(300), nullable=False)
     price = db.Column(db.Float(), nullable=False) 
     paymentStatus = db.Column(db.String(300), nullable=False)
+    dateCreated = db.Column(db.DateTime(), nullable=False)
 
-    def __init__(self, listingID, customerID, talentID, name, details, status, price, paymentStatus):
+    def __init__(self, listingID, customerID, talentID, name, details, status, price, paymentStatus, dateCreated):
         self.listingID = listingID
         self.customerID = customerID
         self.talentID = talentID
@@ -34,9 +35,10 @@ class Listing(db.Model):
         self.status = status
         self.price = price
         self.paymentStatus = paymentStatus
+        self.dateCreated = dateCreated
 
     def json(self):
-        return {"listingID": self.listingID, "customerID": self.customerID, "talentID": self.talentID, "name": self.name, "details": self.details, "status": self.status, "price": self.price, "paymentStatus": self.paymentStatus}
+        return {"listingID": self.listingID, "customerID": self.customerID, "talentID": self.talentID, "name": self.name, "details": self.details, "status": self.status, "price": self.price, "paymentStatus": self.paymentStatus, "dateCreated": self.dateCreated}
 
 #Get all listings
 @app.route("/listing")

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Mar 28, 2022 at 02:02 AM
+-- Generation Time: Mar 31, 2022 at 09:00 AM
 -- Server version: 5.7.34
 -- PHP Version: 7.4.21
 
@@ -30,24 +30,45 @@ USE `listing`;
 --
 
 DROP TABLE IF EXISTS `listing`;
-CREATE TABLE IF NOT EXISTS `listing` (
-  `listingID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `listing` (
+  `listingID` int(11) NOT NULL,
   `customerID` int(11) NOT NULL,
   `talentID` int(11) DEFAULT NULL,
   `name` varchar(300) NOT NULL,
   `details` varchar(300) NOT NULL,
   `status` varchar(300) NOT NULL,
   `price` float(6,2) NOT NULL,
-  `paymentStatus` varchar(300) NOT NULL,
-  PRIMARY KEY (`listingID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  `paymentStatus` varchar(300) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `listing`
 --
 
 INSERT INTO `listing` (`listingID`, `customerID`, `talentID`, `name`, `details`, `status`, `price`, `paymentStatus`) VALUES
-(1, 1, NULL, 'Wedding Photoshoot', 'Require a wedding photographer!', 'Available', 100.00, 'unpaid');
+(1, 1, 2, 'Wedding Photoshoot', 'Require a wedding photographer!', 'Accepted', 100.00, 'unpaid'),
+(2, 2, NULL, 'Professional Photographer', 'Looking for a professional photographer that can help my company take some quality photos!', 'available', 300.00, 'unpaid'),
+(3, 1, NULL, 'Picnic Photographer', 'Have an upcoming picnic even this weekend with my family. Looking for a photographer that is willing to tag along and document it!', 'available', 50.00, 'unpaid');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `listing`
+--
+ALTER TABLE `listing`
+  ADD PRIMARY KEY (`listingID`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `listing`
+--
+ALTER TABLE `listing`
+  MODIFY `listingID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

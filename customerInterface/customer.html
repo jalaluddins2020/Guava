@@ -6,6 +6,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" sizes="16x16" href="./../resources/favicon-96x96.png">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -25,7 +26,7 @@
     <script>
         const customerID = 1;
         $(async () => {
-            var listingURL = "http://localhost:5001/listing/customer/"+customerID
+            var listingURL = "http://localhost:5001/listing/customer/" + customerID
             try {
                 const response =
                     await fetch(
@@ -39,11 +40,11 @@
                     var row = "";
                     const listings = await response.json();
                     const allUserListings = listings["data"];
-                    if(allUserListings){
-                        for(let i = 0; i < allUserListings.length; i++){
-                            //console.log(allUserListings[i])
+                    if (allUserListings) {
+                        for (let i = 0; i < allUserListings.length; i++) {
+                            console.log(allUserListings[i])
                             row += "<tr>";
-                            row += "<td>"+(i+1)+".</td>"+"<td>"+allUserListings[i]["name"]+"</td>"+"<td>"+allUserListings[i]["customerID"]+"</td>";
+                            row += "<td>" + (i + 1) + ".</td>" + "<td>" + allUserListings[i]["name"] + "</td>" + "<td>" + allUserListings[i]["dateCreated"] + "</td>";
                             row += "</tr>";
                         }
                     }
@@ -51,53 +52,72 @@
                 }
             } catch (error) {
                 // Error, print something
-                $("#listingResults").text("Error in calling the service, "+error);
+                $("#listingResults").append("<tr><td>Error in calling the service, " + error + "</td></tr>");
             }
         });
     </script>
-    <div class="header">
-        <span class="logo" onclick="location.href='listing.html'">Pentagon</span>
-        <img src="../resources/notif.png" alt="notif" class="notif" onclick="location.href='notifications.html'">
-        <span class="toggling">
-            <button type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark"
-                onclick="location.href='../interface/listing.html'">Talent</button>
-        </span>
+
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-none">
+            <div class="container-fluid">
+                <a class="navbar-brand logo" href="#">Pentagon</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="../customerInterface/customer.html" href="#">Listings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../customerInterface/create.html">Create</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../customerInterface/customerProfile.html">Profile</a>
+                        </li>
+                    </ul>
+                    <a class="btn btn-outline-dark" data-mdb-ripple-color="dark" href='../interface/listing.html'>Talent</a>
+                </div>
+            </div>
+        </nav>
     </div>
     <hr>
     <!--navigation bar-->
-    <div class="navigation container">
-        <div class="row" style="text-align: center;">
-            <div class="col-4 navi-indiv" onclick="location.href='../customerInterface/customer.html'">Listings</div>
-            <div class="col-4 navi-indiv" onclick="location.href='../customerInterface/create.html'">Create</div>
-            <div class="col-4 navi-indiv" onclick="location.href='../customerInterface/customerProfile.html'">Profile
-            </div>
-        </div>
-    </div>
     <!--content-->
     <div class="testing" id="testing" onclick="printing()">
     </div>
 
     <div class="container py-5">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Posted By</th>
-                </tr>
-            </thead>
-            <tbody id="listingResults">
-            </tbody>
-        </table>
+        <div class="row">
+            <div class="col-6">
+                <h3>Your Listings</h3>
+            </div>
+            <div class="col-6 text-end">
+                <a class="btn btn-success" data-mdb-ripple-color="dark" href='../interface/listing.html'><b>Create New</b></a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Posted On</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listingResults">
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <!--footer-->
     <hr>
     <div class="footer">© Pentagon</div>
-
-
-
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"

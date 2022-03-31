@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Mar 22, 2022 at 04:01 PM
+-- Generation Time: Mar 31, 2022 at 08:59 AM
 -- Server version: 5.7.34
 -- PHP Version: 7.4.21
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `customer`
 --
+CREATE DATABASE IF NOT EXISTS `customer` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `customer`;
 
 -- --------------------------------------------------------
 
@@ -27,6 +29,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `customer`
 --
 
+DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer` (
   `customerID` int(255) NOT NULL,
   `name` varchar(300) NOT NULL,
@@ -39,7 +42,8 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`customerID`, `name`, `contactNumber`, `contactEmail`) VALUES
-(1, 'Gadman Tang', 99887766, 'gadman.tang.2020@smu.edu.sg');
+(1, 'Gadman Tang', 96739311, 'gadman.tang.2020@smu.edu.sg'),
+(2, 'Yong Zi Yi', 99887766, 'ziyi.yong@smu.edu.sg');
 
 --
 -- Indexes for dumped tables
@@ -59,7 +63,7 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customerID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `customerID` int(255) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
