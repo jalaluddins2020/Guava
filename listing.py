@@ -12,8 +12,6 @@ from graphql import Undefined
 from graphql_relay.node.node import from_global_id
 from datetime import datetime
 
-
-
 # initializing our app
 app = Flask(__name__)
 app.debug = True
@@ -113,7 +111,7 @@ app.add_url_rule(
     )
 )'''
 
-#Get all listings
+#Get ALL listings (Regardless of status)
 viewAllListing = "query { allListings { edges { node  {name}} } }"
 @app.route("/listing")
 def get_all_listing():
@@ -133,45 +131,6 @@ def get_all_listing():
             "message": "There are no listings."
         }
     ), 404
-
-#Update a listing
-@app.route("/listing/update/<string:listingID>/<string:talentID>", methods=['PUT'])
-def update_listing(listingID,talentID):
-    try:
-        listing = ListingModel.query.filter_by(listingID=listingID).first()
-        if not listing:
-            return jsonify(
-                {
-                    "code": 404,
-                    "data": {
-                        "listingID": listingID
-                    },
-                    "message": "Listing not found."
-                }
-            ), 404
-
-        # update status
-        data = request.get_json()
-        if data['status']:
-            listing.status = data['status']
-            listing.talentID = talentID
-            db.session.commit()
-            return jsonify(
-                {
-                    "code": 200,
-                    "data": listing.json()
-                }
-            ), 200
-    except Exception as e:
-        return jsonify(
-            {
-                "code": 500,
-                "data": {
-                    "listingID": listingID
-                },
-                "message": "An error occurred while updating the listing. " + str(e)
-            }
-        ), 500
 
 #Get one listing by listingID
 @app.route("/listing/<string:listingID>")
@@ -209,7 +168,7 @@ def find_by_customerID(customerID):
         }
     ), 404
 
-#Get all AVAILABLE listings only
+#Get AVAILABLE listings only
 @app.route("/listing/available")
 def get_available_listing():
     listingList = ListingModel.query.all()
@@ -229,6 +188,52 @@ def get_available_listing():
         }
     ), 404
 
+#Update a listing
+@app.route("/listing/update/<string:listingID>", methods=['PUT'])
+def update_listing(listingID):
+    try:
+        listing = ListingModel.query.filter_by(listingID=listingID).first()
+        if not listing:
+            return jsonify(
+                {
+                    "code": 404,
+                    "data": {
+                        "listingID": listingID
+                    },
+                    "message": "Listing not found."
+                }
+            ), 404
+
+        #Check if update is either to engage or paid
+        data = request.get_json()
+        if data:
+            if data["change"] == "engage":
+                listing.status = data['status']
+                listing.talentID =  data['talentID']
+
+            elif data["change"] == "payment":
+                listing.paymentStatus =  data['payment']
+
+            db.session.commit()
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": listing.json()
+                }
+            ), 200
+        
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "listingID": listingID
+                },
+                "message": "An error occurred while updating the listing. " + str(e)
+            }
+        ), 500
+
+#Create a new listing in db
 @app.route("/listing", methods=["POST"])
 def create_new(listingID):
     if (ListingModel.query.filter_by(listingID=listingID).first()): 
@@ -276,7 +281,7 @@ def create_new(listingID):
 
 
 
-#create listing
+#Create Facebook Listing
 @app.route("/listing/<string:listingID>", methods=['POST'])  
 def create_listing(listingID):
     if (ListingModel.query.filter_by(listingID=listingID).first()): 

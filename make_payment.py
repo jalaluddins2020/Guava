@@ -32,7 +32,7 @@ def start():
     # listing_id = request.json.get("listing_id", None)
     listing_id = 1
     listing_id = str(listing_id)
-    
+
     #invoke listing microservice
     listing = invoke_http(listing_url + "/" + listing_id, method='GET')
     code = listing["code"]
