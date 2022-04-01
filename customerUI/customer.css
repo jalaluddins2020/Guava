@@ -147,3 +147,12 @@ textarea {
     color: white;
 }
 
+.profile {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    border: 0px;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
