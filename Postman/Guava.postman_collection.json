@@ -6,206 +6,402 @@
 	},
 	"item": [
 		{
-			"name": "Customer - get all",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:5010/customer",
-					"host": [
-						"localhost"
-					],
-					"port": "5010",
-					"path": [
-						"customer"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Customer - get one",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Customer",
+			"item": [
+				{
+					"name": "Customer - get all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5010/customer",
+							"host": [
+								"localhost"
+							],
+							"port": "5010",
+							"path": [
+								"customer"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:5010/customer/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5010",
-					"path": [
-						"customer",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Listing - Get all",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:5010/customer",
-					"host": [
-						"localhost"
-					],
-					"port": "5010",
-					"path": [
-						"customer"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Listing - update listing",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n   \"status\": \"PROCESSING\"\r\n}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Customer - get one",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5010/customer/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5010",
+							"path": [
+								"customer",
+								"1"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "localhost:5001/order/1",
-					"host": [
-						"localhost"
-					],
-					"port": "5001",
-					"path": [
-						"order",
-						"1"
-					]
-				},
-				"description": "Please check that the order id exists in your database"
-			},
-			"response": []
-		},
-		{
-			"name": "Customer - create customer [Failure]",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"customerID\": \"\",\n    \"name\": \"Gadman Tang\",\n    \"contactNumber\": \"99887766\"\n    \"contactEmail\": \"gadman.tang.2020@smu.edu.sg\",\n    \"contactTele\": \"121792469\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Customer - create customer [Failure]",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerID\": \"\",\n    \"name\": \"Gadman Tang\",\n    \"contactNumber\": \"99887766\"\n    \"contactEmail\": \"gadman.tang.2020@smu.edu.sg\",\n    \"contactTele\": \"121792469\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5010/customer/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5010",
+							"path": [
+								"customer",
+								"1"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:5010/customer/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5010",
-					"path": [
-						"customer",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Customer - create  customer [Success]",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"customerID\": \"\",\n    \"name\": \"Thiang Lay Foo\",\n    \"contactNumber\": \"6828 0266\"\n    \"contactEmail\": \"lfthiang@smu.edu.sg\",\n    \"contactTele\": \"\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Customer - create  customer [Success]",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerID\": \"2\",\n    \"name\": \"Thiang Lay Foo\",\n    \"contactNumber\": \"68280266\",\n    \"contactEmail\": \"lfthiang@smu.edu.sg\",\n    \"contactTele\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5010/customer/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5010",
+							"path": [
+								"customer",
+								"2"
+							]
 						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:5010/customer/l",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5010",
-					"path": [
-						"customer",
-						"l"
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Telegram",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"customerID\": \"1\",\n    \"name\": \"Gadman\",\n    \"contactNumber\": \"11223344\"\n    \"contactEmail\": \"gadman.tang.2020@smu.edu.sg\",\n    \"contactTele\": \"121792469\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Talent",
+			"item": [
+				{
+					"name": "Talent - get all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5011/talent",
+							"host": [
+								"localhost"
+							],
+							"port": "5011",
+							"path": [
+								"talent"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:5010/customer/l",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5010",
-					"path": [
-						"customer",
-						"l"
-					]
+				{
+					"name": "Talent - get one",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5011/talent/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5011",
+							"path": [
+								"talent",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listing - authenticate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5011/talent/authenticate/mrbean@gmail.com/91827364",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5011",
+							"path": [
+								"talent",
+								"authenticate",
+								"mrbean@gmail.com",
+								"91827364"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Accept Listing",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:5010/customer",
-					"host": [
-						"localhost"
-					],
-					"port": "5010",
-					"path": [
-						"customer"
-					]
+			"name": "Listing",
+			"item": [
+				{
+					"name": "Listing - get all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5001/listing",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"listing"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listing - get one",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5001/listing/1",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"listing",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listing - get all customer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5001/listing/customer/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"listing",
+								"customer",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listing - engage listing",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"change\": \"engage\",\r\n   \"status\": \"engaged\",\r\n   \"talentID\": \"2\",\r\n   \"payment\": \"\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5001/listing/update/1",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"listing",
+								"update",
+								"1"
+							]
+						},
+						"description": "Please check that the order id exists in your database"
+					},
+					"response": []
+				},
+				{
+					"name": "Listing - pay listing",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"change\": \"payment\",\r\n   \"status\": \"\",\r\n   \"talentID\": \"\",\r\n   \"payment\": \"paid\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5001/listing/update/1",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"listing",
+								"update",
+								"1"
+							]
+						},
+						"description": "Please check that the order id exists in your database"
+					},
+					"response": []
+				},
+				{
+					"name": "Accept Listing",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"Accepted\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5100/accept_listing/1/2",
+							"host": [
+								"localhost"
+							],
+							"port": "5100",
+							"path": [
+								"accept_listing",
+								"1",
+								"2"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "Twilio",
+			"item": [
+				{
+					"name": "Twilio",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "To",
+									"value": "+6596739311",
+									"type": "text"
+								},
+								{
+									"key": "From",
+									"value": "+17579822788",
+									"type": "text"
+								},
+								{
+									"key": "Body",
+									"value": "Test",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://AC11ef4e81dd87d257ac03c57b14196e37:4e0ce3f44296a62001562fc7c71b1ca1@api.twilio.com/2010-04-01/Accounts/AC11ef4e81dd87d257ac03c57b14196e37/Messages.json",
+							"protocol": "https",
+							"auth": {
+								"user": "AC11ef4e81dd87d257ac03c57b14196e37",
+								"password": "4e0ce3f44296a62001562fc7c71b1ca1"
+							},
+							"host": [
+								"api",
+								"twilio",
+								"com"
+							],
+							"path": [
+								"2010-04-01",
+								"Accounts",
+								"AC11ef4e81dd87d257ac03c57b14196e37",
+								"Messages.json"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
