@@ -1,5 +1,5 @@
 # Imports
-from asyncio.windows_events import NULL
+#from asyncio.windows_events import NULL
 import os
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -18,7 +18,7 @@ app.debug = True
 
 # Configs
 # Our database configurations will go here
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:@localhost:3306/listing'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/listing'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
@@ -39,8 +39,9 @@ class ListingModel(db.Model):
     status = db.Column(db.String(300), nullable=True)
     price = db.Column(db.Float(), nullable=False) 
     paymentStatus = db.Column(db.String(300), nullable=True)
+    dateCreated = db.Column(db.DateTime(), nullable=False)
 
-    def __init__(self, customerID, talentID, name, details, status, price, paymentStatus):
+    def __init__(self, customerID, talentID, name, details, status, price, paymentStatus, dateCreated):
         self.customerID = customerID
         self.talentID = talentID
         self.name = name
@@ -48,13 +49,14 @@ class ListingModel(db.Model):
         self.status = status
         self.price = price
         self.paymentStatus = paymentStatus
+        self.dateCreated = dateCreated
 
     def json(self):
-        return {"listingID": self.listingID, "customerID": self.customerID, "talentID": self.talentID, "name": self.name, "details": self.details, "status": self.status, "price": self.price, "paymentStatus": self.paymentStatus}
+        return {"listingID": self.listingID, "customerID": self.customerID, "talentID": self.talentID, "name": self.name, "details": self.details, "status": self.status, "price": self.price, "paymentStatus": self.paymentStatus, "dateCreated": self.dateCreated}
 
 # Schema Objects
 # Our schema objects will go here
-class ListingAttribute:
+'''class ListingAttribute:
     customerID = graphene.Int
     talentID= graphene.Int
     name = graphene.String
@@ -62,6 +64,7 @@ class ListingAttribute:
     price = graphene.Int
     status = graphene.String
     paymentStatus = graphene.String
+    dateCreated = graphene.DateTime
 
 class Listing(SQLAlchemyObjectType, ListingAttribute):
    class Meta:
@@ -76,7 +79,7 @@ class Query(graphene.ObjectType):
 class AddListing(graphene.Mutation):
     class Arguments:
         customerID = graphene.Int(required=True)
-        talentID= graphene.Int(required=False, default_value = NULL)
+        talentID= graphene.Int(required=False, default_value = "0")
         name = graphene.String(required=True) 
         details = graphene.String(required=True) 
         price = graphene.Float(required=True)
@@ -104,12 +107,13 @@ app.add_url_rule(
         schema=schema,
         graphiql=True # for having the GraphiQL interface
     )
-)
+)'''
 
 #Get all listings
+viewAllListing = "query { allListings { edges { node  {name}} } }"
 @app.route("/listing")
 def get_all_listing():
-    listingList = Listing.query.all()
+    listingList = ListingModel.query.all()
     if len(listingList):
         return jsonify(
             {
@@ -130,7 +134,7 @@ def get_all_listing():
 @app.route("/listing/update/<string:listingID>/<string:talentID>", methods=['PUT'])
 def update_listing(listingID,talentID):
     try:
-        listing = Listing.query.filter_by(listingID=listingID).first()
+        listing = ListingModel.query.filter_by(listingID=listingID).first()
         if not listing:
             return jsonify(
                 {
@@ -168,7 +172,7 @@ def update_listing(listingID,talentID):
 #Get one listing by listingID
 @app.route("/listing/<string:listingID>")
 def find_by_listingID(listingID):
-    listing = Listing.query.filter_by(listingID=listingID).first()
+    listing = ListingModel.query.filter_by(listingID=listingID).first()
     if listing:
         return jsonify(
             {
@@ -186,7 +190,7 @@ def find_by_listingID(listingID):
 #Get all listing by customerID
 @app.route("/listing/customer/<string:customerID>")
 def find_by_customerID(customerID):
-    listings = Listing.query.filter(Listing.customerID == customerID).all()
+    listings = ListingModel.query.filter(ListingModel.customerID == customerID).all()
     if listings:
         return jsonify(
             {
@@ -204,7 +208,7 @@ def find_by_customerID(customerID):
 #Get all AVAILABLE listings only
 @app.route("/listing/available")
 def get_available_listing():
-    listingList = Listing.query.all()
+    listingList = ListingModel.query.all()
     if len(listingList):
         return jsonify(
             {
@@ -223,7 +227,7 @@ def get_available_listing():
 
 @app.route("/listing", methods=["POST"])
 def create_new(listingID):
-    if (Listing.query.filter_by(listingID=listingID).first()): 
+    if (ListingModel.query.filter_by(listingID=listingID).first()): 
         return jsonify(
             {
                 "code": 400,
@@ -234,7 +238,7 @@ def create_new(listingID):
             }
         ), 400
     data = request.get_json()
-    listing = Listing(**data) 
+    listing = ListingModel(**data) 
 
     try:
         db.session.add(listing)
@@ -271,7 +275,7 @@ def create_new(listingID):
 #create listing
 @app.route("/listing/<string:listingID>", methods=['POST'])  
 def create_listing(listingID):
-    if (Listing.query.filter_by(listingID=listingID).first()): 
+    if (ListingModel.query.filter_by(listingID=listingID).first()): 
         return jsonify(
             {
                 "code": 400,
@@ -282,7 +286,7 @@ def create_listing(listingID):
             }
         ), 400
     data = request.get_json()
-    listing = Listing(**data) 
+    listing = ListingModel(**data) 
 
     try:
         db.session.add(listing)

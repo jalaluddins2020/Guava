@@ -13,7 +13,7 @@ db = SQLAlchemy(app) #Initialise connection to database
 CORS(app)  
 
 #Declare Model
-class Customer(db.Model):
+class CustomerModel(db.Model):
     __tablename__ = 'customer'
     
     customerID = db.Column(db.Integer(), primary_key=True, autoincrement = True)
@@ -35,7 +35,7 @@ class Customer(db.Model):
 #View All Customer Data
 @app.route("/customer")
 def get_all_customer():
-    customerlist = Customer.query.all()
+    customerlist = CustomerModel.query.all()
     if len(customerlist):
         return jsonify(
             {
@@ -55,7 +55,7 @@ def get_all_customer():
 #View One Customer Data By CustomerID
 @app.route("/customer/<string:customerID>") #Map URL route /book/isbn13 to find_by_isbn13 function, where isbn13 is a path variable of string type
 def find_by_customerID(customerID):
-    customer = Customer.query.filter_by(customerID=customerID).first() #Retrieve only the book with isbn13 specified in the path variable (similar to WHERE clause in SQL SELECT expression). since it returns a list of 1 book, first() is used to return 1 book/None (if no matching), which is similar to LIMIT 1 clause in SQL
+    customer = CustomerModel.query.filter_by(customerID=customerID).first() #Retrieve only the book with isbn13 specified in the path variable (similar to WHERE clause in SQL SELECT expression). since it returns a list of 1 book, first() is used to return 1 book/None (if no matching), which is similar to LIMIT 1 clause in SQL
     if customer: #IF book found (not None), return JSON representation
         return jsonify(
             {
@@ -73,7 +73,7 @@ def find_by_customerID(customerID):
 #Create a New Customer Record
 @app.route("/customer/<string:customerID>", methods=['POST'])  
 def create_customer(customerID):
-    if (Customer.query.filter_by(customerID=customerID).first()): 
+    if (CustomerModel.query.filter_by(customerID=customerID).first()): 
         return jsonify(
             {
                 "code": 400,
@@ -84,7 +84,7 @@ def create_customer(customerID):
             }
         ), 400
     data = request.get_json()
-    customer = Customer(**data) 
+    customer = CustomerModel(**data) 
 
     try:
         db.session.add(customer)

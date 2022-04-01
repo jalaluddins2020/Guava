@@ -22,9 +22,10 @@
 <body>
     <!--header-->
     <script>
-        var codedCustomerID = localStorage.getItem('customerID');
+        var loggedInCustomerID = sessionStorage.getItem('customerID');
+        console.log(sessionStorage)
         $(async () => {
-            var listingURL = "http://localhost:5001/listing/customer/" + codedCustomerID
+            var listingURL = "http://localhost:5001/listing/customer/" + loggedInCustomerID
             try {
                 const response =
                     await fetch(

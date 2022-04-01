@@ -31,7 +31,7 @@ class Talent(db.Model):
     def json(self):
         return {"talentID": self.talentID, "name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail}
 
-#View All Customer Data
+#View All Talent Data - CONVERT TO GRAPHQL TO
 @app.route("/talent")
 def get_all_talents():
     talentsList = Talent.query.all()
@@ -51,7 +51,7 @@ def get_all_talents():
         }
     ), 404
 
-#View One Customer Data By CustomerID
+#View One Talent Data By talentID - CONVERT TO GRAPHQL
 @app.route("/talent/<string:talentID>") #Map URL route /book/isbn13 to find_by_isbn13 function, where isbn13 is a path variable of string type
 def find_by_talentID(talentID):
     talent = Talent.query.filter_by(talentID=talentID).first() #Retrieve only the book with isbn13 specified in the path variable (similar to WHERE clause in SQL SELECT expression). since it returns a list of 1 book, first() is used to return 1 book/None (if no matching), which is similar to LIMIT 1 clause in SQL
@@ -69,7 +69,25 @@ def find_by_talentID(talentID):
         }
     ), 404
 
-#Create a New Customer Record
+#Authenticate - REMAIN AS FLASK
+@app.route("/talent/authenticate/<string:talentEmail>/<string:talentNumber>")
+def authenticate(talentEmail,talentNumber):
+    talent = Talent.query.filter(Talent.contactEmail == talentEmail).filter(Talent.contactNumber == talentNumber).first()
+    if talent:
+        return jsonify(
+            {
+                "code": 200,
+                "data": talent.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Talent not found."
+        }
+    ), 404
+
+#Create a New talent Record - CONVERT TO GRAPHQL
 @app.route("/talent/<string:talentID>", methods=['POST'])  
 def create_talent(talentID):
     if (Talent.query.filter_by(talentID=talentID).first()): 
@@ -107,6 +125,6 @@ def create_talent(talentID):
     ), 201    
 
 if __name__ == '__main__':
-    print("This is flask for " + os.path.basename(__file__) + ": manage customers ...")
+    print("This is flask for " + os.path.basename(__file__) + ": Managing Talent ...")
     app.run(host='0.0.0.0', port=5011, debug=True)
    

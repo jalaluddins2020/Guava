@@ -3,24 +3,25 @@
 
 <head>
     <!-- Required meta tags -->
+    <title>Talent UI</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Talent UI</title>
     <link rel="icon" type="image/png" sizes="16x16" href="./../resources/favicon-96x96.png">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Bootstrap & Icons CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
+    <!-- jQuery js CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link href="overall.css" rel="stylesheet">
-
 </head>
 
 <body>
     <script>
         const codedListingID = 1;
         $(async () => {
-            var listingURL = "http://localhost:5001/listing/"+codedListingID
+            var listingURL = "http://localhost:5001/listing/" + codedListingID
             try {
                 const response =
                     await fetch(
@@ -72,7 +73,8 @@
                             <a class="nav-link" href="../talentUI/profile.html">Talent Profile</a>
                         </li>
                     </ul>
-                    <a class="btn btn-outline-dark" data-mdb-ripple-color="dark" href='../customerUI/listings.html'>Go to
+                    <a class="btn btn-outline-dark" data-mdb-ripple-color="dark" href='./../customerUI/listings.html'>Go
+                        to
                         Customer</a>
                 </div>
             </div>
@@ -94,28 +96,28 @@
                         <h5 class="card-title">
                             <span id="listingTitle"></span>
                         </h5>
-                        <br/>
+                        <br />
                         <p class="card-text">
-                            <table class="table table-bordered">
-                                <tbody>
-                                    <tr>
-                                        <th>Job Description</th>
-                                        <td><span id="listingDesc"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Price</th>
-                                        <td>SGD $ <span id="listingPrice"></span>.00</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Date Listed</th>
-                                        <td><span id="listingDate"></span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="applicationButtonCentering">
-                                <div class="btn">apply</div>
-                            </div>
-                            <span id="listingDesc"></span>
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>Job Description</th>
+                                    <td><span id="listingDesc"></span></td>
+                                </tr>
+                                <tr>
+                                    <th>Price</th>
+                                    <td>SGD $ <span id="listingPrice"></span>.00</td>
+                                </tr>
+                                <tr>
+                                    <th>Date Listed</th>
+                                    <td><span id="listingDate"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="applicationButtonCentering">
+                            <div class="btn">apply</div>
+                        </div>
+                        <span id="listingDesc"></span>
                         </p>
                     </div>
                 </div>
@@ -128,7 +130,9 @@
     <div class="footer">© Pentagon</div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

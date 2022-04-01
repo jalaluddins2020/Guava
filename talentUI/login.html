@@ -2,18 +2,18 @@
 <html lang="en">
 
 <head>
-
     <!-- Required meta tags -->
     <title>Talent UI</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" sizes="16x16" href="./../resources/favicon-96x96.png">
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap & Icons CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
+    <!-- jQuery js CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
@@ -45,7 +45,7 @@
         <div class="tab-content">
             <div id="login" class="container tab-pane active"><br>
                 <h3 class="text-center">Login</h3>
-                <form onSubmit="checkLogin()">
+                <form>
                     <div class="mb-3">
                         <label for="name" class="form-label">Email Address</label>
                         <input type="text" class="form-control" id="loginEmail">
@@ -54,11 +54,11 @@
                         <label for="price" class="form-label">Contact Number</label>
                         <input type="float" class="form-control" id="loginNumber">
                     </div>
-                    <button type="submit" class="btn btn-success">Submit</button>
+                    <button type="button" onclick="checkLogin()" class="btn btn-success">Submit</button>
                 </form>
             </div>
             <div id="register" class="container tab-pane fade"><br>
-                <h3 c;ass="text-center">Register</h3>
+                <h3 class="text-center">Register</h3>
                 <form>
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
@@ -83,36 +83,39 @@
     <div class="footer">© Pentagon</div>
 
     <script>
-        function checkLogin(){
+        function checkLogin() {
             var loginEmail = $("#loginEmail").val()
             var loginNumber = $("#loginNumber").val()
-
             $(async () => {
-            var talentURL = "http://localhost:5011/talent/authenticate/"+loginEmail+"/"+loginNumber;
-            try {
-                const response =
-                    await fetch(
-                        talentURL, { method: 'GET' }
-                    );
-                if (!response.ok) {
-                    //Print some error
-                    //$("#listingResults").append("<tr><td class='text-muted'>No results returned</td></tr>")
-                } else {
-                    //Success
-                    const authenticatedTalent = await response.json();
-                    var talentDetail = authenticatedTalent["data"]
-                    sessionStorage.setItem("loggedInTalentID", talentDetail["talentID"])
-                    //var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
-                    location.href = "./listing.html";
-                    //console.log("Session Variable", loggedInTalentID)
+                var talentURL = "http://localhost:5011/talent/authenticate/" + loginEmail + "/" + loginNumber
+                try {
+                    const response =
+                        /* await fetch(
+                            talentURL, { method: 'GET' }
+                        ); */
+                        await fetch(talentURL, { query: `talentID = "query { allListings { edges { node  {name}} } }"` })
+                    if (!response.ok) {
+                        //Print some error
+                        //$("#listingResults").append("<tr><td class='text-muted'>No results returned</td></tr>")
+                    } else {
+                        //Success
+                        const authenticatedTalent = await response.json();
+                        var talentDetail = authenticatedTalent["data"];
+                        console.log(talentDetail)
+                        sessionStorage.setItem("loggedInTalentID", talentDetail["talentID"]);
+                        sessionStorage.setItem("loggedInCustomerId", "1");
+                        //var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
+                        location.href = "./listing.html";
+                    }
+                } catch (error) {
+                    // Error, print something
+                    alert("Failed to log in. Please try again");
                 }
-            } catch (error) {
-                // Error, print something
-                $("#listingResults").text("Error in calling the service, " + error);
-            }
-        });
+            });
         }
     </script>
+
+    <!-- Bootstrap js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
