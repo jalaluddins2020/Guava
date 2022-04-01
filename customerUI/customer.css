@@ -81,8 +81,6 @@ html, body {
     margin-top:16px;
 }
 
-
-
 .form-content label, .was-validated .form-check-input:invalid~.form-check-label, .was-validated .form-check-input:valid~.form-check-label{
     color: black;
 }
