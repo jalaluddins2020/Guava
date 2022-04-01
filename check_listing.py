@@ -36,13 +36,11 @@ def retrieve():
 
         return jsonify({
             "code": 200,
-            "data": {
-                "listing_id": listing_id,
-                "name": name,
-                "contact": contact,
-                "email": email,
-                "status": status
-            }
+            "listing_id": listing_id,
+            "name": name,
+            "contact": contact,
+            "email": email,
+            "status": status
         })
 
     return jsonify({
@@ -52,4 +50,4 @@ def retrieve():
 
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) + " for PayPal checkout")
-    app.run(host="0.0.0.0", port=5007, debug=True)
+    app.run(host="0.0.0.0", port=5005, debug=True)

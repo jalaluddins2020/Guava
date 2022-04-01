@@ -17,10 +17,9 @@ CORS(app)
 
 listing_url = "http://localhost:5001/listing"
 payment_records_url = "http://localhost:5006/records"
-listing_update_url = "http://localhost:5001/listing"
+listing_update_url = "http://localhost:5003/listing"
 client_id = os.getenv("PAYPAL_CLIENT_ID")
 client_secret = os.getenv("PAYPAL_CLIENT_SECRET")
-
 
 paypalrestsdk.configure({
     "mode": "sandbox", # sandbox or production
@@ -132,7 +131,7 @@ def execute():
 
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) + " for PayPal checkout")
-    app.run(host="0.0.0.0", port=5005, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)
 
 
 

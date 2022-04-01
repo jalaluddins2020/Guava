@@ -1,0 +1,233 @@
+version: "3.8"
+
+volumes:
+  rabbitmq_data:
+  pgdata: 
+  kongadata:
+
+networks:
+  kong-net:
+    driver: bridge
+
+services:
+ 
+  ###################################
+  # listing: The listing microservice
+  ###################################
+  listing:
+    build:
+      context: ./
+      dockerfile: listing.Dockerfile
+    image: ryanyak/listing:esd
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/listing
+      PYTHONUNBUFFERED: 1
+ 
+  #######################################################
+  # customer: The customer microservice
+  #######################################################
+  customer:
+    build:
+      context: ./
+      dockerfile: customer.Dockerfile
+    image: ryanyak/customer:esd
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/customer
+      PYTHONUNBUFFERED: 1
+
+  ##################################
+  # talent: The talent microservice
+  ##################################
+  talent:
+    build:
+      context: ./
+      dockerfile: talent.Dockerfile
+    image: ryanyak/talent:esd
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/talent
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5000:5011"
+
+  #######################################################
+  # payment_records: The payment records microservice
+  #######################################################
+  payment_records:
+    build:
+      context: ./
+      dockerfile: payment_records.Dockerfile
+    image: ryanyak/payment_records:esd
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/records
+      PYTHONUNBUFFERED: 1
+
+  ####################################
+  # RabbitMQ: The messaging broker   
+  ####################################
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: esd-rabbit
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes: 
+      - rabbitmq_data:/var/lib/rabbitmq
+      
+  #################################################
+  # notification: The notification microservice
+  #################################################
+  notification:
+    build:
+      context: ./
+      dockerfile: notification.Dockerfile
+    image: ryanyak/notification:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      PYTHONUNBUFFERED: 1
+
+  ###############################################
+  # make_payment: The make_payment microservice
+  ###############################################
+  make_payment:
+    build:
+      context: ./
+      dockerfile: make_payment.Dockerfile
+    image: ryanyak/make_payment:esd
+    restart: always
+    depends_on:
+      - payment_records
+      - listing
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      listing_url: http://localhost:5001/listing
+      payment_records_url: http://localhost:5006/records
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5000:5005"
+
+  ###############################################
+  # check_listing: The check_listing microservice
+  ###############################################
+  check_listing:
+    build:
+      context: ./
+      dockerfile: check_listing.Dockerfile
+    image: ryanyak/check_listing:esd
+    restart: always
+    depends_on:
+      - customer
+      - listing
+      - talent
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      listing_url: http://localhost:5001/listing
+      payment_records_url: http://localhost:5006/records
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5000:5005"
+
+  ##################################
+  # Telebot: The telebot microservice
+  ##################################
+  telebot:
+    build:
+      context: ./
+      dockerfile: telebot.Dockerfile
+    image: ryanyak/telebot:esd
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/telebot
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5000:5002"
+
+  #######################################
+  # Postgres: The database used by Kong
+  #######################################
+  kong-database:
+    image: postgres:9.6
+    restart: always
+    networks:
+      - kong-net
+    environment:
+      POSTGRES_DB: kong
+      POSTGRES_USER: kong
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "kong"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  #######################################
+  # Kong database migration
+  #######################################
+  kong-migration:
+    image: kong:2.0.4
+    command: "kong migrations bootstrap"
+    restart: on-failure
+    networks:
+      - kong-net
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: password
+    depends_on:
+      - kong-database
+
+  #######################################
+  # Kong: The API Gateway
+  #######################################
+  kong:
+    image: kong:2.0.4
+    restart: always
+    networks:
+      - kong-net
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: password
+      KONG_PROXY_LISTEN: 0.0.0.0:8000
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+    depends_on:
+      - kong-migration
+    ports:
+      - "8000:8000"
+  
+  #######################################
+  # Konga: Kong GUI 
+  #######################################
+  konga:
+    image: pantsel/konga
+    restart: always
+    networks:
+        - kong-net
+    environment:
+      DB_ADAPTER: postgres
+      DB_HOST: kong-database
+      DB_USER: kong
+      DB_PASSWORD: password
+      DB_DATABASE: konga_db
+    depends_on:
+      - kong
+    ports:
+      - "13370:1337"
+    volumes:
+      - kongadata:/app/kongadata
