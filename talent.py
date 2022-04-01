@@ -8,6 +8,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localh
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
+
 db = SQLAlchemy(app) #Initialise connection to database
 
 CORS(app)  
@@ -39,7 +40,7 @@ def get_all_talents():
             {
                 "code": 200,
                 "data":{
-                    "talents": [talent.json() for talent in talentsList]
+                    "customers": [talent.json() for talent in talentsList]
                 }
             }
         )
@@ -62,24 +63,6 @@ def find_by_talentID(talentID):
             }
         )
     return jsonify( #ELSE, return an error message in JSON & return HTTP status code 404 for NOT FOUND. Unspecified will return 200 OK
-        {
-            "code": 404,
-            "message": "Talent not found."
-        }
-    ), 404
-    
-#Authenticate
-@app.route("/talent/authenticate/<string:talentEmail>/<string:talentNumber>")
-def authenticate(talentEmail,talentNumber):
-    talent = Talent.query.filter(Talent.contactEmail == talentEmail).filter(Talent.contactNumber == talentNumber).first()
-    if talent:
-        return jsonify(
-            {
-                "code": 200,
-                "data": talent.json()
-            }
-        )
-    return jsonify(
         {
             "code": 404,
             "message": "Talent not found."
@@ -112,7 +95,7 @@ def create_talent(talentID):
                 "data": {
                     "talentID": talentID
                 },
-                "message": "An error occurred creating the talent."
+                "message": "An error occurred creating the customer."
             }
         ), 500
 
@@ -124,6 +107,6 @@ def create_talent(talentID):
     ), 201    
 
 if __name__ == '__main__':
-    print("This is flask for " + os.path.basename(__file__) + ": manage talent ...")
+    print("This is flask for " + os.path.basename(__file__) + ": manage customers ...")
     app.run(host='0.0.0.0', port=5011, debug=True)
    

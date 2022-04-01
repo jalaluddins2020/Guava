@@ -50,4 +50,4 @@ def retrieve():
 
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) + " for PayPal checkout")
-    app.run(host="0.0.0.0", port=5005, debug=True)
+    app.run(host="0.0.0.0", port=5007, debug=True)

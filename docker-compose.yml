@@ -49,8 +49,6 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/talent
       PYTHONUNBUFFERED: 1
-    ports:
-      - "5000:5011"
 
   #######################################################
   # payment_records: The payment records microservice
@@ -107,13 +105,9 @@ services:
       - payment_records
       - listing
     environment:
-      rabbit_host: rabbitmq
-      rabbit_port: 5672
       listing_url: http://localhost:5001/listing
       payment_records_url: http://localhost:5006/records
       PYTHONUNBUFFERED: 1
-    ports:
-      - "5000:5005"
 
   ###############################################
   # check_listing: The check_listing microservice
@@ -129,28 +123,32 @@ services:
       - listing
       - talent
     environment:
+      listing_url: http://localhost:5001/listing
+      customer_url: http://localhost:5010/customer
+      talent_url: http://localhost:5011/talent
+      PYTHONUNBUFFERED: 1
+
+  ###############################################
+  # accept_listing: The accept_listing microservice
+  ###############################################
+  accept_listing:
+    build:
+      context: ./
+      dockerfile: accept_listing.Dockerfile
+    image: ryanyak/accept_listing:esd
+    restart: always
+    depends_on:
+      - customer
+      - listing
+      - talent
+      - rabbitmq
+    environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
       listing_url: http://localhost:5001/listing
-      payment_records_url: http://localhost:5006/records
+      customer_url: http://localhost:5010/customer
+      talent_url: http://localhost:5011/talent
       PYTHONUNBUFFERED: 1
-    ports:
-      - "5000:5005"
-
-  ##################################
-  # Telebot: The telebot microservice
-  ##################################
-  telebot:
-    build:
-      context: ./
-      dockerfile: telebot.Dockerfile
-    image: ryanyak/telebot:esd
-    restart: always
-    environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/telebot
-      PYTHONUNBUFFERED: 1
-    ports:
-      - "5000:5002"
 
   #######################################
   # Postgres: The database used by Kong
