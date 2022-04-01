@@ -1,33 +1,46 @@
+# Imports
+from asyncio.windows_events import NULL
 import os
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+import graphene
+from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
+from flask_graphql import GraphQLView
+import facebook
+from graphql import Undefined
+from graphql_relay.node.node import from_global_id
+from datetime import datetime
 
+# initializing our app
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/listing'
+app.debug = True
+
+# Configs
+# Our database configurations will go here
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:@localhost:3306/listing'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
-db = SQLAlchemy(app) #Initialise connection to database
+# Modules
+# SQLAlchemy will be initiated here
+db = SQLAlchemy(app)
 
-CORS(app)  
-
-#Declare Model
-class Listing(db.Model):
+# Models
+# Our relations will be setup here
+class ListingModel(db.Model):
     __tablename__ = 'listing'
 
     listingID = db.Column(db.Integer(), primary_key=True)
     customerID = db.Column(db.Integer(), nullable=False)
-    talentID = db.Column(db.Integer(), nullable=False)
+    talentID = db.Column(db.Integer(), nullable=True)
     name = db.Column(db.String(300), nullable=False)
     details = db.Column(db.String(300), nullable=False)
-    status = db.Column(db.String(300), nullable=False)
+    status = db.Column(db.String(300), nullable=True)
     price = db.Column(db.Float(), nullable=False) 
-    paymentStatus = db.Column(db.String(300), nullable=False)
-    dateCreated = db.Column(db.DateTime(), nullable=False)
+    paymentStatus = db.Column(db.String(300), nullable=True)
 
-    def __init__(self, listingID, customerID, talentID, name, details, status, price, paymentStatus, dateCreated):
-        self.listingID = listingID
+    def __init__(self, customerID, talentID, name, details, status, price, paymentStatus):
         self.customerID = customerID
         self.talentID = talentID
         self.name = name
@@ -35,10 +48,63 @@ class Listing(db.Model):
         self.status = status
         self.price = price
         self.paymentStatus = paymentStatus
-        self.dateCreated = dateCreated
 
     def json(self):
-        return {"listingID": self.listingID, "customerID": self.customerID, "talentID": self.talentID, "name": self.name, "details": self.details, "status": self.status, "price": self.price, "paymentStatus": self.paymentStatus, "dateCreated": self.dateCreated}
+        return {"listingID": self.listingID, "customerID": self.customerID, "talentID": self.talentID, "name": self.name, "details": self.details, "status": self.status, "price": self.price, "paymentStatus": self.paymentStatus}
+
+# Schema Objects
+# Our schema objects will go here
+class ListingAttribute:
+    customerID = graphene.Int
+    talentID= graphene.Int
+    name = graphene.String
+    details = graphene.String
+    price = graphene.Int
+    status = graphene.String
+    paymentStatus = graphene.String
+
+class Listing(SQLAlchemyObjectType, ListingAttribute):
+   class Meta:
+       model = ListingModel
+       interfaces = (graphene.relay.Node, )
+
+class Query(graphene.ObjectType):
+    node = graphene.relay.Node.Field()
+    listing=graphene.relay.Node.Field(Listing)
+    all_listings = SQLAlchemyConnectionField(Listing)
+
+class AddListing(graphene.Mutation):
+    class Arguments:
+        customerID = graphene.Int(required=True)
+        talentID= graphene.Int(required=False, default_value = NULL)
+        name = graphene.String(required=True) 
+        details = graphene.String(required=True) 
+        price = graphene.Float(required=True)
+        status = graphene.String(required=False)
+        paymentStatus = graphene.String(required=False)
+    listing = graphene.Field(lambda: Listing)
+
+    def mutate(self, info, talentID, customerID, name, details, price, status, paymentStatus):
+        listing = ListingModel(customerID=customerID,name=name, details=details, price=price, talentID = talentID, status=status, paymentStatus=paymentStatus)
+        db.session.add(listing)
+        db.session.commit()
+        return AddListing(listing=listing)
+
+class Mutation(graphene.ObjectType):
+    add_listing = AddListing.Field()
+
+schema = graphene.Schema(query=Query, mutation=Mutation)
+
+# Routes
+# Our GraphQL route will go here
+app.add_url_rule(
+    '/graphql-api',
+    view_func=GraphQLView.as_view(
+        'graphql',
+        schema=schema,
+        graphiql=True # for having the GraphiQL interface
+    )
+)
 
 #Get all listings
 @app.route("/listing")
@@ -100,7 +166,7 @@ def update_listing(listingID,talentID):
         ), 500
 
 #Get one listing by listingID
-@app.route("/listing/<int:listingID>")
+@app.route("/listing/<string:listingID>")
 def find_by_listingID(listingID):
     listing = Listing.query.filter_by(listingID=listingID).first()
     if listing:
@@ -156,7 +222,7 @@ def get_available_listing():
     ), 404
 
 @app.route("/listing", methods=["POST"])
-def create_new():
+def create_new(listingID):
     if (Listing.query.filter_by(listingID=listingID).first()): 
         return jsonify(
             {
