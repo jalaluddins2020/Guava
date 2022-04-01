@@ -40,7 +40,7 @@ def get_all_talents():
             {
                 "code": 200,
                 "data":{
-                    "customers": [talent.json() for talent in talentsList]
+                    "talents": [talent.json() for talent in talentsList]
                 }
             }
         )
@@ -63,6 +63,24 @@ def find_by_talentID(talentID):
             }
         )
     return jsonify( #ELSE, return an error message in JSON & return HTTP status code 404 for NOT FOUND. Unspecified will return 200 OK
+        {
+            "code": 404,
+            "message": "Talent not found."
+        }
+    ), 404
+    
+#Authenticate
+@app.route("/talent/authenticate/<string:talentEmail>/<string:talentNumber>")
+def authenticate(talentEmail,talentNumber):
+    talent = Talent.query.filter(contactEmail = talentEmail).filter(contactNumber = talentNumber).all()
+    if talent:
+        return jsonify(
+            {
+                "code": 200,
+                "data": talent.json()
+            }
+        )
+    return jsonify(
         {
             "code": 404,
             "message": "Talent not found."
@@ -95,7 +113,7 @@ def create_talent(talentID):
                 "data": {
                     "talentID": talentID
                 },
-                "message": "An error occurred creating the customer."
+                "message": "An error occurred creating the talent."
             }
         ), 500
 
@@ -107,6 +125,6 @@ def create_talent(talentID):
     ), 201    
 
 if __name__ == '__main__':
-    print("This is flask for " + os.path.basename(__file__) + ": manage customers ...")
+    print("This is flask for " + os.path.basename(__file__) + ": manage talent ...")
     app.run(host='0.0.0.0', port=5011, debug=True)
    
