@@ -1,3 +1,4 @@
+@@ -1,196 +1,170 @@
 <!doctype html>
 <html lang="en">
 
@@ -17,7 +18,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- Stylesheets -->
-    <link href="../talentUI/customer.css" rel="stylesheet">
+    <link href="./customer.css" rel="stylesheet">
 </head>
 
 <body>
@@ -25,7 +26,7 @@
     <script>
         /*var loggedInCustomerID = sessionStorage.getItem('customerID');
         console.log(sessionStorage)*/
-        var loggedInCustomerID = 1;
+        const loggedInCustomerID = 1;
         $(async () => {
             var listingURL = "http://localhost:5001/listing/customer/" + loggedInCustomerID
             try {
@@ -39,17 +40,42 @@
                 } else {
                     //Success
                     var row = "";
+                    var listingBadgeCol = "";
+                    var paymentBadgeCol = "";
+
                     const listings = await response.json();
                     const allUserListings = listings["data"];
                     if (allUserListings) {
                         for (let i = 0; i < allUserListings.length; i++) {
-                            console.log(allUserListings[i])
+                            //console.log(allUserListings[i])
+
+                            var alllistingDetails = allUserListings[i];
+                            var eachListingID = alllistingDetails["listingID"];
+                            var eachListingTitle = alllistingDetails["name"];
+                            var eachListingStatus = alllistingDetails["status"]
+                            var eachListingPaymentStatus = alllistingDetails["paymentStatus"]
+                            var eachListingDate = alllistingDetails["dateCreated"];
+
+                            if (eachListingStatus == "available") {
+                                listingBadgeCol = "bg-secondary";
+                                if (eachListingPaymentStatus == "unpaid") {
+                                    paymentBadgeCol = "bg-secondary";
+                                }
+                            } else {
+                                listingBadgeCol = "bg-primary";
+                                if (eachListingPaymentStatus == "unpaid") {
+                                    paymentBadgeCol = "bg-warning";
+                                } else {
+                                    paymentBadgeCol = "bg-success";
+                                }
+                            }
+
                             row += "<tr>";
                             row += "<td>" + (i + 1) + ".</td>"; //Index
-                            row += "<td><a href='../customerUI/details.html?listingID=" + allUserListings[i]["listingID"] + "'>" + allUserListings[i]["name"] + "</a></td>"; //Listing Title with href link
-                            row += "<td><span class='badge bg-primary'>" + allUserListings[i]["status"] + "</span></td>"; //Availability status
-                            row += "<td><span class='badge bg-primary'>" + allUserListings[i]["paymentStatus"] + "</span></td>"; //Payment status
-                            row += "<td>" + allUserListings[i]["dateCreated"] + "</td>"; //Date posted
+                            row += "<td><a href='../customerUI/details.html?listingID=" + eachListingID + "'>" + eachListingTitle + "</a></td>"; //Listing Title with href link
+                            row += "<td><span class='badge " + listingBadgeCol + "'>" + eachListingStatus + "</span></td>"; //Availability status
+                            row += "<td><span class='badge " + paymentBadgeCol + "'>" + eachListingPaymentStatus + "</span></td>"; //Payment status
+                            row += "<td>" + eachListingDate + "</td>"; //Date posted
                             row += "</tr>";
                         }
                     }
@@ -60,6 +86,61 @@
                 $("#listingResults").append("<tr><td>Error in calling the service, " + error + "</td></tr>");
             }
         });
+
+        $("#addNewListing").submit(async (event) => {
+            event.preventDefault();
+            var listingURL = "http://localhost:5001/listing/new";
+            //console.log(loggedInCustomerID);
+            var newListingName = $("#newListingName").val();
+            var newListingPrice = parseFloat($("#newListingPrice").val());
+            var newListingDesc = $("#newListingDesc").val();
+
+            data = { 
+                listingID: "", 
+                customerID: loggedInCustomerID, 
+                talentID: "", 
+                name: newListingName, 
+                details: newListingDesc, 
+                status: available, 
+                price: newListingPrice, 
+                paymentStatus: unpaid, 
+                dateCreated: "" 
+            }
+            try {
+                const response = await fetch(listingURL, { 
+                        method: 'POST', 
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ 
+                                listingID: "", 
+                                customerID: loggedInCustomerID, 
+                                talentID: "", 
+                                name: newListingName, 
+                                details: newListingDesc, 
+                                status: available, 
+                                price: newListingPrice, 
+                                paymentStatus: unpaid, 
+                                dateCreated: "" 
+                            })
+                    });
+                
+                const result = await response.json();
+                
+                    if (!response.ok) {
+                        //Print some error
+                        console.log(result.message);
+                    } else {
+                        //Success
+                        console.log("Success");
+                        return false;
+                    }
+                } catch (error) {
+                    // Error, print something
+                    console.log("There is a problem adding this listing, please try again later."+error);
+                }
+            }
+        )
+
+
     </script>
     <!--Navigation Bar-->
     <div class="container">
@@ -128,31 +209,28 @@
                     <h4 class="modal-title">Post New Listing</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <form>
+                <form id="addNewListing">
+                    <!-- Modal body -->
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label for="name" class="form-label">Job Title</label>
-                            <input type="text" class="form-control" id="name">
+                            <label for="newListingName" class="form-label">Job Title</label>
+                            <input type="text" class="form-control" id="newListingName">
                         </div>
                         <div class="mb-3">
-                            <label for="price" class="form-label">Price</label>
-                            <input type="float" class="form-control" id="price">
+                            <label for="newListingPrice" class="form-label">Price</label>
+                            <input type="number" step="0.01" min=0 class="form-control" id="newListingPrice">
                         </div>
                         <div class="mb-3">
-                            <label for="description" class="form-label">Job Description</label>
-                            <textarea class="form-control" id="description" rows="5"></textarea>
+                            <label for="newListingDesc" class="form-label">Job Description</label>
+                            <textarea class="form-control" id="newListingDesc" rows="5"></textarea>
                         </div>
-                    </form>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <!--<button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>-->
-                    <button type="button" class="btn btn-success">Submit</button>
-                </div>
-
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <!--<button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>-->
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

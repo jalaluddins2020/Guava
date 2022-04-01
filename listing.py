@@ -43,7 +43,8 @@ class ListingModel(db.Model):
     paymentStatus = db.Column(db.String(300), nullable=True)
     dateCreated = db.Column(db.DateTime(), nullable=False)
 
-    def __init__(self, customerID, talentID, name, details, status, price, paymentStatus, dateCreated):
+    def __init__(self, listingID, customerID, talentID, name, details, status, price, paymentStatus, dateCreated):
+        self.listingID = listingID
         self.customerID = customerID
         self.talentID = talentID
         self.name = name
@@ -54,7 +55,15 @@ class ListingModel(db.Model):
         self.dateCreated = dateCreated
 
     def json(self):
-        return {"listingID": self.listingID, "customerID": self.customerID, "talentID": self.talentID, "name": self.name, "details": self.details, "status": self.status, "price": self.price, "paymentStatus": self.paymentStatus, "dateCreated": self.dateCreated}
+        return {"listingID": self.listingID, 
+                "customerID": self.customerID, 
+                "talentID": self.talentID, 
+                "name": self.name, 
+                "details": self.details,
+                "status": self.status, 
+                "price": self.price, 
+                "paymentStatus": self.paymentStatus, 
+                "dateCreated": self.dateCreated}
 
 # Schema Objects
 # Our schema objects will go here
@@ -234,9 +243,9 @@ def update_listing(listingID):
         ), 500
 
 #Create a new listing in db
-@app.route("/listing", methods=["POST"])
-def create_new(listingID):
-    if (ListingModel.query.filter_by(listingID=listingID).first()): 
+@app.route("/listing/new", methods=["POST"])
+def create_new():
+    '''if (ListingModel.query.filter_by(listingID=listingID).first()): 
         return jsonify(
             {
                 "code": 400,
@@ -245,7 +254,7 @@ def create_new(listingID):
                 },
                 "message": "Listing already exists."
             }
-        ), 400
+        ), 400'''
     data = request.get_json()
     listing = ListingModel(**data) 
 
@@ -253,20 +262,20 @@ def create_new(listingID):
         db.session.add(listing)
         db.session.commit()
 
-        graph = facebook.GraphAPI(access_token='EAAJpiCZBvAF4BAE7ElxxwRAkErKtvGRG2tsVWwtwfC00eCldv9pNdmxw9LqNTIFnN1oEBCxALhvVEUUc9tXLzVU8dosbWHIaL6k2W5cTE4ZCztiLJuZAuOnQOrASXKQPHk5ZBTmL2DSRVIurNdZC9dMhd3JdUj4l5BZCHpiUjWCp50ZAaVEpXRoRWZAPMvItqlkZD', version="3.0")
+        '''graph = facebook.GraphAPI(access_token='EAAJpiCZBvAF4BAE7ElxxwRAkErKtvGRG2tsVWwtwfC00eCldv9pNdmxw9LqNTIFnN1oEBCxALhvVEUUc9tXLzVU8dosbWHIaL6k2W5cTE4ZCztiLJuZAuOnQOrASXKQPHk5ZBTmL2DSRVIurNdZC9dMhd3JdUj4l5BZCHpiUjWCp50ZAaVEpXRoRWZAPMvItqlkZD', version="3.0")
 
         graph.put_object(
         parent_object=108952705097678,
         connection_name="feed",
         message = f"NEW LISTING! \nCustomerID: {listing.customerID} \nRequired: {listing.name} \nDetails: {listing.details} \nPrice: ${listing.price}"
-        )
+        )'''
 
     except: 
         return jsonify(
             {
                 "code": 500,
                 "data": {
-                    "listingID": listingID
+                    "error": "unknown"
                 },
                 "message": "An error occurred creating the listing."
             }
