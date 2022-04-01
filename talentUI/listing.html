@@ -21,6 +21,7 @@
     $(async () => {
         var listingURL = "http://localhost:5001/listing"
         var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
+        console.log(sessionStorage)
         console.log("Logged in talent's ID (Line 21):" + loggedInTalentID)
         try {
             const response =

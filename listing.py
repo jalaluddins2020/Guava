@@ -12,9 +12,13 @@ from graphql import Undefined
 from graphql_relay.node.node import from_global_id
 from datetime import datetime
 
+
+
 # initializing our app
 app = Flask(__name__)
 app.debug = True
+
+CORS(app)
 
 # Configs
 # Our database configurations will go here

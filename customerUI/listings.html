@@ -22,8 +22,9 @@
 <body>
     <!--header-->
     <script>
-        var loggedInCustomerID = sessionStorage.getItem('customerID');
-        console.log(sessionStorage)
+        /*var loggedInCustomerID = sessionStorage.getItem('customerID');
+        console.log(sessionStorage)*/$
+        var loggedInCustomerID = 1;
         $(async () => {
             var listingURL = "http://localhost:5001/listing/customer/" + loggedInCustomerID
             try {
@@ -43,7 +44,7 @@
                         for (let i = 0; i < allUserListings.length; i++) {
                             console.log(allUserListings[i])
                             row += "<tr>";
-                            row += "<td>" + (i + 1) + ".</td>" + "<td>" + allUserListings[i]["name"] + "</td>" + "<td>" + allUserListings[i]["dateCreated"] + "</td>";
+                            row += "<td>" + (i + 1) + ".</td><td><a herf='../customerUI/details.html'>" + allUserListings[i]["name"] + "</a></td><td>" + allUserListings[i]["dateCreated"] + "</td>";
                             row += "</tr>";
                         }
                     }
@@ -101,6 +102,11 @@
                             <th scope="col">#</th>
                             <th scope="col">Title</th>
                             <th scope="col">Posted On</th>
+                        </tr>
+                        <tr>
+                            <td>5.</td>
+                            <td><a href="../customerUI/Listing"></td>
+                            <td>Yesterday</td>
                         </tr>
                     </thead>
                     <tbody id="listingResults"></tbody>
