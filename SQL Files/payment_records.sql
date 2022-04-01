@@ -14,5 +14,4 @@ CREATE TABLE IF NOT EXISTS payments (
 );
 
 INSERT INTO payments (payment_id, listing_id, customer_id, price, date_time) VALUES ("PAYID-MI5PAJI63V0799180830831E", 7, 5, 15.00, "2022-03-17 17:54:32");
-INSERT INTO payments (payment_id, listing_id, customer_id, price, date_time) VALUES ("PAYID-MI5O76Y47S81428VU094974A", 3, 1, 25.00, "2022-03-19 20:36:12");
 INSERT INTO payments (payment_id, listing_id, customer_id, price, date_time) VALUES ("PAYID-MI5O6WA2DT331953U1639052", 8, 3, 10.00, "2022-03-20 23:54:45");
