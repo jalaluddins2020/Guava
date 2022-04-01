@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;900&display=swap');
+
+
+body {
+    padding-left: 2rem;
+    padding-top: 2rem;
+    padding-right:2rem;
+    padding-bottom:2rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.logo {
+    font-weight:bold;
+    font-size:5vh;
+}
+
+.footer {
+    color:grey;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+
+.image {
+    width:30%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+    padding-top:3%;
+}
+
+.text {
+    text-align: center;
+}
+
+
+.card-title { 
+    text-align: center;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    padding-top: 2%;
+}
+
+
+.card-body {
+    align-items: center;
+    text-align: center;
+}
+
+
+.contact {
+    position:relative;
+    
+}
+
+.context {
+    margin-left:20%;
+    margin-right:20%;
+    min-height: 100%;
+}
+
+
+.applyButton {
+    display:flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+.card {
+    display:flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.applicationButtonCentering {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+
+.listingCentral{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+.listing {
+    display:flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
