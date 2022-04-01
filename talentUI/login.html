@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link href="../talentUI/overall.css" rel="stylesheet">
 </head>
 
 <body>
@@ -95,14 +94,17 @@
                     await fetch(
                         talentURL, { method: 'GET' }
                     );
-                console.log(await response.json())
                 if (!response.ok) {
                     //Print some error
                     //$("#listingResults").append("<tr><td class='text-muted'>No results returned</td></tr>")
                 } else {
                     //Success
-                    const customer = await response.json();
-                    //console.log(customer["data"])
+                    const authenticatedTalent = await response.json();
+                    var talentDetail = authenticatedTalent["data"]
+                    sessionStorage.setItem("loggedInTalentID", talentDetail["talentID"])
+                    var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
+                    location.href = "./listing.html";
+                    //console.log("Session Variable", loggedInTalentID)
                 }
             } catch (error) {
                 // Error, print something

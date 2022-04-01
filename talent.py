@@ -8,7 +8,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localh
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
-
 db = SQLAlchemy(app) #Initialise connection to database
 
 CORS(app)  
@@ -72,7 +71,7 @@ def find_by_talentID(talentID):
 #Authenticate
 @app.route("/talent/authenticate/<string:talentEmail>/<string:talentNumber>")
 def authenticate(talentEmail,talentNumber):
-    talent = Talent.query.filter(contactEmail = talentEmail).filter(contactNumber = talentNumber).all()
+    talent = Talent.query.filter(Talent.contactEmail == talentEmail).filter(Talent.contactNumber == talentNumber).first()
     if talent:
         return jsonify(
             {
