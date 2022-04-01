@@ -23,7 +23,7 @@
     <!--header-->
     <script>
         /*var loggedInCustomerID = sessionStorage.getItem('customerID');
-        console.log(sessionStorage)*/$
+        console.log(sessionStorage)*/
         var loggedInCustomerID = 1;
         $(async () => {
             var listingURL = "http://localhost:5001/listing/customer/" + loggedInCustomerID
@@ -43,8 +43,12 @@
                     if (allUserListings) {
                         for (let i = 0; i < allUserListings.length; i++) {
                             console.log(allUserListings[i])
-                            row += "<tr>";
-                            row += "<td>" + (i + 1) + ".</td><td><a herf='../customerUI/details.html'>" + allUserListings[i]["name"] + "</a></td><td>" + allUserListings[i]["dateCreated"] + "</td>";
+                            row += "<tr>";                       
+                            row += "<td>" + (i + 1) + ".</td>"; //Index
+                            row += "<td><a href='../customerUI/details.html?listingID="+allUserListings[i]["listingID"]+"'>" + allUserListings[i]["name"] + "</a></td>"; //Listing Title with href link
+                            row += "<td><span class='badge bg-primary'>" + allUserListings[i]["status"] + "</span></td>"; //Availability status
+                            row += "<td><span class='badge bg-primary'>" + allUserListings[i]["paymentStatus"] + "</span></td>"; //Payment status
+                            row += "<td>" + allUserListings[i]["dateCreated"] + "</td>"; //Date posted
                             row += "</tr>";
                         }
                     }
@@ -101,12 +105,9 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Title</th>
+                            <th scope="col">Availability Status</th>
+                            <th scope="col">Payment Status</th>
                             <th scope="col">Posted On</th>
-                        </tr>
-                        <tr>
-                            <td>5.</td>
-                            <td><a href="../customerUI/Listing"></td>
-                            <td>Yesterday</td>
                         </tr>
                     </thead>
                     <tbody id="listingResults"></tbody>

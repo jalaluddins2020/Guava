@@ -19,9 +19,11 @@
 
 <body>
     <script>
-        const codedListingID = 1;
+        const queryString = window.location.search;
+        const URLParams = new URLSearchParams(queryString);
+        const selectedListingID = URLParams.get("listingID");
         $(async () => {
-            var listingURL = "http://localhost:5001/listing/"+codedListingID
+            var listingURL = "http://localhost:5001/listing/"+selectedListingID
             try {
                 const response =
                     await fetch(
@@ -36,13 +38,22 @@
                     var listingDetail = listing["data"];
                     var listingTitle = listingDetail["name"];
                     var listingDesc = listingDetail["details"];
-                    var listingDate = listingDetail["dateCreated"];
                     var listingPrice = listingDetail["price"]
+                    var listingStatus = listingDetail["status"]
+                    var listingPaymentStatus = listingDetail["paymentStatus"]
+                    var listingDate = listingDetail["dateCreated"];
+
+                    if(listingStatus == "available"){
+                        $("#payButton").prop("disabled", true);
+                    }
 
                     $("#listingTitle").text(listingTitle);
                     $("#listingDesc").text(listingDesc);
                     $("#listingPrice").text(listingPrice);
+                    $("#listingStatus").text(listingStatus);
+                    $("#listingPaymentStatus").text(listingPaymentStatus);
                     $("#listingDate").text(listingDate);
+                    $("#imageURL").attr("src","../resources/listing"+selectedListingID+".jpeg")
 
                 }
             } catch (error) {
@@ -50,6 +61,10 @@
                 //$("#listingResults").text("Error in calling the service, "+error);
             }
         });
+
+        function test(){
+            alert("success");
+        }
     </script>
     <!--Navigation Bar-->
     <div class="container">
@@ -85,7 +100,7 @@
         <div class="row justify-content-center">
             <div class="col-6">
                 <div class="card">
-                    <img src="../resources/1.jpeg" class="card-img-top" alt="...">
+                    <img id="imageURL" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">
                             <span id="listingTitle"></span>
@@ -103,12 +118,20 @@
                                         <td>SGD $ <span id="listingPrice"></span>.00</td>
                                     </tr>
                                     <tr>
+                                        <th>Listing Status</th>
+                                        <td><span id="listingStatus"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Payment Status</th>
+                                        <td><span id="listingPaymentStatus"></span></td>
+                                    </tr>
+                                    <tr>
                                         <th>Date Listed</th>
                                         <td><span id="listingDate"></span></td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <span id="listingDesc"></span>
+                            <button id="payButton" class="btn btn-dark btn-lg" onclick="test()">Pay Talent</button>
                         </p>
                     </div>
                 </div>
