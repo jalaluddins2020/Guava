@@ -102,7 +102,7 @@
                     const authenticatedTalent = await response.json();
                     var talentDetail = authenticatedTalent["data"]
                     sessionStorage.setItem("loggedInTalentID", talentDetail["talentID"])
-                    var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
+                    //var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
                     location.href = "./listing.html";
                     //console.log("Session Variable", loggedInTalentID)
                 }
