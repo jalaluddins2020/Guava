@@ -16,7 +16,6 @@ CORS(app)
 
 listing_url = "http://localhost:5001/listing"
 payment_records_url = "http://localhost:5006/records"
-listing_update_url = "http://localhost:5003/listing"
 client_id = os.getenv("PAYPAL_CLIENT_ID")
 client_secret = os.getenv("PAYPAL_CLIENT_SECRET")
 
@@ -25,39 +24,39 @@ paypalrestsdk.configure({
     "client_id": client_id,
     "client_secret": client_secret })
 
-@app.route("/payment") #, methods=["post"]
-def start():
-    global price, name, customer_id, details, listing_id, talent_id
-    # receive listing_id post from customer ui
-    # listing_id = request.json.get("listing_id", None)
-    listing_id = 1
-    listing_id = str(listing_id)
+@app.route("/payment/<string:listing_id>") 
+def start(listing_id):
+    global price, name, customer_id, details, talent_id
+
+    # receive listing_id from customer ui
+    print(listing_id)
 
     #invoke listing microservice
     listing = invoke_http(listing_url + "/" + listing_id, method='GET')
     code = listing["code"]
     print(code)
 
-    #listing microservice price, name & details
     if code in range(200, 300):
         price = str(listing["data"]["price"])
         name = str(listing["data"]["name"])
         customer_id = str(listing["data"]["customerID"])
         details = str(listing["data"]["details"])
         talent_id = str(listing["data"]["talentID"])
+        
         return render_template("index.html")
-
+    
     else:
-        return {
-            "code": 500,
+        return jsonify({
+            "code": 404,
             "data": {"result": listing},
             "message": "Failed to invoke listing microservice"
-        }
+        })
+    
     
 
-@app.route("/payment/create", methods=["POST"]) 
-def create():
-    global price, name, customer_id, details, listing_id
+@app.route("/payment/<string:listing_id>/create", methods=["POST"]) 
+def create(listing_id):
+    global price, name, customer_id, details
 
     #payment creation to send to paypal
     payment = paypalrestsdk.Payment({
@@ -88,9 +87,9 @@ def create():
     return jsonify({"paymentID": payment.id})
 
 #for onApproval
-@app.route("/payment/execute", methods=["POST"])
-def execute():
-    global price, name, customer_id, details, listing_id
+@app.route("/payment/<string:listing_id>/execute", methods=["POST"])
+def execute(listing_id):
+    global price, name, customer_id, details
 
     payment = paypalrestsdk.Payment.find(request.form["paymentID"])
 
@@ -119,9 +118,11 @@ def execute():
         else:
             print("Record failed")
 
-        update_status = invoke_http(listing_update_url + "/" + listing_id + "/" + talent_id, method="put",json={"listing_id": listing_id, "payment_status": "Paid"})
+        #update listing payment status
+        update_status = invoke_http(listing_url + "/update/" + listing_id, method="put",json={"change": "payment", "status": "", "talentID": "", "payment": "paid"})
         if update_status["code"] in range (200, 300):
-            print("Sent to listing microservice")
+            print("Updated listing microservice")
+            return redirect("file:///C:/ESD/Labs/Guava-main/customerUI/listings.html")
         else:
             print("Update to listing microservice failed")
 
