@@ -17,7 +17,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- Stylesheets -->
-    <link href="./customer.css" rel="stylesheet">
+    <link href="../talentUI/customer.css" rel="stylesheet">
 </head>
 
 <body>
@@ -39,43 +39,17 @@
                 } else {
                     //Success
                     var row = "";
-                    var listingBadgeCol = "";
-                    var paymentBadgeCol = "";
-
                     const listings = await response.json();
                     const allUserListings = listings["data"];
                     if (allUserListings) {
                         for (let i = 0; i < allUserListings.length; i++) {
                             console.log(allUserListings[i])
-
-                            var alllistingDetails = allUserListings[i];
-                            var eachListingID = alllistingDetails["listingID"];
-                            var eachListingTitle = alllistingDetails["name"];
-                            var eachListingStatus = alllistingDetails["status"]
-                            var eachListingPaymentStatus = alllistingDetails["paymentStatus"]
-                            var eachListingDate = alllistingDetails["dateCreated"];
-                            
-                            if(eachListingStatus == "available"){
-                                listingBadgeCol = "bg-secondary";
-                                if(eachListingPaymentStatus == "unpaid"){
-                                    paymentBadgeCol = "bg-secondary";
-                                }
-                            }else{
-                                listingBadgeCol = "bg-primary";
-                                if(eachListingPaymentStatus == "unpaid"){
-                                    paymentBadgeCol = "bg-warning";
-                                }else{
-                                    paymentBadgeCol = "bg-success";
-                                }
-                            }
-                            
-
                             row += "<tr>";
                             row += "<td>" + (i + 1) + ".</td>"; //Index
-                            row += "<td><a href='../customerUI/details.html?listingID=" + eachListingID + "'>" + eachListingTitle + "</a></td>"; //Listing Title with href link
-                            row += "<td><span class='badge "+listingBadgeCol+"'>" + eachListingStatus + "</span></td>"; //Availability status
-                            row += "<td><span class='badge "+paymentBadgeCol+"'>" + eachListingPaymentStatus + "</span></td>"; //Payment status
-                            row += "<td>" + eachListingDate + "</td>"; //Date posted
+                            row += "<td><a href='../customerUI/details.html?listingID=" + allUserListings[i]["listingID"] + "'>" + allUserListings[i]["name"] + "</a></td>"; //Listing Title with href link
+                            row += "<td><span class='badge bg-primary'>" + allUserListings[i]["status"] + "</span></td>"; //Availability status
+                            row += "<td><span class='badge bg-primary'>" + allUserListings[i]["paymentStatus"] + "</span></td>"; //Payment status
+                            row += "<td>" + allUserListings[i]["dateCreated"] + "</td>"; //Date posted
                             row += "</tr>";
                         }
                     }

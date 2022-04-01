@@ -3,30 +3,25 @@
 
 <head>
     <!-- Required meta tags -->
-    <title>Customer UI</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Customer UI</title>
     <link rel="icon" type="image/png" sizes="16x16" href="./../resources/favicon-96x96.png">
-
-    <!-- Bootstrap & Icons CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
-    <!-- jQuery js CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="../talentUI/talentCSS.css" rel="stylesheet">
+    <link rel="stylesheet" href="customerCSS.css">
 
-    <!-- Stylesheets -->
-    <link href="../talentUI/customer.css" rel="stylesheet">
 </head>
 
 <body>
     <script>
-        const queryString = window.location.search;
-        const URLParams = new URLSearchParams(queryString);
-        const selectedListingID = URLParams.get("listingID");
+        const codedListingID = 1;
         $(async () => {
-            var listingURL = "http://localhost:5001/listing/" + selectedListingID
+            var listingURL = "http://localhost:5001/listing/"+codedListingID
             try {
                 const response =
                     await fetch(
@@ -39,25 +34,15 @@
                     //Success
                     const listing = await response.json();
                     var listingDetail = listing["data"];
-                    var listingID = listingDetail["listingID"];
                     var listingTitle = listingDetail["name"];
                     var listingDesc = listingDetail["details"];
-                    var listingPrice = listingDetail["price"]
-                    var listingStatus = listingDetail["status"]
-                    var listingPaymentStatus = listingDetail["paymentStatus"]
                     var listingDate = listingDetail["dateCreated"];
-
-                    if (listingStatus == "available") {
-                        $("#payButton").prop("disabled", true);
-                    }
+                    var listingPrice = listingDetail["price"]
 
                     $("#listingTitle").text(listingTitle);
                     $("#listingDesc").text(listingDesc);
                     $("#listingPrice").text(listingPrice);
-                    $("#listingStatus").text(listingStatus);
-                    $("#listingPaymentStatus").text(listingPaymentStatus);
                     $("#listingDate").text(listingDate);
-                    $("#imageURL").attr("src", "../resources/listing" + selectedListingID + ".jpeg")
 
                 }
             } catch (error) {
@@ -65,20 +50,12 @@
                 //$("#listingResults").text("Error in calling the service, "+error);
             }
         });
-
-        function makePayment(selectedListingID) {
-            var paymentURL = "http://localhost:5005/payment"
-            window.location.href= paymentURL + "/" + selectedListingID
-
-            console.log(selectedListingID)
-        }
-
     </script>
     <!--Navigation Bar-->
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light bg-none">
             <div class="container-fluid">
-                <a class="navbar-brand logo" href="listings.html">Pentagon</a>
+                <a class="navbar-brand logo" href="#">Pentagon</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
                     aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -92,8 +69,7 @@
                             <a class="nav-link" href="../customerUI/profile.html">Profile</a>
                         </li>
                     </ul>
-                    <a class="btn btn-outline-dark" data-mdb-ripple-color="dark" href='../talentUI/listing.html'>Go to
-                        Talent</a>
+                    <a class="btn btn-outline-dark" data-mdb-ripple-color="dark" href='../talentUI/listing.html'>Go to Talent</a>
                 </div>
             </div>
         </nav>
@@ -109,39 +85,30 @@
         <div class="row justify-content-center">
             <div class="col-6">
                 <div class="card">
-                    <img id="imageURL" class="card-img-top" alt="...">
+                    <img src="../resources/1.jpeg" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">
                             <span id="listingTitle"></span>
                         </h5>
-                        <br />
+                        <br/>
                         <p class="card-text">
-                        <table class="table table-bordered">
-                            <tbody>
-                                <tr>
-                                    <th>Job Description</th>
-                                    <td><span id="listingDesc"></span></td>
-                                </tr>
-                                <tr>
-                                    <th>Price</th>
-                                    <td>SGD $ <span id="listingPrice"></span>.00</td>
-                                </tr>
-                                <tr>
-                                    <th>Listing Status</th>
-                                    <td><span id="listingStatus"></span></td>
-                                </tr>
-                                <tr>
-                                    <th>Payment Status</th>
-                                    <td><span id="listingPaymentStatus"></span></td>
-                                </tr>
-                                <tr>
-                                    <th>Date Listed</th>
-                                    <td><span id="listingDate"></span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <button id="payButton" class="btn btn-dark btn-lg" onclick="makePayment(selectedListingID)">Pay
-                            Talent</button>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th>Job Description</th>
+                                        <td><span id="listingDesc"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Price</th>
+                                        <td>SGD $ <span id="listingPrice"></span>.00</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date Listed</th>
+                                        <td><span id="listingDate"></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <span id="listingDesc"></span>
                         </p>
                     </div>
                 </div>
@@ -154,9 +121,7 @@
     <div class="footer">© Pentagon</div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 
 </html>
