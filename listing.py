@@ -4,13 +4,14 @@ import os
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-import graphene
-from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
-from flask_graphql import GraphQLView
-import facebook
-from graphql import Undefined
-from graphql_relay.node.node import from_global_id
+# import graphene
+# from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
+# from flask_graphql import GraphQLView
+# import facebook
+# from graphql import Undefined
+# from graphql_relay.node.node import from_global_id
 from datetime import datetime
+from os import environ
 
 # initializing our app
 app = Flask(__name__)
@@ -20,7 +21,7 @@ CORS(app)
 
 # Configs
 # Our database configurations will go here
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/listing'
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://root@localhost:3306/listing'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
