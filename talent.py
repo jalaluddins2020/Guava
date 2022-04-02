@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy #Import flask version of SQLAlchemy
 from flask_cors import CORS
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/talent' #Specify database URL & use mysql+mysqlconnector prefix to instruct which database engine and connector to use
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/talent' #Specify database URL & use mysql+mysqlconnector prefix to instruct which database engine and connector to use
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 

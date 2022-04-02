@@ -24,9 +24,9 @@
 <script>
     $(async () => {
         var listingURL = "http://localhost:5001/listing"
-        // var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
-        // console.log(sessionStorage)
-        // console.log("Logged in talent's ID (Line 21):" + loggedInTalentID)
+        var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
+        console.log(sessionStorage)
+        console.log("Logged in talent's ID (Line 21):" + loggedInTalentID)
         try {
             const response =
                 await fetch(
@@ -58,6 +58,9 @@
                             } else {
                                 return "Unavailable"
                             }
+                        },
+                        link: function(one) {
+                            window.location.href = "details.html?listingID=" + one.listingID
                         }
                     }
                 }
@@ -69,6 +72,7 @@
             console.log("catch")
         }
     });
+
 </script>
 
 <body>
@@ -112,8 +116,7 @@
                         <h5 class="card-title">Listing Number: {{oneListing.listingID}}</h5>
                         <h5 class="card-title">Customer: {{oneListing.customerID}}</h5>
                         <p class="card-text">{{oneListing.details}}</p>
-                        <button type="button" class="btn btn-outline-dark contact" data-mdb-ripple-color="dark"
-                            onclick="location.href='details.html'">Details</button>
+                        <button v-on:click="link(oneListing)" class="btn btn-outline-dark contact" >Details</button>
                 </div>
             </div>
 
