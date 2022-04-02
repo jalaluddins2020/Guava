@@ -50,6 +50,15 @@
                     },
                     methods: {
                         // format
+                        status: function(one) {
+                            var stat = one.status
+                            if (stat == "available") {
+                                var output = stat[0].toUpperCase() + stat.substring(1)
+                                return output
+                            } else {
+                                return "Unavailable"
+                            }
+                        }
                     }
                 }
                 ).mount("#app")
@@ -96,11 +105,12 @@
         <div class="content container-fluid">
             <div class="listing row" id="app">
 
-                <div class="card-body col-3" v-for="oneListing in listings">
-                        <img class="card-img-top" src="../resources/2.webp" alt="Card image cap">
+                <div class="card col-8 p-2 m-2" v-for="oneListing in listings">
+                        <h3 class="card-title">{{status(oneListing)}}</h3>
+                        <!-- <img class="card-img-top" src="../resources/2.webp" alt="Card image cap"> -->
                         <h5 class="card-title">Required: {{oneListing.name}}</h5>
-                        <h5 class="card-title">ListingID: {{oneListing.listingID}}</h5>
-                        <h5 class="card-title">CustomerID: {{oneListing.customerID}}</h5>
+                        <h5 class="card-title">Listing Number: {{oneListing.listingID}}</h5>
+                        <h5 class="card-title">Customer: {{oneListing.customerID}}</h5>
                         <p class="card-text">{{oneListing.details}}</p>
                         <button type="button" class="btn btn-outline-dark contact" data-mdb-ripple-color="dark"
                             onclick="location.href='details.html'">Details</button>
