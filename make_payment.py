@@ -23,10 +23,10 @@ paypalrestsdk.configure({
     "mode": "sandbox", # sandbox or production
     "client_id": client_id,
     "client_secret": client_secret })
-
-@app.route("/payment/<string:listing_id>") 
-def start(listing_id):
-    global price, name, customer_id, details, talent_id
+  
+@app.route("/create/<string:listing_id>", methods=["POST"]) 
+def create(listing_id):
+    global price, name, customer_id, details
 
     # receive listing_id from customer ui
     print(listing_id)
@@ -41,9 +41,6 @@ def start(listing_id):
         name = str(listing["data"]["name"])
         customer_id = str(listing["data"]["customerID"])
         details = str(listing["data"]["details"])
-        talent_id = str(listing["data"]["talentID"])
-        
-        return render_template("index.html")
     
     else:
         return jsonify({
@@ -51,12 +48,6 @@ def start(listing_id):
             "data": {"result": listing},
             "message": "Failed to invoke listing microservice"
         })
-    
-    
-
-@app.route("/payment/<string:listing_id>/create", methods=["POST"]) 
-def create(listing_id):
-    global price, name, customer_id, details
 
     #payment creation to send to paypal
     payment = paypalrestsdk.Payment({
@@ -81,13 +72,15 @@ def create(listing_id):
 
     if payment.create():
         print(payment)
+        return jsonify({"paymentID": payment.id})
     else:
         print(payment.error)
+        return jsonify({"message": payment.error})
 
-    return jsonify({"paymentID": payment.id})
+
 
 #for onApproval
-@app.route("/payment/<string:listing_id>/execute", methods=["POST"])
+@app.route("/execute/<string:listing_id>", methods=["POST"])
 def execute(listing_id):
     global price, name, customer_id, details
 
@@ -101,30 +94,31 @@ def execute(listing_id):
     status = payment.success()
     print(status)
 
-    
 
     # if status:
     #     body = {"payment_id": payment.id, "listing_id": 12, "customer_id": 5, "price": 15.00}
     #     record_status = invoke_http(payment_records_url, method="post", json=body)
     #     print(record_status)
 
-    #if status is true, add to payment_records db
+    #if status is true,
     if status:
         body = {"payment_id": payment.id, "listing_id": listing_id, "customer_id": customer_id, "price": price}
         record_status = invoke_http(payment_records_url, method="post", json=body)
-
-        if record_status["code"] in range (200, 300):
-            print("Sent to payment_records microservice")
-        else:
-            print("Record failed")
 
         #update listing payment status
         update_status = invoke_http(listing_url + "/update/" + listing_id, method="put",json={"change": "payment", "status": "", "talentID": "", "payment": "paid"})
         if update_status["code"] in range (200, 300):
             print("Updated listing microservice")
-            return redirect("file:///C:/ESD/Labs/Guava-main/customerUI/listings.html")
+
         else:
             print("Update to listing microservice failed")
+
+        #add to payment records db
+        if record_status["code"] in range (200, 300):
+            print("Sent to payment_records microservice")
+        else:
+            print("Record failed")
+
 
     #payment.id will be transaction id for logging purposes in payment records
     return jsonify({"status": payment.success(), "payment": body})
