@@ -28,7 +28,7 @@
         console.log(sessionStorage)*/
         const loggedInCustomerID = 1;
         $(async () => {
-            var listingURL = "http://localhost:5001/listing/customer/" + loggedInCustomerID
+            var listingURL = "http://localhost:5007/check/" + loggedInCustomerID
             try {
                 const response =
                     await fetch(
@@ -55,6 +55,9 @@
                             var eachListingStatus = alllistingDetails["status"]
                             var eachListingPaymentStatus = alllistingDetails["paymentStatus"]
                             var eachListingDate = alllistingDetails["dateCreated"];
+                            var eachListingTalentName = alllistingDetails["talentName"]
+                            var eachListingTalentNumber = alllistingDetails["contact"]
+                            var eachListingTalentEmail = alllistingDetails["email"]
 
                             if (eachListingStatus == "available") {
                                 listingBadgeCol = "bg-secondary";
@@ -75,6 +78,9 @@
                             row += "<td><a href='../customerUI/details.html?listingID=" + eachListingID + "'>" + eachListingTitle + "</a></td>"; //Listing Title with href link
                             row += "<td><span class='badge " + listingBadgeCol + "'>" + eachListingStatus + "</span></td>"; //Availability status
                             row += "<td><span class='badge " + paymentBadgeCol + "'>" + eachListingPaymentStatus + "</span></td>"; //Payment status
+                            row += "<td>" + eachListingTalentName + "</td>";
+                            row += "<td>" + eachListingTalentNumber + "</td>";
+                            row += "<td>" + eachListingTalentEmail + "</td>";
                             row += "<td>" + eachListingDate + "</td>"; //Date posted
                             row += "</tr>";
                         }
@@ -190,6 +196,9 @@
                             <th scope="col">Title</th>
                             <th scope="col">Availability Status</th>
                             <th scope="col">Payment Status</th>
+                            <th scope="col">Talent Name</th>
+                            <th scope="col">Talent Number</th>
+                            <th scope="col">Talent Email</th>
                             <th scope="col">Posted On</th>
                         </tr>
                     </thead>
