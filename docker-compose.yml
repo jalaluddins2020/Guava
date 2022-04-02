@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3"
 
 volumes:
   rabbitmq_data:
@@ -23,6 +23,8 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/listing
       PYTHONUNBUFFERED: 1
+    ports:
+      - "5001:5001"
  
   #######################################################
   # customer: The customer microservice
@@ -36,6 +38,8 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/customer
       PYTHONUNBUFFERED: 1
+    ports:
+      - "5010:5010"
 
   ##################################
   # talent: The talent microservice
@@ -49,6 +53,8 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/talent
       PYTHONUNBUFFERED: 1
+    ports:
+      - "5011:5011"
 
   #######################################################
   # payment_records: The payment records microservice
@@ -60,8 +66,10 @@ services:
     image: ryanyak/payment_records:esd
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/records
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/payment_recordsdb
       PYTHONUNBUFFERED: 1
+    ports:
+      - "5006:5006"
 
   ####################################
   # RabbitMQ: The messaging broker   
@@ -108,6 +116,8 @@ services:
       listing_url: http://localhost:5001/listing
       payment_records_url: http://localhost:5006/records
       PYTHONUNBUFFERED: 1
+    ports:
+      - "5005:5005"
 
   ###############################################
   # check_listing: The check_listing microservice
@@ -124,9 +134,10 @@ services:
       - talent
     environment:
       listing_url: http://localhost:5001/listing
-      customer_url: http://localhost:5010/customer
       talent_url: http://localhost:5011/talent
       PYTHONUNBUFFERED: 1
+    ports:
+      - "5007:5007"
 
   ###############################################
   # accept_listing: The accept_listing microservice
@@ -145,87 +156,87 @@ services:
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
-      listing_url: http://localhost:5001/listing
-      customer_url: http://localhost:5010/customer
-      talent_url: http://localhost:5011/talent
+      listing_url: http://localhost:5001/listing/update
       PYTHONUNBUFFERED: 1
-
-  #######################################
-  # Postgres: The database used by Kong
-  #######################################
-  kong-database:
-    image: postgres:9.6
-    restart: always
-    networks:
-      - kong-net
-    environment:
-      POSTGRES_DB: kong
-      POSTGRES_USER: kong
-      POSTGRES_PASSWORD: password
     ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "kong"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+      - "5100:5100"
 
-  #######################################
-  # Kong database migration
-  #######################################
-  kong-migration:
-    image: kong:2.0.4
-    command: "kong migrations bootstrap"
-    restart: on-failure
-    networks:
-      - kong-net
-    environment:
-      KONG_DATABASE: postgres
-      KONG_PG_HOST: kong-database
-      KONG_PG_USER: kong
-      KONG_PG_PASSWORD: password
-    depends_on:
-      - kong-database
+  # #######################################
+  # # Postgres: The database used by Kong
+  # #######################################
+  # kong-database:
+  #   image: postgres:9.6
+  #   restart: always
+  #   networks:
+  #     - kong-net
+  #   environment:
+  #     POSTGRES_DB: kong
+  #     POSTGRES_USER: kong
+  #     POSTGRES_PASSWORD: password
+  #   ports:
+  #     - "5432:5432"
+  #   healthcheck:
+  #     test: ["CMD", "pg_isready", "-U", "kong"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
 
-  #######################################
-  # Kong: The API Gateway
-  #######################################
-  kong:
-    image: kong:2.0.4
-    restart: always
-    networks:
-      - kong-net
-    environment:
-      KONG_DATABASE: postgres
-      KONG_PG_HOST: kong-database
-      KONG_PG_USER: kong
-      KONG_PG_PASSWORD: password
-      KONG_PROXY_LISTEN: 0.0.0.0:8000
-      KONG_ADMIN_LISTEN: 0.0.0.0:8001
-    depends_on:
-      - kong-migration
-    ports:
-      - "8000:8000"
+  # #######################################
+  # # Kong database migration
+  # #######################################
+  # kong-migration:
+  #   image: kong:2.0.4
+  #   command: "kong migrations bootstrap"
+  #   restart: on-failure
+  #   networks:
+  #     - kong-net
+  #   environment:
+  #     KONG_DATABASE: postgres
+  #     KONG_PG_HOST: kong-database
+  #     KONG_PG_USER: kong
+  #     KONG_PG_PASSWORD: password
+  #   depends_on:
+  #     - kong-database
+
+  # #######################################
+  # # Kong: The API Gateway
+  # #######################################
+  # kong:
+  #   image: kong:2.0.4
+  #   restart: always
+  #   networks:
+  #     - kong-net
+  #   environment:
+  #     KONG_DATABASE: postgres
+  #     KONG_PG_HOST: kong-database
+  #     KONG_PG_USER: kong
+  #     KONG_PG_PASSWORD: password
+  #     KONG_PROXY_LISTEN: 0.0.0.0:8000
+  #     KONG_ADMIN_LISTEN: 0.0.0.0:8001
+  #   depends_on:
+  #     - kong-migration
+  #   ports:
+  #     - "8000:8000"
   
-  #######################################
-  # Konga: Kong GUI 
-  #######################################
-  konga:
-    image: pantsel/konga
-    restart: always
-    networks:
-        - kong-net
-    environment:
-      DB_ADAPTER: postgres
-      DB_HOST: kong-database
-      DB_USER: kong
-      DB_PASSWORD: password
-      DB_DATABASE: konga_db
-    depends_on:
-      - kong
-    ports:
-      - "13370:1337"
-    volumes:
-      - kongadata:/app/kongadata
+  # #######################################
+  # # Konga: Kong GUI 
+  # #######################################
+  # konga:
+  #   image: pantsel/konga
+  #   restart: always
+  #   networks:
+  #       - kong-net
+  #   environment:
+  #     DB_ADAPTER: postgres
+  #     DB_HOST: kong-database
+  #     DB_USER: kong
+  #     DB_PASSWORD: password
+  #     DB_DATABASE: konga_db
+  #   depends_on:
+  #     - kong
+  #   ports:
+  #     - "13370:1337"
+  #   volumes:
+  #     - kongadata:/app/kongadata
