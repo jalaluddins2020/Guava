@@ -18,18 +18,19 @@
 
     <!-- Stylesheets -->
     <link href="./talent.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue@next"></script>
 </head>
 
 <script>
     $(async () => {
         var listingURL = "http://localhost:5001/listing"
-        var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
-        console.log(sessionStorage)
-        console.log("Logged in talent's ID (Line 21):" + loggedInTalentID)
+        // var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
+        // console.log(sessionStorage)
+        // console.log("Logged in talent's ID (Line 21):" + loggedInTalentID)
         try {
             const response =
                 await fetch(
-                    listingURL, { method: 'GET', body: { "listingID": "1" } }
+                    listingURL, { method: 'GET'}
                 );
             if (!response.ok) {
                 //Print some error
@@ -84,64 +85,38 @@
                             <a class="nav-link" href="../talentUI/profile.html">Talent Profile</a>
                         </li>
                     </ul>
-                    <a class="btn btn-outline-dark" data-mdb-ripple-color="dark" href='./../customerUI/listings.html'>Go
-                        to
+                    <a class="btn btn-outline-dark" data-mdb-ripple-color="dark" href='../customerUI/listings.html'>Go to
                         Customer</a>
                 </div>
             </div>
         </nav>
     </div>
     <hr>
-    <!--content-->
-    <div id="app">
-        <h1 v-for="oneListing in listings">
-            {{oneListing.listingID}}
-            {{oneListing.customerID}}
-            {{oneListing.talentID}}
-            {{oneListing.name}}
-            {{oneListing.details}}
-            {{oneListing.status}}
-            {{oneListing.price}}
-            {{oneListing.paymentStatus}}
-            {{oneListing.dateCreated}}
-        </h1>
-    </div>
-    <div id="app">
-        <h1 v-for="oneListing in listings">
-            {{oneListing.listingID}}
-            {{oneListing.customerID}}
-            {{oneListing.talentID}}
+        <!--content-->
+        <div class="content container-fluid">
+            <div class="listing row" id="app">
 
+                <div class="card-body col-3" v-for="oneListing in listings">
+                        <img class="card-img-top" src="../resources/2.webp" alt="Card image cap">
+                        <h5 class="card-title">Required: {{oneListing.name}}</h5>
+                        <h5 class="card-title">ListingID: {{oneListing.listingID}}</h5>
+                        <h5 class="card-title">CustomerID: {{oneListing.customerID}}</h5>
+                        <p class="card-text">{{oneListing.details}}</p>
+                        <button type="button" class="btn btn-outline-dark contact" data-mdb-ripple-color="dark"
+                            onclick="location.href='details.html'">Details</button>
+                </div>
+            </div>
 
-            {{oneListing.status}}
-            {{oneListing.price}}
-            {{oneListing.paymentStatus}}
-            {{oneListing.dateCreated}}
-        </h1>
-    </div>
-
-    <div class="card-body col-3" id="app">
-        <img class="card-img-top" src="../resources/2.webp" alt="Card image cap">
-        <h5 class="card-title">{{oneListing.name}}</h5>
-        <h5 class="card-title">{{oneListing.listingID}}</h5>
-        <h5 class="card-title">{{oneListing.customerID}}</h5>
-        <p class="card-text">{{oneListing.details}}</p>
-        <button type="button" class="btn btn-outline-dark contact" data-mdb-ripple-color="dark"
-            onclick="location.href='details.html'">Details</button>
-    </div>
-    </div>
-    <!--footer-->
-    <hr>
-    <div class="footer">© Pentagon</div>
-
-    </div>
+        <!--footer-->
+        <hr>
+        <div class="footer">© Pentagon</div>
+        
+        </div>
+        
 
 
 
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    </body>
+    </html>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
-</body>
-
-</html>
