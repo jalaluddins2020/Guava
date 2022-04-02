@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -9,38 +10,58 @@ from invokes import invoke_http
 app = Flask(__name__)
 CORS(app)
 
-listing_url = "http://localhost:5003/listing"
-talent_url = "http://localhost:5004/talent"
+listing_url = "http://localhost:5001/listing"
+talent_url = "http://localhost:5011/talent"
 
-@app.route("/check", methods=["post"])
-def retrieve():
-    # receive customer_id post from customer ui
-    customer_id = request.json.get("customer_id", None)
+@app.route("/check/<string:customer_id>")
+def retrieve(customer_id):
+    results = []
 
     #invoke listing microservice
-    listing = invoke_http(listing_url + "/" + customer_id, method='GET')
+    listing = invoke_http(listing_url + "/customer/" + customer_id, method='GET')
     code = listing["code"]
-    print("listing")
 
     #listing microservice listingId, talentId, price, status
     if code in range (200, 300):
-        listing_id = str(listing["data"]["listingID"])
-        talent_id = str(listing["data"]["talentID"])
-        price = str(listing["data"]["price"])
-        status = str(listing["data"]["paymentStatus"])
 
-        talent = invoke_http(listing_url + "/" + talent_id, method='GET')
-        name = str(talent["data"]["name"])
-        contact = str(talent["data"]["contactDetails"])
-        email = str(talent["data"]["email"])
+        for ele in listing["data"]:
 
+            listing_id = ele["listingID"]
+            talent_id = ele["talentID"]
+            price = ele["price"]
+            status = ele["status"]
+            paymentStatus = ele["paymentStatus"]
+            title = ele["name"]
+            dateCreated = ele["dateCreated"]
+
+            talent_name = None
+            contact = None
+            email = None
+
+            if talent_id != None:
+                talent = invoke_http(talent_url + "/" + str(talent_id), method='GET')
+                talent_name = talent["data"]["name"]
+                contact = talent["data"]["contactNumber"]
+                email = talent["data"]["contactEmail"]
+
+            results.append(
+                {
+                    "listingID": listing_id,
+                    "name" : title,
+                    "dateCreated": dateCreated,
+                    "talentID": talent_id, 
+                    "price": price,
+                    "status": status,
+                    "paymentStatus": paymentStatus,
+                    "talentName": talent_name,
+                    "contact": contact,
+                    "email": email
+                }
+            )
+        
         return jsonify({
             "code": 200,
-            "listing_id": listing_id,
-            "name": name,
-            "contact": contact,
-            "email": email,
-            "status": status
+            "data": results
         })
 
     return jsonify({
@@ -49,5 +70,5 @@ def retrieve():
     })
 
 if __name__ == "__main__":
-    print("This is flask " + os.path.basename(__file__) + " for PayPal checkout")
+    print("This is flask " + os.path.basename(__file__) + " for retrieving listings")
     app.run(host="0.0.0.0", port=5007, debug=True)
