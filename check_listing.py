@@ -21,7 +21,6 @@ def retrieve(customer_id):
     #invoke listing microservice
     listing = invoke_http(listing_url + "/customer/" + customer_id, method='GET')
     code = listing["code"]
-    print(listing)
 
     #listing microservice listingId, talentId, price, status
     if code in range (200, 300):
@@ -41,7 +40,6 @@ def retrieve(customer_id):
             email = None
 
             if talent_id != None:
-                print(talent_url + "/" + str(talent_id))
                 talent = invoke_http(talent_url + "/" + str(talent_id), method='GET')
                 talent_name = talent["data"]["name"]
                 contact = talent["data"]["contactNumber"]
