@@ -10,6 +10,7 @@
 5. make_payment: 5005
 6. payment_records: 5006
 7. check_listing: 5007
+8. accept_listing: 5008
 
 ## Twilio Credentials
 Email: gadman.tang.2020@smu.edu.sg

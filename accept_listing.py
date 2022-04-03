@@ -15,14 +15,14 @@ CORS(app)
 #URL
 listing_URL = environ.get('listing_url') or "http://localhost:5001/listing/update"
 
-@app.route("/accept_listing/<string:listingID>/<string:talentID>")
-def accept_listing(listingID,talentID):
+@app.route("/accept_listing/<string:listingID>",methods=['PUT'])
+def accept_listing(listingID):
     if request.is_json:
         try:
             statusChange = request.get_json()
             print("\nAccepting a listing:", statusChange)
 
-            result = processAcceptListing(statusChange,listingID,talentID)
+            result = processAcceptListing(statusChange,listingID)
             print('\n------------------------')
             print('\nresult: ', result)
             return jsonify(result), result["code"]
@@ -45,9 +45,9 @@ def accept_listing(listingID,talentID):
     }), 400
 
 
-def processAcceptListing(statusChange,listingID,talentID):
+def processAcceptListing(statusChange,listingID):
     print('\n-----Invoking Listing microservice-----')
-    accept_result = invoke_http(listing_URL+"/"+listingID+"/"+talentID, method='PUT', json=statusChange)
+    accept_result = invoke_http(listing_URL+"/"+listingID, method='PUT', json=statusChange)
     print('accept_result:', accept_result)
 
     print('\n\n-----Publishing the (Accept info) message with routing_key=accept.notification-----')
@@ -59,4 +59,4 @@ def processAcceptListing(statusChange,listingID,talentID):
 
 if __name__ == "__main__":
     print("This is flask "+ os.path.basename(__file__) +" accepting an listing")
-    app.run(host="0.0.0.0", port=5100, debug=True)
+    app.run(host="0.0.0.0", port=5008, debug=True)  

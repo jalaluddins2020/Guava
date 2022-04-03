@@ -58,6 +58,7 @@ def sendSMS(customerNumber,acceptedListingID):
                 }
     response = requests.post(twilioUrl,data=smsContent)
     smsStatusCode = response.status_code
+    print(smsStatusCode)
     if smsStatusCode == 201:
         print("\nSMS sent successfully!")
     else:

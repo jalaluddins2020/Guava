@@ -187,7 +187,7 @@ def get_available_listing():
             {
                 "code": 200,
                 "data": {
-                    "listings": [listing.json() for listing in listingList if listing.status == "available"]
+                    "listings": [listing.json() for listing in listingList if listing.status == "Available"]
                 }
             }
         )

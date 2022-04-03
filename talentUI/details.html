@@ -24,92 +24,89 @@
 <body>
     <script>
         let params = new URLSearchParams(document.location.search)
-        console.log(params.get("listingID"))
+        //console.log("ListingID: "+params.get("listingID"))
         const directedlistingID = params.get("listingID")
+        const loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
+        //console.log("Logged in talent's ID (Line 34):" + loggedInTalentID)
 
         $(async () => {
-        var listingURL = "http://localhost:5001/listing/" + directedlistingID
-        var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
-        console.log(sessionStorage)
-        console.log("Logged in talent's ID (Line 21):" + loggedInTalentID)
+            var listingURL = "http://localhost:5001/listing/" + directedlistingID
 
-        try {
-            const response =
-                await fetch(
-                    listingURL, { method: 'GET'}
-                );
-            if (!response.ok) {
-                //Print some error
-                //$("#listingResults").append("<tr><td class='text-muted'>No results returned</td></tr>")
-                $("#app").text("Error in calling the service, " + error);
-                console.log("!response")
-            } else {
-                //Success
-                const listing = await response.json();
-                listingdetails = listing.data
-                console.log(listingdetails)
+            try {
+                const response =
+                    await fetch(
+                        listingURL, { method: 'GET' }
+                    );
+                if (!response.ok) {
+                    //Print some error
+                    //$("#listingResults").append("<tr><td class='text-muted'>No results returned</td></tr>")
+                    $("#app").text("Error in calling the service, " + error);
+                    console.log("!response")
+                } else {
+                    //Success
+                    const listing = await response.json();
+                    listingdetails = listing.data
+                    console.log(listingdetails)
 
-                Vue.createApp({
-                    data() {
-                        return {
-                            listing: listingdetails,
-                            date: listingdetails.dateCreated
-                        }
-                    },
-                    methods: {
-                        // format
-                        images: function() {
-                            var imglist = ["1.jpeg", "2.webp", "3.jpeg", "4.webp", "5.png", "6.jpeg"]
-                            var n = Math.floor((Math.random() * 5) + 1)
-                            return "../resources/" + imglist[n]
-                            
+                    Vue.createApp({
+                        data() {
+                            return {
+                                listing: listingdetails,
+                                date: listingdetails.dateCreated
+                            }
+                        },
+                        methods: {
+                            // format
+                            images: function () {
+                                var imglist = ["1.jpeg", "2.webp", "3.jpeg", "4.webp", "5.png", "6.jpeg"]
+                                var n = Math.floor((Math.random() * 5) + 1)
+                                return "../resources/" + imglist[n]
+
+                            }
                         }
                     }
+                    ).mount("#app")
                 }
-                ).mount("#app")
+            } catch (error) {
+                // Error, print something
+                $("#app").text("Error in calling the service, " + error);
+                console.log("catch")
             }
-        } catch (error) {
-            // Error, print something
-            $("#app").text("Error in calling the service, " + error);
-            console.log("catch")
+        });
+
+        function updateListing(){
+            $(async () => {
+            var acceptListingURL = "http://localhost:5008/accept_listing/"+directedlistingID;
+            
+            try {
+                const response = await fetch(acceptListingURL, 
+                    {method: 'PUT', 
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ 
+                            change: "engage",
+                            status: "Engaged",
+                            talentID: loggedInTalentID,
+                            payment: ""
+                            })
+                    }
+                );
+
+                const result = await response.json();
+                if (!response.ok) {
+                    //Print some error
+                    console.log(result.message);
+                } else {
+                    //Success
+                    console.log("Success");
+                    return false;
+                }
+            } catch (error) {
+                // Error, print something
+                console.log("There is a problem updating this listing, please try again later." + error);
+            }
+            })
         }
-    });
 
-    // $("#updateListing").submit(async (event) => {
-    //         event.preventDefault();
-    //         var listingURL = "http://localhost:5100/accept_listing/" + directedlistingID + "/" + loggedInTalentID;
-    //         //console.log(loggedInCustomerID);
-
-    //         data = { 
-    //             listingID: directedlistingID,
-    //             talentID: loggedInTalentID
-    //         }
-    //         try {
-    //             const response = await fetch(listingURL, { 
-    //                     method: 'PUT', 
-    //                     headers: { "Content-Type": "application/json" },
-    //                     body: JSON.stringify({ 
-    //                             listingID: directedlistingID, 
-    //                             talentID: loggedInTalentID
-    //                         })
-    //                 });
-                
-    //             const result = await response.json();
-                
-    //                 if (!response.ok) {
-    //                     //Print some error
-    //                     console.log(result.message);
-    //                 } else {
-    //                     //Success
-    //                     console.log("Success");
-    //                     return false;
-    //                 }
-    //             } catch (error) {
-    //                 // Error, print something
-    //                 console.log("There is a problem updating this listing, please try again later."+error);
-    //             }
-    //         }
-    //     )
     </script>
     <!--Navigation Bar-->
     <div class="container">
@@ -158,25 +155,23 @@
                         </h5>
                         <br />
                         <p class="card-text">
-                        <table class="table table-bordered">
-                            <tbody>
-                                <tr>
-                                    <th>Job Description</th>
-                                    <td><span>{{listing.details}}</span></td>
-                                </tr>
-                                <tr>
-                                    <th>Price</th>
-                                    <td>SGD $ <span>{{listing.price}}</span>.00</td>
-                                </tr>
-                                <tr>
-                                    <th>Date Listed</th>
-                                    <td><span>{{date}}</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="applicationButtonCentering">
-                            <div class="btn btn-outline-dark" id="updateListing">Apply</div>
-                        </div>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th>Job Description</th>
+                                        <td><span>{{listing.details}}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Price</th>
+                                        <td>SGD $ <span>{{listing.price}}</span>.00</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date Listed</th>
+                                        <td><span>{{date}}</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button type="button" class="btn btn-outline-dark mx-5" onclick="updateListing()">Apply now</button>
                         </p>
                     </div>
                 </div>
