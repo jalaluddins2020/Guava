@@ -18,7 +18,7 @@
 
     <!-- Stylesheets -->
     <link href="./talent.css" rel="stylesheet">
-    <script src="https://unpkg.com/vue@next"></script>
+    
 </head>
 
 <body>
@@ -28,88 +28,35 @@
         const directedlistingID = params.get("listingID")
 
         $(async () => {
-        var listingURL = "http://localhost:5001/listing/" + directedlistingID
-        var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
-        console.log(sessionStorage)
-        console.log("Logged in talent's ID (Line 21):" + loggedInTalentID)
+            var listingURL = "http://localhost:5001/listing/" + directedlistingID
+            try {
+                const response =
+                    await fetch(
+                        listingURL, { method: 'GET' }
+                    );
+                if (!response.ok) {
+                    //Print some error
+                    //$("#listingResults").append("<tr><td class='text-muted'>No results returned</td></tr>")
+                } else {
+                    //Success
+                    const listing = await response.json();
+                    var listingDetail = listing["data"];
+                    var listingTitle = listingDetail["name"];
+                    var listingDesc = listingDetail["details"];
+                    var listingDate = listingDetail["dateCreated"];
+                    var listingPrice = listingDetail["price"];
 
-        try {
-            const response =
-                await fetch(
-                    listingURL, { method: 'GET'}
-                );
-            if (!response.ok) {
-                //Print some error
-                //$("#listingResults").append("<tr><td class='text-muted'>No results returned</td></tr>")
-                $("#app").text("Error in calling the service, " + error);
-                console.log("!response")
-            } else {
-                //Success
-                const listing = await response.json();
-                listingdetails = listing.data
-                console.log(listingdetails)
+                    $("#listingTitle").text(listingTitle);
+                    $("#listingDesc").text(listingDesc);
+                    $("#listingPrice").text(listingPrice);
+                    $("#listingDate").text(listingDate);
 
-                Vue.createApp({
-                    data() {
-                        return {
-                            listing: listingdetails,
-                            date: listingdetails.dateCreated
-                        }
-                    },
-                    methods: {
-                        // format
-                        images: function() {
-                            var imglist = ["1.jpeg", "2.webp", "3.jpeg", "4.webp", "5.png", "6.jpeg"]
-                            var n = Math.floor((Math.random() * 5) + 1)
-                            return "../resources/" + imglist[n]
-                            
-                        }
-                    }
                 }
-                ).mount("#app")
+            } catch (error) {
+                // Error, print something
+                //$("#listingResults").text("Error in calling the service, "+error);
             }
-        } catch (error) {
-            // Error, print something
-            $("#app").text("Error in calling the service, " + error);
-            console.log("catch")
-        }
-    });
-
-    // $("#updateListing").submit(async (event) => {
-    //         event.preventDefault();
-    //         var listingURL = "http://localhost:5100/accept_listing/" + directedlistingID + "/" + loggedInTalentID;
-    //         //console.log(loggedInCustomerID);
-
-    //         data = { 
-    //             listingID: directedlistingID,
-    //             talentID: loggedInTalentID
-    //         }
-    //         try {
-    //             const response = await fetch(listingURL, { 
-    //                     method: 'PUT', 
-    //                     headers: { "Content-Type": "application/json" },
-    //                     body: JSON.stringify({ 
-    //                             listingID: directedlistingID, 
-    //                             talentID: loggedInTalentID
-    //                         })
-    //                 });
-                
-    //             const result = await response.json();
-                
-    //                 if (!response.ok) {
-    //                     //Print some error
-    //                     console.log(result.message);
-    //                 } else {
-    //                     //Success
-    //                     console.log("Success");
-    //                     return false;
-    //                 }
-    //             } catch (error) {
-    //                 // Error, print something
-    //                 console.log("There is a problem updating this listing, please try again later."+error);
-    //             }
-    //         }
-    //     )
+        });
     </script>
     <!--Navigation Bar-->
     <div class="container">
@@ -150,11 +97,11 @@
     <div class="container-fluid pb-5">
         <div class="row justify-content-center">
             <div class="col-8">
-                <div class="card" id="app">
-                    <img :src="images()" class="card-img-top" alt="...">
+                <div class="card">
+                    <img src="../resources/1.jpeg" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">
-                            <span id="listingTitle">{{listing.name}}</span>
+                            <span id="listingTitle"></span>
                         </h5>
                         <br />
                         <p class="card-text">
@@ -162,28 +109,28 @@
                             <tbody>
                                 <tr>
                                     <th>Job Description</th>
-                                    <td><span>{{listing.details}}</span></td>
+                                    <td><span id="listingDesc"></span></td>
                                 </tr>
                                 <tr>
                                     <th>Price</th>
-                                    <td>SGD $ <span>{{listing.price}}</span>.00</td>
+                                    <td>SGD $ <span id="listingPrice"></span>.00</td>
                                 </tr>
                                 <tr>
                                     <th>Date Listed</th>
-                                    <td><span>{{date}}</span></td>
+                                    <td><span id="listingDate"></span></td>
                                 </tr>
                             </tbody>
                         </table>
                         <div class="applicationButtonCentering">
-                            <div class="btn btn-outline-dark" id="updateListing">Apply</div>
+                            <div class="btn btn-outline-dark">Apply</div>
                         </div>
+                        <span id="listingDesc"></span>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 
     <!--footer-->
     <hr>

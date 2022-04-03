@@ -23,7 +23,7 @@
 
 <script>
     $(async () => {
-        var listingURL = "http://localhost:5001/listing"
+        var listingURL = "http://localhost:5001/listing/available"
         var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
         console.log(sessionStorage)
         console.log("Logged in talent's ID (Line 21):" + loggedInTalentID)
@@ -61,6 +61,12 @@
                         },
                         link: function(one) {
                             window.location.href = "details.html?listingID=" + one.listingID
+                        },
+                        images: function() {
+                            var imglist = ["1.jpeg", "2.webp", "3.jpeg", "4.webp", "5.png", "6.jpeg"]
+                            var n = Math.floor((Math.random() * 5) + 1)
+                            return "../resources/" + imglist[n]
+                            
                         }
                     }
                 }
@@ -72,6 +78,7 @@
             console.log("catch")
         }
     });
+
 
 </script>
 
@@ -109,10 +116,10 @@
         <div class="content container-fluid">
             <div class="listing row" id="app">
 
-                <div class="card col-8 p-2 m-2" v-for="oneListing in listings">
-                        <h3 class="card-title">{{status(oneListing)}}</h3>
-                        <!-- <img class="card-img-top" src="../resources/2.webp" alt="Card image cap"> -->
-                        <h5 class="card-title">Required: {{oneListing.name}}</h5>
+                <div class="card col-6 p-2 m-2" v-for="oneListing in listings">
+                        <h2 class="card-title text-success">{{status(oneListing)}}</h2>
+                        <img class="card-img-top" :src="images()" alt="Card image cap">
+                        <h3 class="card-title">Required: {{oneListing.name}}</h3>
                         <h5 class="card-title">Listing Number: {{oneListing.listingID}}</h5>
                         <h5 class="card-title">Customer: {{oneListing.customerID}}</h5>
                         <p class="card-text">{{oneListing.details}}</p>

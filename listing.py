@@ -7,7 +7,7 @@ from flask_cors import CORS
 # import graphene
 # from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
 # from flask_graphql import GraphQLView
-# import facebook
+import facebook
 # from graphql import Undefined
 # from graphql_relay.node.node import from_global_id
 from datetime import datetime
