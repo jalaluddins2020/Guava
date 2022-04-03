@@ -33,7 +33,7 @@ def retrieve(customer_id):
             status = ele["status"]
             paymentStatus = ele["paymentStatus"]
             title = ele["name"]
-            dateCreated = ele["dateCreated"]
+            dateCreated = ele["dateCreated"][4:16]
 
             talent_name = None
             contact = None
@@ -44,6 +44,10 @@ def retrieve(customer_id):
                 talent_name = talent["data"]["name"]
                 contact = talent["data"]["contactNumber"]
                 email = talent["data"]["contactEmail"]
+            else:
+                talent_name = "-"
+                contact = "-"
+                email = "-"
 
             results.append(
                 {
