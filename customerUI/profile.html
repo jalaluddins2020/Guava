@@ -47,7 +47,8 @@
                     $("#customerName").text(customerName);
                     $("#customerNumber").text(customerNumber);
                     $("#customerEmail").text(customerEmail);
-                    console.log(customerDetail)
+                    $("#imageURL").attr("src", "./../resources/customer" + codedCustomerID + ".png")
+                    //console.log(customerDetail)
                 }
             } catch (error) {
                 // Error, print something
@@ -82,7 +83,7 @@
     <hr>
     <!--content-->
     <div class="profile card">
-        <img src="../resources/customer1.png" alt="" style="width:17em;">
+        <img id="imageURL" alt="" style="width:17em;">
         <p style="margin-top:30px;">
             <b>Name:</b>
             <span id="customerName"></span>
@@ -92,7 +93,7 @@
             <span id="customerNumber"></span>
         </p>
         <p>
-            <b>Email:</b>Email:
+            <b>Email:</b>
             <span id="customerEmail"></span>
         </p>
 

@@ -34,9 +34,9 @@ db = SQLAlchemy(app)
 class ListingModel(db.Model):
     __tablename__ = 'listing'
 
-    listingID = db.Column(db.Integer(), primary_key=True)
-    customerID = db.Column(db.Integer(), nullable=False)
-    talentID = db.Column(db.Integer(), nullable=True)
+    listingID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    customerID = db.Column(db.Integer, nullable=False)
+    talentID = db.Column(db.Integer, nullable=True)
     name = db.Column(db.String(300), nullable=False)
     details = db.Column(db.String(300), nullable=False)
     status = db.Column(db.String(300), nullable=True)
@@ -44,16 +44,24 @@ class ListingModel(db.Model):
     paymentStatus = db.Column(db.String(300), nullable=True)
     dateCreated = db.Column(db.DateTime(), nullable=False)
 
-    def __init__(self, listingID, customerID, talentID, name, details, status, price, paymentStatus, dateCreated):
-        self.listingID = listingID
+    #  def __init__(self, listingID, customerID, talentID, name, details, status, price, paymentStatus, dateCreated):
+    #     self.listingID = listingID
+    #     self.customerID = customerID
+    #     self.talentID = talentID
+    #     self.name = name
+    #     self.details = details
+    #     self.status = status
+    #     self.price = price
+    #     self.paymentStatus = paymentStatus
+    #     self.dateCreated = dateCreated
+
+    def __init__(self, customerID, name, details, status, price, paymentStatus):
         self.customerID = customerID
-        self.talentID = talentID
         self.name = name
         self.details = details
         self.status = status
         self.price = price
         self.paymentStatus = paymentStatus
-        self.dateCreated = dateCreated
 
     def json(self):
         return {"listingID": self.listingID, 

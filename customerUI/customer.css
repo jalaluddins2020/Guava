@@ -154,3 +154,15 @@ textarea {
     margin-top: 5%;
     margin-bottom: 5%;
 }
+
+.logo {
+    font-weight:bold;
+    font-size:5vh;
+}
+
+.footer {
+    color:grey;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
