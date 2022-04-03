@@ -21,17 +21,15 @@ class CustomerModel(db.Model):
     name = db.Column(db.String(300), nullable=False)
     contactNumber = db.Column(db.Integer(), nullable=False)
     contactEmail = db.Column(db.String(300), nullable=False)
-    contactTele = db.Column(db.String(300), nullable=True)
 
-    def __init__(self, customerID, name, contactNumber, contactEmail, contactTele):
+    def __init__(self, customerID, name, contactNumber, contactEmail):
         self.customerID = customerID
         self.name = name
         self.contactNumber = contactNumber
         self.contactEmail = contactEmail
-        self.contactTele = contactTele
 
     def json(self):
-        return {"customerID": self.customerID, "name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail, "contactTele": self.contactTele}
+        return {"customerID": self.customerID, "name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail}
 
 #View All Customer Data
 @app.route("/customer")
