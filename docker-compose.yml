@@ -1,13 +1,8 @@
-version: "3"
+version: "3.8"
 
 volumes:
   rabbitmq_data:
   pgdata: 
-  kongadata:
-
-networks:
-  kong-net:
-    driver: bridge
 
 services:
  
@@ -113,8 +108,8 @@ services:
       - payment_records
       - listing
     environment:
-      listing_url: http://localhost:5001/listing
-      payment_records_url: http://localhost:5006/records
+      listing_url: http://listing:5001/listing
+      payment_records_url: http://payment_records:5006/records
       PYTHONUNBUFFERED: 1
     ports:
       - "5005:5005"
@@ -129,12 +124,11 @@ services:
     image: ryanyak/check_listing:esd
     restart: always
     depends_on:
-      - customer
       - listing
       - talent
     environment:
-      listing_url: http://localhost:5001/listing
-      talent_url: http://localhost:5011/talent
+      listing_url: http://listing:5001/listing
+      talent_url: http://talent:5011/talent
       PYTHONUNBUFFERED: 1
     ports:
       - "5007:5007"
@@ -156,87 +150,8 @@ services:
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
-      listing_url: http://localhost:5001/listing/update
+      listing_url: http://listing:5001/listing/update
       PYTHONUNBUFFERED: 1
     ports:
       - "5100:5100"
 
-  # #######################################
-  # # Postgres: The database used by Kong
-  # #######################################
-  # kong-database:
-  #   image: postgres:9.6
-  #   restart: always
-  #   networks:
-  #     - kong-net
-  #   environment:
-  #     POSTGRES_DB: kong
-  #     POSTGRES_USER: kong
-  #     POSTGRES_PASSWORD: password
-  #   ports:
-  #     - "5432:5432"
-  #   healthcheck:
-  #     test: ["CMD", "pg_isready", "-U", "kong"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-  #   volumes:
-  #     - pgdata:/var/lib/postgresql/data
-
-  # #######################################
-  # # Kong database migration
-  # #######################################
-  # kong-migration:
-  #   image: kong:2.0.4
-  #   command: "kong migrations bootstrap"
-  #   restart: on-failure
-  #   networks:
-  #     - kong-net
-  #   environment:
-  #     KONG_DATABASE: postgres
-  #     KONG_PG_HOST: kong-database
-  #     KONG_PG_USER: kong
-  #     KONG_PG_PASSWORD: password
-  #   depends_on:
-  #     - kong-database
-
-  # #######################################
-  # # Kong: The API Gateway
-  # #######################################
-  # kong:
-  #   image: kong:2.0.4
-  #   restart: always
-  #   networks:
-  #     - kong-net
-  #   environment:
-  #     KONG_DATABASE: postgres
-  #     KONG_PG_HOST: kong-database
-  #     KONG_PG_USER: kong
-  #     KONG_PG_PASSWORD: password
-  #     KONG_PROXY_LISTEN: 0.0.0.0:8000
-  #     KONG_ADMIN_LISTEN: 0.0.0.0:8001
-  #   depends_on:
-  #     - kong-migration
-  #   ports:
-  #     - "8000:8000"
-  
-  # #######################################
-  # # Konga: Kong GUI 
-  # #######################################
-  # konga:
-  #   image: pantsel/konga
-  #   restart: always
-  #   networks:
-  #       - kong-net
-  #   environment:
-  #     DB_ADAPTER: postgres
-  #     DB_HOST: kong-database
-  #     DB_USER: kong
-  #     DB_PASSWORD: password
-  #     DB_DATABASE: konga_db
-  #   depends_on:
-  #     - kong
-  #   ports:
-  #     - "13370:1337"
-  #   volumes:
-  #     - kongadata:/app/kongadata
