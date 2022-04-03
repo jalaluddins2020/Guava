@@ -256,12 +256,19 @@ def create_new():
                 "message": "Listing already exists."
             }
         ), 400'''
-    data = request.get_json()
-    listing = ListingModel(**data) 
 
     try:
+        data = request.get_json()
+        listing = ListingModel(**data) 
         db.session.add(listing)
         db.session.commit()
+
+        return jsonify(
+                {
+                    "code": 201,
+                    "data": listing.json()
+                }
+            ), 201
 
         '''graph = facebook.GraphAPI(access_token='EAAJpiCZBvAF4BAE7ElxxwRAkErKtvGRG2tsVWwtwfC00eCldv9pNdmxw9LqNTIFnN1oEBCxALhvVEUUc9tXLzVU8dosbWHIaL6k2W5cTE4ZCztiLJuZAuOnQOrASXKQPHk5ZBTmL2DSRVIurNdZC9dMhd3JdUj4l5BZCHpiUjWCp50ZAaVEpXRoRWZAPMvItqlkZD', version="3.0")
 
@@ -271,14 +278,14 @@ def create_new():
         message = f"NEW LISTING! \nCustomerID: {listing.customerID} \nRequired: {listing.name} \nDetails: {listing.details} \nPrice: ${listing.price}"
         )'''
 
-    except: 
+    except Exception as e: 
         return jsonify(
             {
                 "code": 500,
                 "data": {
                     "error": "unknown"
                 },
-                "message": "An error occurred creating the listing."
+                "message": "An error occurred creating the listing." + str(e)
             }
         ), 500
 

@@ -58,14 +58,14 @@
                             var eachListingTalentNumber = alllistingDetails["contact"]
                             var eachListingTalentEmail = alllistingDetails["email"]
 
-                            if (eachListingStatus == "available") {
+                            if (eachListingStatus == "Available") {
                                 listingBadgeCol = "bg-secondary";
-                                if (eachListingPaymentStatus == "unpaid") {
+                                if (eachListingPaymentStatus == "Unpaid") {
                                     paymentBadgeCol = "bg-secondary";
                                 }
                             } else {
                                 listingBadgeCol = "bg-primary";
-                                if (eachListingPaymentStatus == "unpaid") {
+                                if (eachListingPaymentStatus == "Unpaid") {
                                     paymentBadgeCol = "bg-warning";
                                 } else {
                                     paymentBadgeCol = "bg-success";
@@ -92,44 +92,37 @@
             }
         });
 
-        $("#addNewListing").submit(async (event) => {
-            event.preventDefault();
-            var listingURL = "http://localhost:5001/listing/new";
-            //console.log(loggedInCustomerID);
-            var newListingName = $("#newListingName").val();
-            var newListingPrice = parseFloat($("#newListingPrice").val());
-            var newListingDesc = $("#newListingDesc").val();
 
-            data = { 
-                listingID: "", 
-                customerID: loggedInCustomerID, 
-                talentID: "", 
-                name: newListingName, 
-                details: newListingDesc, 
-                status: available, 
-                price: newListingPrice, 
-                paymentStatus: unpaid, 
-                dateCreated: "" 
-            }
-            try {
-                const response = await fetch(listingURL, { 
-                        method: 'POST', 
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ 
-                                listingID: "", 
-                                customerID: loggedInCustomerID, 
-                                talentID: "", 
-                                name: newListingName, 
-                                details: newListingDesc, 
-                                status: available, 
-                                price: newListingPrice, 
-                                paymentStatus: unpaid, 
-                                dateCreated: "" 
-                            })
-                    });
-                
-                const result = await response.json();
-                
+
+        function addNewListing(){
+            async () => {
+                var listingURL = "http://localhost:5001/listing/new";
+                //console.log(loggedInCustomerID);
+                var newListingName = $("#newListingName").val();
+                var newListingPrice = parseFloat($("#newListingPrice").val());
+                var newListingDesc = $("#newListingDesc").val();
+
+                console.log(newListingName);
+                alert("yes");
+
+                /*try {
+                    const response = await fetch(listingURL, { 
+                            method: 'POST', 
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ 
+                                    listingID: "", 
+                                    customerID: loggedInCustomerID, 
+                                    talentID: "", 
+                                    name: newListingName, 
+                                    details: newListingDesc, 
+                                    status: "Available", 
+                                    price: newListingPrice, 
+                                    paymentStatus: "Unpaid", 
+                                    dateCreated: "" 
+                                })
+                        });
+                    
+                    const result = await response.json();
                     if (!response.ok) {
                         //Print some error
                         console.log(result.message);
@@ -141,9 +134,49 @@
                 } catch (error) {
                     // Error, print something
                     console.log("There is a problem adding this listing, please try again later."+error);
-                }
+                }*/
             }
-        )
+        }
+
+        // $("#addNewListing").submit(async (event) => {
+        //     event.stopImmediatePropagation();
+        //     var listingURL = "http://localhost:5001/listing/new";
+        //     //console.log(loggedInCustomerID);
+        //     var newListingName = $("#newListingName").val();
+        //     var newListingPrice = parseFloat($("#newListingPrice").val());
+        //     var newListingDesc = $("#newListingDesc").val();
+
+        //     try {
+        //         const response = await fetch(listingURL, { 
+        //                 method: 'POST', 
+        //                 headers: { "Content-Type": "application/json" },
+        //                 body: JSON.stringify({ 
+        //                         listingID: "", 
+        //                         customerID: loggedInCustomerID, 
+        //                         talentID: "", 
+        //                         name: newListingName, 
+        //                         details: newListingDesc, 
+        //                         status: "Available", 
+        //                         price: newListingPrice, 
+        //                         paymentStatus: "Unpaid", 
+        //                         dateCreated: "" 
+        //                     })
+        //             });
+                
+        //         const result = await response.json();
+        //         if (!response.ok) {
+        //             //Print some error
+        //             console.log(result.message);
+        //         } else {
+        //             //Success
+        //             console.log("Success");
+        //             return false;
+        //         }
+        //     } catch (error) {
+        //         // Error, print something
+        //         console.log("There is a problem adding this listing, please try again later."+error);
+        //     }
+        // })
 
 
     </script>
@@ -217,12 +250,12 @@
                     <h4 class="modal-title">Post New Listing</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form id="addNewListing">
                     <!-- Modal body -->
+                <form>
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="newListingName" class="form-label">Job Title</label>
-                            <input type="text" class="form-control" id="newListingName">
+                             <input type="text" class="form-control" id="newListingName">
                         </div>
                         <div class="mb-3">
                             <label for="newListingPrice" class="form-label">Price</label>
@@ -233,12 +266,12 @@
                             <textarea class="form-control" id="newListingDesc" rows="5"></textarea>
                         </div>
                     </div>
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <!--<button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>-->
-                        <button type="submit" class="btn btn-success">Submit</button>
-                    </div>
                 </form>
+                    <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="addNewListing()">Submit</button>
+                </div>
             </div>
         </div>
     </div>
