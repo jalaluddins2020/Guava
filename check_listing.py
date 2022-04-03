@@ -1,4 +1,4 @@
-from asyncio.windows_events import NULL
+# from asyncio.windows_events import NULL
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -6,12 +6,13 @@ import os, sys
 
 import requests
 from invokes import invoke_http
+from os import environ
 
 app = Flask(__name__)
 CORS(app)
 
-listing_url = "http://localhost:5001/listing"
-talent_url = "http://localhost:5011/talent"
+listing_url = environ.get('listing_url') or "http://localhost:5001/listing/"
+talent_url = environ.get('talent_url')  or "http://localhost:5011/talent"
 
 @app.route("/check/<string:customer_id>")
 def retrieve(customer_id):
@@ -20,6 +21,7 @@ def retrieve(customer_id):
     #invoke listing microservice
     listing = invoke_http(listing_url + "/customer/" + customer_id, method='GET')
     code = listing["code"]
+    print(listing)
 
     #listing microservice listingId, talentId, price, status
     if code in range (200, 300):
@@ -39,6 +41,7 @@ def retrieve(customer_id):
             email = None
 
             if talent_id != None:
+                print(talent_url + "/" + str(talent_id))
                 talent = invoke_http(talent_url + "/" + str(talent_id), method='GET')
                 talent_name = talent["data"]["name"]
                 contact = talent["data"]["contactNumber"]

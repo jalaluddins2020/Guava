@@ -7,11 +7,13 @@ import amqp_setup
 import pika
 import json
 
+from os import environ
+
 app = Flask(__name__)
 CORS(app)
 
 #URL
-listing_URL = "http://localhost:5001/listing/update"
+listing_URL = environ.get('listing_url') or "http://localhost:5001/listing/update"
 
 @app.route("/accept_listing/<string:listingID>/<string:talentID>")
 def accept_listing(listingID,talentID):
