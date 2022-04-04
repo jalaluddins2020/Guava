@@ -52,17 +52,15 @@
                         data() {
                             return {
                                 listing: listingdetails,
-                                date: listingdetails.dateCreated
+                                date: listingdetails.dateCreated,
+                                
                             }
                         },
                         methods: {
                             // format
-                            images: function () {
-                                var imglist = ["1.jpeg", "2.webp", "3.jpeg", "4.webp", "5.png", "6.jpeg"]
-                                var n = Math.floor((Math.random() * 5) + 1)
-                                return "../resources/" + imglist[n]
-
-                            }
+                            images: function(one) {
+                            return "../resources/listing" + this.listing.listingID + ".jpeg"
+                        }
                         }
                     }
                     ).mount("#app")
@@ -148,7 +146,7 @@
         <div class="row justify-content-center">
             <div class="col-8">
                 <div class="card" id="app">
-                    <img :src="images()" class="card-img-top" alt="...">
+                    <img :src="images(one)" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">
                             <span id="listingTitle">{{listing.name}}</span>

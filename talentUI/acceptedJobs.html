@@ -20,7 +20,60 @@
     <link href="./talent.css" rel="stylesheet">
     <script src="https://unpkg.com/vue@next"></script>
 </head>
-
+<script>
+    $(async () => {
+        var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
+        console.log(sessionStorage)
+        console.log("Logged in talent's ID (Line 21):" + loggedInTalentID)
+        var listingURL = "http://localhost:5001/listing/talent/" + 2
+        try {
+            const response =
+                await fetch(
+                    listingURL, { method: 'GET'}
+                );
+            if (!response.ok) {
+                //Print some error
+                //$("#listingResults").append("<tr><td class='text-muted'>No results returned</td></tr>")
+                $("#app").text("Error in calling the service, " + error);
+                console.log("!response")
+            } else {
+                //Success
+                const allListings = await response.json();
+                listingsArray = allListings.data
+                console.log(listingsArray)
+                Vue.createApp({
+                    data() {
+                        return {
+                            listings: listingsArray
+                        }
+                    },
+                    methods: {
+                        // format
+                        status: function(one) {
+                            var stat = one.status
+                            if (stat == "Available") {
+                                return "Available"
+                            } else {
+                                return "Unavailable"
+                            }
+                        },
+                        link: function(one) {
+                            window.location.href = "details.html?listingID=" + one.listingID
+                        },
+                        images: function(one) {
+                            return "../resources/listing" + one.listingID + ".jpeg"
+                        }
+                    }
+                }
+                ).mount("#app")
+            }
+        } catch (error) {
+            // Error, print something
+            $("#app").text("Error in calling the service, " + error);
+            console.log("catch")
+        }
+    });
+</script>
 <body>
     <script>
         var loggedInTalentID = sessionStorage.getItem("loggedInTalentID");
@@ -58,30 +111,31 @@
     <hr>
     <!--content-->
     <div class="content container-fluid">
-        <div class="listing row">
+        <div class="listing row" id="app">
 
-            <div class="card-body col-3 col-lg-3">
-                <img class="card-img-top" src="../resources/1.jpeg" alt="Card image cap">
-                <h5 class="card-title">Sunset Wedding</h5>
-                <p class="card-text">Take image</p>
-                <button type="button" class="btn btn-outline-dark contact" data-mdb-ripple-color="dark"
-                    onclick="location.href='details.html'">Details</button>
-            </div>
-
-
-            <div class="card-body col-3">
-                <img class="card-img-top" src="../resources/2.webp" alt="Card image cap">
-                <h5 class="card-title">Sunset Wedding</h5>
-                <p class="card-text">Take image</p>
-                <button type="button" class="btn btn-outline-dark contact" data-mdb-ripple-color="dark"
-                    onclick="location.href='details.html'">Details</button>
-            </div>
-            <div class="card-body col-3">
-                <img class="card-img-top" src="../resources/3.jpeg" alt="Card image cap">
-                <h5 class="card-title">Sunset Wedding</h5>
-                <p class="card-text">Take image</p>
-                <button type="button" class="btn btn-outline-dark contact" data-mdb-ripple-color="dark"
-                    onclick="location.href='details.html'">Details</button>
+            <div class="card col-6 p-2 m-2" v-for="oneListing in listings">
+                    <img class="card-img-top" :src="images(oneListing)" alt="Card image cap">
+                    <h3 class="card-title">Accepted: {{oneListing.name}}</h3>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th>Listing Number</th>
+                                <td><span>{{oneListing.listingID}}</span></td>
+                            </tr>
+                            <tr>
+                                <th>Job Description</th>
+                                <td><span>{{oneListing.details}}</span></td>
+                            </tr>
+                            <tr>
+                                <th>Price</th>
+                                <td>SGD $ <span>{{oneListing.price}}</span>.00</td>
+                            </tr>
+                            <tr>
+                                <th>Customer</th>
+                                <td><span>{{oneListing.customerID}}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
             </div>
         </div>
 

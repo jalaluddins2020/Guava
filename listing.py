@@ -168,6 +168,25 @@ def find_by_listingID(listingID):
         }
     ), 404
 
+#Get all listing by talentID
+@app.route("/listing/talent/<string:talentID>")
+def find_by_talentID(talentID):
+    listings = ListingModel.query.filter(ListingModel.talentID == talentID).all()
+    if listings:
+        return jsonify(
+            {
+                "code": 200,
+                "data": [listing.json() for listing in listings]
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Listing not found."
+        }
+    ), 404
+
+
 #Get all listing by customerID
 @app.route("/listing/customer/<string:customerID>")
 def find_by_customerID(customerID):
@@ -187,7 +206,7 @@ def find_by_customerID(customerID):
     ), 404
 
 #Get AVAILABLE listings only
-@app.route("/listing/available")
+@app.route("/listing/Available")
 def get_available_listing():
     listingList = ListingModel.query.all()
     if len(listingList):
