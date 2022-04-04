@@ -36,16 +36,4 @@ CREATE TABLE IF NOT EXISTS `talent` (
   `contactNumber` int(8) NOT NULL,
   `contactEmail` varchar(300) NOT NULL,
   PRIMARY KEY (`talentID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `talent`
---
-
-INSERT INTO `talent` (`talentID`, `name`, `contactNumber`, `contactEmail`) VALUES
-(1, 'Mr Bean', 91827364, 'mrbean@gmail.com');
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -29,7 +29,7 @@ class Talent(db.Model):
         self.contactEmail = contactEmail
 
     def json(self):
-        return {"name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail}
+        return {"talentID": self.talentID, "name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail}
 
 ### Get all talent details ###
 @app.route("/talent")

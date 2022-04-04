@@ -31,41 +31,9 @@ USE `customer`;
 
 DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer` (
-  `customerID` int(255) NOT NULL,
+  `customerID` int(255) NOT NULL AUTO_INCREMENT,
   `name` varchar(300) NOT NULL,
   `contactNumber` int(8) NOT NULL,
-  `contactEmail` varchar(300) NOT NULL
+  `contactEmail` varchar(300) NOT NULL,
+  PRIMARY KEY (`customerID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `customer`
---
-
-INSERT INTO `customer` (`customerID`, `name`, `contactNumber`, `contactEmail`) VALUES
-(1, 'Gadman Tang', 96739311, 'gadman.tang.2020@smu.edu.sg'),
-(2, 'Yong Zi Yi', 99887766, 'ziyi.yong@smu.edu.sg');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `customer`
---
-ALTER TABLE `customer`
-  ADD PRIMARY KEY (`customerID`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `customer`
---
-ALTER TABLE `customer`
-  MODIFY `customerID` int(255) NOT NULL AUTO_INCREMENT;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

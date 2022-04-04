@@ -93,26 +93,23 @@
                 var talentURL = "http://localhost:5011/talent/authenticate/" + loginEmail + "/" + loginNumber
                 try {
                     const response =
-                        /* await fetch(
+                        await fetch(
                             talentURL, { method: 'GET' }
-                        ); */
-                        await fetch(talentURL, { query: `talentID = "query { allListings { edges { node  {name}} } }"` })
+                        );
                     if (!response.ok) {
-                        //Print some error
-                        //$("#listingResults").append("<tr><td class='text-muted'>No results returned</td></tr>")
+                        alert("Failed to log in. Please try again. (1)")
+                        window.location.replace("http://localhost/pentagon/talentUI/login.html");
                     } else {
-                        //Success
                         const authenticatedTalent = await response.json();
                         var talentDetail = authenticatedTalent["data"];
-                        console.log(talentDetail)
-                        sessionStorage.setItem("loggedInTalentID", talentDetail["talentID"]);
-                        sessionStorage.setItem("loggedInCustomerId", "1");
-                        //var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
-                        location.href = "./listing.html";
+                        window.sessionStorage.setItem("loggedInTalentID", talentDetail["talentID"]);
+                        window.sessionStorage.setItem("loggedInCustomerId", "1");
+                        //console.log(window.sessionStorage.getItem("loggedInTalentID"));
+                        window.location.href = "http://localhost/pentagon/talentUI/listing.html";
                     }
                 } catch (error) {
-                    // Error, print something
-                    alert("Failed to log in. Please try again");
+                    console.log(error);
+                    alert("Failed to log in. Please try again (2)");
                 }
             });
         }
