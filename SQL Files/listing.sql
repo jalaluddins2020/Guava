@@ -49,9 +49,9 @@ CREATE TABLE IF NOT EXISTS `listing` (
 
 INSERT INTO `listing` (`listingID`, `customerID`, `talentID`, `name`, `details`, `status`, `price`, `paymentStatus`, `dateCreated`) VALUES
 (1, 1, 2, 'Wedding Photoshoot', 'Require a wedding photographer!', 'Accepted', 100.00, 'unpaid', '2022-03-27 05:02:11'),
-(2, 2, NULL, 'Professional Photographer', 'Looking for a professional photographer that can help my company take some quality photos!', 'available', 300.00, 'unpaid', '2022-03-27 23:08:23'),
-(3, 1, NULL, 'Picnic Photographer', 'Have an upcoming picnic even this weekend with my family. Looking for a photographer that is willing to tag along and document it!', 'available', 50.00, 'unpaid', '2022-03-29 06:40:31'),
-(4, 2, NULL, 'Skate Photographer', 'Hi there, I am currently looking for a photographer that can preferably skate while taking photographs of my team. Do accept if you are interested!', 'available', 80.00, '', '2022-03-31 09:03:45');
+(2, 2, NULL, 'Professional Photographer', 'Looking for a professional photographer that can help my company take some quality photos!', 'Available', 300.00, 'unpaid', '2022-03-27 23:08:23'),
+(3, 1, NULL, 'Picnic Photographer', 'Have an upcoming picnic even this weekend with my family. Looking for a photographer that is willing to tag along and document it!', 'Available', 50.00, 'unpaid', '2022-03-29 06:40:31'),
+(4, 2, NULL, 'Skate Photographer', 'Hi there, I am currently looking for a photographer that can preferably skate while taking photographs of my team. Do accept if you are interested!', 'Available', 80.00, '', '2022-03-31 09:03:45');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
