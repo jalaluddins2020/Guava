@@ -22,14 +22,13 @@ class CustomerModel(db.Model):
     contactNumber = db.Column(db.Integer(), nullable=False)
     contactEmail = db.Column(db.String(300), nullable=False)
 
-    def __init__(self, customerID, name, contactNumber, contactEmail):
-        self.customerID = customerID
+    def __init__(self, name, contactNumber, contactEmail):
         self.name = name
         self.contactNumber = contactNumber
         self.contactEmail = contactEmail
 
     def json(self):
-        return {"customerID": self.customerID, "name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail}
+        return {"name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail}
 
 #View All Customer Data
 @app.route("/customer")
@@ -70,20 +69,25 @@ def find_by_customerID(customerID):
     ), 404
 
 #Create a New Customer Record
-@app.route("/customer/<string:customerID>", methods=['POST'])  
-def create_customer(customerID):
-    if (CustomerModel.query.filter_by(customerID=customerID).first()): 
+@app.route("/customer", methods=['POST'])  
+def create_customer():
+
+    data = request.get_json()
+    customer = CustomerModel(**data) 
+
+    contactNumber=customer.contactNumber
+    contactEmail=customer.contactEmail
+    if (CustomerModel.query.filter_by(contactNumber=contactNumber).first() or CustomerModel.query.filter_by(contactEmail=contactEmail).first()): 
         return jsonify(
             {
                 "code": 400,
                 "data": {
-                    "customerID": customerID
+                    "contactNumber": contactNumber,
+                    "contactEmail": contactEmail
                 },
                 "message": "Customer already exists."
             }
         ), 400
-    data = request.get_json()
-    customer = CustomerModel(**data) 
 
     try:
         db.session.add(customer)
@@ -92,9 +96,6 @@ def create_customer(customerID):
         return jsonify(
             {
                 "code": 500,
-                "data": {
-                    "customerID": customerID
-                },
                 "message": "An error occurred creating the customer."
             }
         ), 500
