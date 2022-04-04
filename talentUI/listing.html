@@ -83,7 +83,7 @@
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light bg-none">
             <div class="container-fluid">
-                <a class="navbar-brand logo" href="#">Pentagon</a>
+                <a class="navbar-brand logo" href="#"><img class='logoimg' src="../resources/logoNavi.png" alt=""></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
                     aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -110,18 +110,21 @@
     <hr>
         <!--content-->
         <div class="content container-fluid">
-            <div class="listing row" id="app">
-
-                <div class="card col-6 p-2 m-2" v-for="oneListing in listings">
-                        <h2 class="card-title text-success">{{status(oneListing)}}</h2>
-                        <img class="card-img-top" :src="images(oneListing)" alt="Card image cap">
-                        <h3 class="card-title">Required: {{oneListing.name}}</h3>
-                        <h5 class="card-title">Listing Number: {{oneListing.listingID}}</h5>
-                        <h5 class="card-title">Customer: {{oneListing.customerID}}</h5>
+            <div class="indiv-listingRow row" id="app">
+                <div class="indiv-listing justify-content-between col-4 col-sm-3 m-4" v-for="oneListing in listings">
+                    <img class="card-img-top" :src="images(oneListing)" alt="Card image cap">
+                    <div class="card-body">
+                        <div class="listingNumber">LISTING #{{oneListing.listingID}}</div>
+                        <h3 class="card-title">{{oneListing.name}}</h3>
+                        <div class="customerIDNumber">by customer {{oneListing.customerID}}</div>
+                        <hr>
                         <p class="card-text">{{oneListing.details}}</p>
                         <button v-on:click="link(oneListing)" class="btn btn-outline-dark contact" >Details</button>
+                    </div>
                 </div>
             </div>
+
+            
 
         <!--footer-->
         <hr>
