@@ -27,18 +27,20 @@ class Payment_records(db.Model):
     payment_id = db.Column(db.String(128), primary_key=True)
     listing_id = db.Column(db.Integer, nullable=False)
     customer_id = db.Column(db.Integer, nullable=False)
+    talent_id = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float(precision=2), nullable=False)
     date_time = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
-    def __init__(self, payment_id, listing_id, customer_id, price, date_time):
+    def __init__(self, payment_id, listing_id, customer_id, talent_id, price, date_time):
         self.payment_id = payment_id
         self.listing_id = listing_id
         self.customer_id = customer_id
+        self.talent_id = talent_id
         self.price = price
         self.date_time = date_time
 
     def json(self):
-        return {"payment_id": self.payment_id, "listing_id": self.listing_id, "customer_id": self.customer_id, "price": self.price, "date_time": self.date_time}
+        return {"payment_id": self.payment_id, "listing_id": self.listing_id, "customer_id": self.customer_id, "talent_id": self.talent_id, "price": self.price, "date_time": self.date_time}
 
 
 @app.route("/records")
@@ -91,9 +93,10 @@ def create_payment():
     payment_id = request.json.get('payment_id', None)
     listing_id = request.json.get('listing_id', None)
     customer_id = request.json.get('customer_id', None)
+    talent_id = request.json.get('talent_id', None)
     price = request.json.get('price', None)
 
-    new_payment = Payment_records(payment_id, listing_id, customer_id, price, datetime.now())
+    new_payment = Payment_records(payment_id, listing_id, customer_id, talent_id, price, datetime.now())
 
     try:
         db.session.add(new_payment)

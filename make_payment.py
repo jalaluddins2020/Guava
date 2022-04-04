@@ -27,7 +27,7 @@ paypalrestsdk.configure({
   
 @app.route("/create/<string:listing_id>", methods=["POST"]) 
 def create(listing_id):
-    global price, name, customer_id, details
+    global price, name, customer_id, talent_id, details
 
     # receive listing_id from customer ui
     print(listing_id)
@@ -41,6 +41,7 @@ def create(listing_id):
         price = str(listing["data"]["price"])
         name = str(listing["data"]["name"])
         customer_id = str(listing["data"]["customerID"])
+        talent_id = str(listing["data"]["talentID"])
         details = str(listing["data"]["details"])
     
     else:
@@ -83,7 +84,7 @@ def create(listing_id):
 #for onApproval
 @app.route("/execute/<string:listing_id>", methods=["POST"])
 def execute(listing_id):
-    global price, name, customer_id, details
+    global price, name, customer_id, talent_id, details
 
     payment = paypalrestsdk.Payment.find(request.form["paymentID"])
 
@@ -103,7 +104,7 @@ def execute(listing_id):
 
     #if status is true,
     if status:
-        body = {"payment_id": payment.id, "listing_id": listing_id, "customer_id": customer_id, "price": price}
+        body = {"payment_id": payment.id, "listing_id": listing_id, "customer_id": customer_id, "talent_id": talent_id, "price": price}
         record_status = invoke_http(payment_records_url, method="post", json=body)
 
         #update listing payment status
