@@ -23,14 +23,13 @@ class Talent(db.Model):
     contactNumber = db.Column(db.Integer(), nullable=False)
     contactEmail = db.Column(db.String(300), nullable=False)
 
-    def __init__(self, talentID, name, contactNumber, contactEmail):
-        self.talentID = talentID
+    def __init__(self, name, contactNumber, contactEmail):
         self.name = name
         self.contactNumber = contactNumber
         self.contactEmail = contactEmail
 
     def json(self):
-        return {"talentID": self.talentID, "name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail}
+        return {"name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail}
 
 #View All Talent Data - CONVERT TO GRAPHQL TO
 @app.route("/talent")
@@ -89,20 +88,25 @@ def authenticate(talentEmail,talentNumber):
     ), 404
 
 #Create a New talent Record - CONVERT TO GRAPHQL
-@app.route("/talent/<string:talentID>", methods=['POST'])  
-def create_talent(talentID):
-    if (Talent.query.filter_by(talentID=talentID).first()): 
+@app.route("/talent", methods=['POST'])  
+def create_talent():
+
+    data = request.get_json()
+    talent = Talent(**data) 
+
+    contactEmail = talent.contactEmail
+    contactNumber = talent.contactNumber
+    if (Talent.query.filter_by(contactEmail=contactEmail).first() or Talent.query.filter_by(contactNumber=contactNumber).first()): 
         return jsonify(
             {
                 "code": 400,
                 "data": {
-                    "talentID": talentID
+                    "contactEmail": contactEmail,
+                    "contactNumber": contactNumber
                 },
                 "message": "Talent already exists."
             }
         ), 400
-    data = request.get_json()
-    talent = Talent(**data) 
 
     try:
         db.session.add(talent)
@@ -111,9 +115,6 @@ def create_talent(talentID):
         return jsonify(
             {
                 "code": 500,
-                "data": {
-                    "talentID": talentID
-                },
                 "message": "An error occurred creating the customer."
             }
         ), 500
