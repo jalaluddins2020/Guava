@@ -138,21 +138,20 @@
     </div>
     <hr>
 
-    <a class="btn btn-dark" href="../talentUI/listing.html">
+    <a class="btn btn-dark returnButton" href="../talentUI/listing.html">
         <i class="bi bi-arrow-left-square"></i> Back
     </a>
 
     <!--Main Content-->
     <div class="container-fluid pb-5">
-        <div class="row justify-content-center">
-            <div class="col-8">
-                <div class="card" id="app">
-                    <img :src="images(one)" class="card-img-top" alt="...">
+        <div class="row indivListingDetailsRow justify-content-center">
+            <div class="col-5">
+                <div class="indivListingDetails" id="app">
+                    <img :src="images(one)" class="card-img-top details" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">
                             <span id="listingTitle">{{listing.name}}</span>
                         </h5>
-                        <br />
                         <p class="card-text">
                             <table class="table table-bordered">
                                 <tbody>
