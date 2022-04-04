@@ -13,17 +13,17 @@ app = Flask(__name__)
 CORS(app)
 
 #URL
-listing_URL = environ.get('listing_url') or "http://localhost:5001/listing/update"
+listing_URL = environ.get('listing_url') or "http://localhost:5001/listing/update/"
 
 ### Accept a listing using this Complex Microservice ###
-@app.route("/accept_listing/<int:listingID>",methods=['PUT'])
-def accept_listing(listingID):
+@app.route("/accept_listing",methods=['PUT'])
+def accept_listing():
     if request.is_json:
         try:
-            statusChange = request.get_json()
-            print("\nAccepting a listing:", statusChange)
+            changeRequest = request.get_json()
+            print("\nAccepting a listing:", changeRequest)
 
-            result = processAcceptListing(statusChange,listingID)
+            result = processAcceptListing(changeRequest)
             print('\n------------------------')
             print('\nresult: ', result)
             return jsonify(result), result["code"]
@@ -46,9 +46,9 @@ def accept_listing(listingID):
     }), 400
 
 ### Process and perform act of accepting a listing ###
-def processAcceptListing(statusChange,listingID):
+def processAcceptListing(changeRequest):
     print('\n-----Invoking Listing microservice-----')
-    accept_result = invoke_http(listing_URL+"/"+str(listingID), method='PUT', json=statusChange)
+    accept_result = invoke_http(listing_URL+str(changeRequest["listingID"]), method='PUT', json=changeRequest)
     print('accept_result:', accept_result)
 
     print('\n\n-----Publishing the (Accept info) message with routing_key=accept.notification-----')

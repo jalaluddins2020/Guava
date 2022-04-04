@@ -71,10 +71,10 @@
                 console.log("catch")
             }
         });
-
+        
         function updateListing(){
             $(async () => {
-            var acceptListingURL = "http://localhost:5008/accept_listing/"+directedlistingID;
+            var acceptListingURL = "http://localhost:5008/accept_listing";
             
             try {
                 const response = await fetch(acceptListingURL, 
@@ -84,6 +84,7 @@
                             change: "engage",
                             status: "Engaged",
                             talentID: loggedInTalentID,
+                            listingID: directedlistingID,
                             payment: ""
                             })
                     }
