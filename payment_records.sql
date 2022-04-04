@@ -14,5 +14,5 @@ CREATE TABLE IF NOT EXISTS payments (
     PRIMARY KEY(listing_id)
 );
 
-INSERT INTO payments (payment_id, listing_id, customer_id, price, date_time) VALUES ("PAYID-MI5PAJI63V0799180830831E", 7, 5, 1, 15.00, "2022-03-17 17:54:32");
-INSERT INTO payments (payment_id, listing_id, customer_id, price, date_time) VALUES ("PAYID-MI5O6WA2DT331953U1639052", 8, 3, 2, 10.00, "2022-03-20 23:54:45");
+INSERT INTO payments (payment_id, listing_id, customer_id, talent_id, price, date_time) VALUES ("PAYID-MI5PAJI63V0799180830831E", 7, 5, 1, 15.00, "2022-03-17 17:54:32");
+INSERT INTO payments (payment_id, listing_id, customer_id, talent_id, price, date_time) VALUES ("PAYID-MI5O6WA2DT331953U1639052", 8, 3, 2, 10.00, "2022-03-20 23:54:45");
