@@ -95,7 +95,7 @@
             var newListingPrice = parseFloat($("#newListingPrice").val());
             var newListingDesc = $("#newListingDesc").val();
 
-            async () => {
+            $(async () => {
                 var listingURL = "http://localhost:5001/listing/new";
 
                 try {
@@ -118,14 +118,17 @@
                         console.log(result.message);
                     } else {
                         //Success
-                        console.log("Success");
-                        return false;
+                        console.log("New listing created.");
+                        $("#newListingName").val()
+                        $("#newListingPrice").val()
+                        $("#newListingDesc").val()
+                        window.location.replace("./listings.html");
                     }
                 } catch (error) {
                     // Error, print something
                     console.log("There is a problem adding this listing, please try again later."+error);
                 }
-            }
+            })
         }
 
         // $("#addNewListing").submit(async (event) => {
