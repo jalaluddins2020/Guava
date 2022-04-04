@@ -25,7 +25,7 @@
         var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
         console.log(sessionStorage)
         console.log("Logged in talent's ID (Line 21):" + loggedInTalentID)
-        var listingURL = "http://localhost:5001/listing/talent/" + 2
+        var listingURL = "http://localhost:5001/listing/talent/" + loggedInTalentID
         try {
             const response =
                 await fetch(
