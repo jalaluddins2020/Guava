@@ -88,7 +88,7 @@ def authenticate(talentEmail,talentNumber):
     ), 404
 
 ### Create a new talent record ###
-@app.route("/talent", methods=['POST'])  
+@app.route("/talent/new", methods=['POST'])  
 def create_talent():
 
     data = request.get_json()

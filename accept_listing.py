@@ -48,7 +48,7 @@ def accept_listing(listingID):
 ### Process and perform act of accepting a listing ###
 def processAcceptListing(statusChange,listingID):
     print('\n-----Invoking Listing microservice-----')
-    accept_result = invoke_http(listing_URL+"/"+listingID, method='PUT', json=statusChange)
+    accept_result = invoke_http(listing_URL+"/"+str(listingID), method='PUT', json=statusChange)
     print('accept_result:', accept_result)
 
     print('\n\n-----Publishing the (Accept info) message with routing_key=accept.notification-----')

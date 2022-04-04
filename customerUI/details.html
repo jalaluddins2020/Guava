@@ -40,8 +40,7 @@
                         listingURL, { method: 'GET' }
                     );
                 if (!response.ok) {
-                    //Print some error
-                    //$("#listingResults").append("<tr><td class='text-muted'>No results returned</td></tr>")
+                    $("#mainResults").html("<div class='text-center text-muted'> Error in calling the service. Please try again.</div>")
                 } else {
                     //Success
                     const listing = await response.json();
@@ -70,7 +69,7 @@
                 }
             } catch (error) {
                 // Error, print something
-                //$("#listingResults").text("Error in calling the service, "+error);
+                $("#mainResults").html("<div class='text-center text-muted'> Error in calling the service. Please try again.</div>")
             }
         });
 
@@ -104,7 +103,7 @@
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light bg-none">
             <div class="container-fluid">
-                <a class="navbar-brand logo" href="listings.html">Pentagon</a>
+                <a class="navbar-brand logo" href="./listings.html">Pentagon</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
                     aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -112,13 +111,13 @@
                 <div class="collapse navbar-collapse" id="navbar">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="../customerUI/listings.html" href="#">Listings</a>
+                            <a class="nav-link active" aria-current="./listings.html" href="#">Listings</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../customerUI/profile.html">Profile</a>
+                            <a class="nav-link" href="./profile.html">Profile</a>
                         </li>
                     </ul>
-                    <a class="btn btn-outline-dark" data-mdb-ripple-color="dark" href='../talentUI/listing.html'>Go to
+                    <a class="btn btn-outline-dark" data-mdb-ripple-color="dark" href='./../talentUI/listings.html'>Go to
                         Talent</a>
                 </div>
             </div>
@@ -128,10 +127,10 @@
 
     <!--Main Content-->
     <div class="container-fluid pb-5">
-        <a class="btn btn-dark" href="../customerUI/listings.html">
+        <a class="btn btn-dark" href="listings.html">
             <i class="bi bi-arrow-left-square"></i> Back
         </a>
-        <div class="row justify-content-center">
+        <div id="mainResults" class="row justify-content-center">
             <div class="col-6">
                 <div class="card">
                     <img id="imageURL" class="card-img-top" alt="...">

@@ -45,8 +45,11 @@
                     );
                 //console.log(response)
                 if (!response.ok) {
-                    //Print some error
-                    //$("#listingResults").append("<tr><td class='text-muted'>No results returned</td></tr>")
+                    if(response.status == 404){
+                        $("#mainResults").html("<div class='text-center text-muted'>No profile loaded!</div>");
+                    }else{
+                        $("#mainResults").html("<div class='text-center text-muted'> Error in calling the service. Please try again.</div>")
+                    }
                 } else {
                     //Success
                     const customer = await response.json();
@@ -64,7 +67,7 @@
                 }
             } catch (error) {
                 // Error, print something
-                $("#listingResults").text("Error in calling the service, " + error);
+                $("#mainResults").html("<div class='text-center text-muted'> Error in calling the service, " + error + "</div>")
             }
         });
     </script>
@@ -72,7 +75,7 @@
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light bg-none">
             <div class="container-fluid">
-                <a class="navbar-brand logo" href="#">Pentagon</a>
+                <a class="navbar-brand logo" href="./listings.html">Pentagon</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
                     aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -80,11 +83,11 @@
                 <div class="collapse navbar-collapse" id="navbar">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
                         <li class="nav-item">
-                            <a class="nav-link" href="../talentUI/listing.html">Find New
+                            <a class="nav-link" href="./listings.html">Find New
                                 Job</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../talentUI/acceptedJobs.html">Accepted Job</a>
+                            <a class="nav-link" href="./acceptedJobs.html">Accepted Job</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="../talentUI/profile.html" href="#">Talent
@@ -100,25 +103,29 @@
     </div>
     <hr>
     <!--content-->
-    <div class="profile card">
-        <form action="profile.js">
-            <img id="imageURL" alt="" style="width:17em;">
-            <p style="margin-top:30px;">
-                <b>Name:</b>
-                <span id="talentName"></span>
-            </p>
-            <p>
-                <b>Contact:</b>
-                <span id="talentNumber"></span>
-            </p>
-            <p>
-                <b>Email:</b>
-                <span id="talentEmail"></span>
-            </p>
-        </form>
-
+    <div class="container py-5">
+        <div id="mainResults" class="row mb-5 text">
+            <div class="col-12">
+                <div class="profile card">
+                    <form action="profile.js">
+                        <img id="imageURL" alt="" style="width:17em;">
+                        <p style="margin-top:30px;">
+                            <b>Name:</b>
+                            <span id="talentName"></span>
+                        </p>
+                        <p>
+                            <b>Contact:</b>
+                            <span id="talentNumber"></span>
+                        </p>
+                        <p>
+                            <b>Email:</b>
+                            <span id="talentEmail"></span>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
     <!--footer-->
     <hr>
     <div class="footer">© Pentagon</div>

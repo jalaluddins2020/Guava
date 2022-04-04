@@ -92,7 +92,7 @@
                 const result = await response.json();
                 if (!response.ok) {
                     //Print some error
-                    console.log(result.message);
+                    $("#app").html("<div class='text-center text-muted'> Error in calling the service. Please try again. </div>");
                 } else {
                     //Success
                     console.log("Success");
@@ -101,7 +101,7 @@
                 }
             } catch (error) {
                 // Error, print something
-                console.log("There is a problem updating this listing, please try again later." + error);
+                $("#app").html("<div class='text-center text-muted'> Error in calling the service, " + error + "</div>");
             }
             })
         }
@@ -111,7 +111,7 @@
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light bg-none">
             <div class="container-fluid">
-                <a class="navbar-brand logo" href="#">Pentagon</a>
+                <a class="navbar-brand logo" href="./listings.html">Pentagon</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
                     aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -119,14 +119,14 @@
                 <div class="collapse navbar-collapse" id="navbar">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
                         <li class="nav-item">
-                            <a class="nav-link active" href="../talentUI/listing.html">Find New
+                            <a class="nav-link active" href="./listings.html">Find New
                                 Job</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../talentUI/acceptedJobs.html">Accepted Job</a>
+                            <a class="nav-link" href="./acceptedJobs.html">Accepted Job</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../talentUI/profile.html">Talent Profile</a>
+                            <a class="nav-link" href="./profile.html">Talent Profile</a>
                         </li>
                     </ul>
                     <a class="btn btn-outline-dark" data-mdb-ripple-color="dark" href='./../customerUI/listings.html'>Go
@@ -138,7 +138,7 @@
     </div>
     <hr>
 
-    <a class="btn btn-dark returnButton" href="../talentUI/listing.html">
+    <a class="btn btn-dark returnButton" href="./listings.html">
         <i class="bi bi-arrow-left-square"></i> Back
     </a>
 

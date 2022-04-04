@@ -75,7 +75,7 @@
                         <label for="price" class="form-label">Email Address</label>
                         <input type="float" class="form-control" id="registerEmail">
                     </div>
-                    <button type="button" class="btn btn-dark">Register</button>
+                    <button type="button" class="btn btn-primary" onclick="newUser()">Register</button>
                 </form>
             </div>
         </div>
@@ -98,18 +98,50 @@
                         );
                     if (!response.ok) {
                         alert("Failed to log in. Please try again. (1)")
-                        window.location.replace("http://localhost/pentagon/talentUI/login.html");
+                        window.location.href = "./login.html";
                     } else {
                         const authenticatedTalent = await response.json();
                         var talentDetail = authenticatedTalent["data"];
-                        window.sessionStorage.setItem("loggedInTalentID", talentDetail["talentID"]);
-                        window.sessionStorage.setItem("loggedInCustomerId", "1");
-                        //console.log(window.sessionStorage.getItem("loggedInTalentID"));
-                        window.location.href = "http://localhost/pentagon/talentUI/listing.html";
+                        sessionStorage.setItem("loggedInTalentID", talentDetail["talentID"]);
+                        sessionStorage.setItem("loggedInCustomerId", "1");
+                        // console.log(sessionStorage);
+                        // console.log(sessionStorage.getItem("loggedInTalentID"));
+                        window.location.href = "./listings.html";
                     }
                 } catch (error) {
-                    console.log(error);
                     alert("Failed to log in. Please try again (2)");
+                    window.location.href = "./login.html";
+                }
+            });
+        }
+
+        function newUser(){
+            var registerName = $("#registerName").val()
+            var registerNumber = $("#registerNumber").val()
+            var registerEmail = $("#registerEmail").val()
+            $(async () => {
+                var talentURL = "http://localhost:5011/talent/new";
+                try {
+                    const response = await fetch(talentURL, { 
+                        method: 'POST', 
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ 
+                                name: registerName, 
+                                contactNumber: registerNumber, 
+                                contactEmail: registerEmail
+                            })
+                    });
+                    if (!response.ok) {
+                        alert("Existing account may exist. Please login or try creating again. (1)")
+                        window.location.href = "./login.html";
+                    } else {
+                        alert("Account created successfully! Please login.");
+                        window.location.href = "./login.html";
+                    }
+                } catch (error) {
+                    alert("Failed to create your account. Please try again (2)");
+                    console.log(error)
+                    //window.location.href = "./login.html";
                 }
             });
         }

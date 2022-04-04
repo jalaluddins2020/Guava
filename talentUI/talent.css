@@ -78,11 +78,6 @@ body {
     font-family: 'Work Sans', sans-serif;
 }
 
-.customerIDNumber {
-    margin-top:1px;
-    color:grey;
-}
-
 .card-img-top.details {
     height:auto;
     width:60%;

@@ -20,7 +20,7 @@ def retrieve(customer_id):
     results = []
 
     #invoke listing microservice
-    listing = invoke_http(listing_url + "/customer/" + customer_id, method='GET')
+    listing = invoke_http(listing_url + "/customer/" + str(customer_id), method='GET')
     code = listing["code"]
 
     #listing microservice listingId, talentId, price, status
