@@ -44,17 +44,6 @@ class ListingModel(db.Model):
     paymentStatus = db.Column(db.String(300), nullable=True)
     dateCreated = db.Column(db.DateTime(), nullable=False)
 
-    #  def __init__(self, listingID, customerID, talentID, name, details, status, price, paymentStatus, dateCreated):
-    #     self.listingID = listingID
-    #     self.customerID = customerID
-    #     self.talentID = talentID
-    #     self.name = name
-    #     self.details = details
-    #     self.status = status
-    #     self.price = price
-    #     self.paymentStatus = paymentStatus
-    #     self.dateCreated = dateCreated
-
     def __init__(self, customerID, name, details, status, price, paymentStatus):
         self.customerID = customerID
         self.name = name
@@ -73,61 +62,6 @@ class ListingModel(db.Model):
                 "price": self.price, 
                 "paymentStatus": self.paymentStatus, 
                 "dateCreated": self.dateCreated}
-
-# Schema Objects
-# Our schema objects will go here
-'''class ListingAttribute:
-    customerID = graphene.Int
-    talentID= graphene.Int
-    name = graphene.String
-    details = graphene.String
-    price = graphene.Int
-    status = graphene.String
-    paymentStatus = graphene.String
-    dateCreated = graphene.DateTime
-
-class Listing(SQLAlchemyObjectType, ListingAttribute):
-   class Meta:
-       model = ListingModel
-       interfaces = (graphene.relay.Node, )
-
-class Query(graphene.ObjectType):
-    node = graphene.relay.Node.Field()
-    listing=graphene.relay.Node.Field(Listing)
-    all_listings = SQLAlchemyConnectionField(Listing)
-
-class AddListing(graphene.Mutation):
-    class Arguments:
-        customerID = graphene.Int(required=True)
-        talentID= graphene.Int(required=False, default_value = "0")
-        name = graphene.String(required=True) 
-        details = graphene.String(required=True) 
-        price = graphene.Float(required=True)
-        status = graphene.String(required=False)
-        paymentStatus = graphene.String(required=False)
-    listing = graphene.Field(lambda: Listing)
-
-    def mutate(self, info, talentID, customerID, name, details, price, status, paymentStatus):
-        listing = ListingModel(customerID=customerID,name=name, details=details, price=price, talentID = talentID, status=status, paymentStatus=paymentStatus)
-        db.session.add(listing)
-        db.session.commit()
-        return AddListing(listing=listing)
-
-class Mutation(graphene.ObjectType):
-    add_listing = AddListing.Field()
-
-schema = graphene.Schema(query=Query, mutation=Mutation)
-
-# Routes
-# Our GraphQL route will go here
-app.add_url_rule(
-    '/graphql-api',
-    view_func=GraphQLView.as_view(
-        'graphql',
-        schema=schema,
-        graphiql=True # for having the GraphiQL interface
-    )
-)'''
 
 #Get ALL listings (Regardless of status)
 viewAllListing = "query { allListings { edges { node  {name}} } }"
@@ -273,37 +207,26 @@ def update_listing(listingID):
 #Create a new listing in db
 @app.route("/listing/new", methods=["POST"])
 def create_new():
-    '''if (ListingModel.query.filter_by(listingID=listingID).first()): 
-        return jsonify(
-            {
-                "code": 400,
-                "data": {
-                    "listingID": listingID
-                },
-                "message": "Listing already exists."
-            }
-        ), 400'''
-
     try:
         data = request.get_json()
         listing = ListingModel(**data) 
         db.session.add(listing)
         db.session.commit()
 
-        return jsonify(
-                {
-                    "code": 201,
-                    "data": listing.json()
-                }
-            ), 201
+        # return jsonify(
+        #         {
+        #             "code": 201,
+        #             "data": listing.json()
+        #         }
+        #     ), 201
 
-        '''graph = facebook.GraphAPI(access_token='EAAJpiCZBvAF4BAE7ElxxwRAkErKtvGRG2tsVWwtwfC00eCldv9pNdmxw9LqNTIFnN1oEBCxALhvVEUUc9tXLzVU8dosbWHIaL6k2W5cTE4ZCztiLJuZAuOnQOrASXKQPHk5ZBTmL2DSRVIurNdZC9dMhd3JdUj4l5BZCHpiUjWCp50ZAaVEpXRoRWZAPMvItqlkZD', version="3.0")
+        graph = facebook.GraphAPI(access_token='EAAJpiCZBvAF4BAE7ElxxwRAkErKtvGRG2tsVWwtwfC00eCldv9pNdmxw9LqNTIFnN1oEBCxALhvVEUUc9tXLzVU8dosbWHIaL6k2W5cTE4ZCztiLJuZAuOnQOrASXKQPHk5ZBTmL2DSRVIurNdZC9dMhd3JdUj4l5BZCHpiUjWCp50ZAaVEpXRoRWZAPMvItqlkZD', version="3.0")
 
         graph.put_object(
-        parent_object=108952705097678,
-        connection_name="feed",
-        message = f"NEW LISTING! \nCustomerID: {listing.customerID} \nRequired: {listing.name} \nDetails: {listing.details} \nPrice: ${listing.price}"
-        )'''
+            parent_object=108952705097678,
+            connection_name="feed",
+            message = f"NEW LISTING! \nCustomerID: {listing.customerID} \nRequired: {listing.name} \nDetails: {listing.details} \nPrice: ${listing.price}"
+        )
 
     except Exception as e: 
         return jsonify(
@@ -323,56 +246,6 @@ def create_new():
         }
     ), 201
 
-
-
-#Create Facebook Listing
-@app.route("/listing/<string:listingID>", methods=['POST'])  
-def create_listing(listingID):
-    if (ListingModel.query.filter_by(listingID=listingID).first()): 
-        return jsonify(
-            {
-                "code": 400,
-                "data": {
-                    "listingID": listingID
-                },
-                "message": "Listing already exists."
-            }
-        ), 400
-    data = request.get_json()
-    listing = ListingModel(**data) 
-
-    try:
-        db.session.add(listing)
-        db.session.commit()
-
-        graph = facebook.GraphAPI(access_token='EAAJpiCZBvAF4BAE7ElxxwRAkErKtvGRG2tsVWwtwfC00eCldv9pNdmxw9LqNTIFnN1oEBCxALhvVEUUc9tXLzVU8dosbWHIaL6k2W5cTE4ZCztiLJuZAuOnQOrASXKQPHk5ZBTmL2DSRVIurNdZC9dMhd3JdUj4l5BZCHpiUjWCp50ZAaVEpXRoRWZAPMvItqlkZD', version="3.0")
-
-        graph.put_object(
-        parent_object=108952705097678,
-        connection_name="feed",
-        message = f"NEW LISTING! \nCustomerID: {listing.customerID} \nRequired: {listing.name} \nDetails: {listing.details} \nPrice: ${listing.price}"
-        )
-
-    except: 
-        return jsonify(
-            {
-                "code": 500,
-                "data": {
-                    "listingID": listingID
-                },
-                "message": "An error occurred creating the listing."
-            }
-        ), 500
-
-    return jsonify(
-        {
-            "code": 201,
-            "data": listing.json()
-        }
-    ), 201    
-
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage listing ...")
     app.run(host='0.0.0.0', port=5001, debug=True)
-
-

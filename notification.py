@@ -10,7 +10,7 @@ load_dotenv()
 twilioAccountSID = os.getenv("TWILIO_ACCOUNT_SID")
 twilioAuthToken = os.getenv("TWILIO_AUTH_TOKEN")
 twilioUrl = "https://"+twilioAccountSID+":"+twilioAuthToken+"@api.twilio.com/2010-04-01/Accounts/"+twilioAccountSID+"/Messages.json"
-monitorBindingKey='*.notify'
+monitorBindingKey='*.notification'
 
 customer_URL = "http://localhost:5010/customer"
 
@@ -48,13 +48,13 @@ def processNotification(notificationMsg):
     except Exception as e:
         print("\n--NOT JSON RECEIVED:", e)
         print("\n--DATA:", notificationMsg)
-    print()
+
 
 def sendSMS(customerNumber,acceptedListingID):
     smsContent = {
                     "To": customerNumber, 
-                    "From": "+17579822788", 
-                    "Body": "Hi! Your listing has been accepted, do check it out: http://localhost:5001/listing/"+acceptedListingID
+                    "From": "+17579822788",
+                    "Body": "Hi! Your listing has been accepted, do check it out: http://localhost/pentagon/customerUI/details.html?listingID="+acceptedListingID
                 }
     response = requests.post(twilioUrl,data=smsContent)
     smsStatusCode = response.status_code
@@ -63,6 +63,7 @@ def sendSMS(customerNumber,acceptedListingID):
         print("\nSMS sent successfully!")
     else:
         print("\nIssue with sending the SMS...")
+        print(response)
 
 def getCustomerNumber(customerID):
     response = invoke_http(customer_URL+"/"+customerID, method='GET')
