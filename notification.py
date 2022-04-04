@@ -29,6 +29,7 @@ def callback(channel, method, properties, body): # required signature for the ca
     processNotification(body)
     print() # print a new line feed
 
+### Process the notification received ###
 def processNotification(notificationMsg):
     print("\nPrinting the notification message received:")
     try:
@@ -49,7 +50,7 @@ def processNotification(notificationMsg):
         print("\n--NOT JSON RECEIVED:", e)
         print("\n--DATA:", notificationMsg)
 
-
+### Sends a sms to the customer ###
 def sendSMS(customerNumber,acceptedListingID):
     smsContent = {
                     "To": customerNumber, 
@@ -65,6 +66,7 @@ def sendSMS(customerNumber,acceptedListingID):
         print("\nIssue with sending the SMS...")
         print(response)
 
+### Retrieves the contact number of customer who created the engaged listing ###
 def getCustomerNumber(customerID):
     response = invoke_http(customer_URL+"/"+customerID, method='GET')
     if(response["code"] not in range(200,300)):

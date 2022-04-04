@@ -25,7 +25,7 @@ paypalrestsdk.configure({
     "client_id": client_id,
     "client_secret": client_secret })
   
-@app.route("/create/<string:listing_id>", methods=["POST"]) 
+@app.route("/create/<int:listing_id>", methods=["POST"]) 
 def create(listing_id):
     global price, name, customer_id, talent_id, details
 
@@ -79,10 +79,8 @@ def create(listing_id):
         print(payment.error)
         return jsonify({"message": payment.error})
 
-
-
 #for onApproval
-@app.route("/execute/<string:listing_id>", methods=["POST"])
+@app.route("/execute/<int:listing_id>", methods=["POST"])
 def execute(listing_id):
     global price, name, customer_id, talent_id, details
 

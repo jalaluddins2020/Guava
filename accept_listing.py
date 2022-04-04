@@ -15,7 +15,8 @@ CORS(app)
 #URL
 listing_URL = environ.get('listing_url') or "http://localhost:5001/listing/update"
 
-@app.route("/accept_listing/<string:listingID>",methods=['PUT'])
+### Accept a listing using this Complex Microservice ###
+@app.route("/accept_listing/<int:listingID>",methods=['PUT'])
 def accept_listing(listingID):
     if request.is_json:
         try:
@@ -44,7 +45,7 @@ def accept_listing(listingID):
         "message": "Invalid JSON input: " + str(request.get_data())
     }), 400
 
-
+### Process and perform act of accepting a listing ###
 def processAcceptListing(statusChange,listingID):
     print('\n-----Invoking Listing microservice-----')
     accept_result = invoke_http(listing_URL+"/"+listingID, method='PUT', json=statusChange)

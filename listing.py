@@ -21,7 +21,7 @@ CORS(app)
 
 # Configs
 # Our database configurations will go here
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://root:root@localhost:3306/listing'
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://is213@localhost:3306/listing'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
@@ -63,8 +63,7 @@ class ListingModel(db.Model):
                 "paymentStatus": self.paymentStatus, 
                 "dateCreated": self.dateCreated}
 
-#Get ALL listings (Regardless of status)
-viewAllListing = "query { allListings { edges { node  {name}} } }"
+### Get all listing with status either Available or Engaged ###
 @app.route("/listing")
 def get_all_listing():
     listingList = ListingModel.query.all()
@@ -84,8 +83,8 @@ def get_all_listing():
         }
     ), 404
 
-#Get one listing by listingID
-@app.route("/listing/<string:listingID>")
+### Get one listing detail by listingID ###
+@app.route("/listing/<int:listingID>")
 def find_by_listingID(listingID):
     listing = ListingModel.query.filter_by(listingID=listingID).first()
     if listing:
@@ -102,8 +101,8 @@ def find_by_listingID(listingID):
         }
     ), 404
 
-#Get all listing by talentID
-@app.route("/listing/talent/<string:talentID>")
+### Get all listings engaged by a talentID ###
+@app.route("/listing/talent/<int:talentID>")
 def find_by_talentID(talentID):
     listings = ListingModel.query.filter(ListingModel.talentID == talentID).all()
     if listings:
@@ -121,8 +120,8 @@ def find_by_talentID(talentID):
     ), 404
 
 
-#Get all listing by customerID
-@app.route("/listing/customer/<string:customerID>")
+### Get all listing created by a customerID ###
+@app.route("/listing/customer/<int:customerID>")
 def find_by_customerID(customerID):
     listings = ListingModel.query.filter(ListingModel.customerID == customerID).all()
     if listings:
@@ -139,7 +138,7 @@ def find_by_customerID(customerID):
         }
     ), 404
 
-#Get AVAILABLE listings only
+### Get all listings with status Available ###
 @app.route("/listing/Available")
 def get_available_listing():
     listingList = ListingModel.query.all()
@@ -159,8 +158,8 @@ def get_available_listing():
         }
     ), 404
 
-#Update a listing
-@app.route("/listing/update/<string:listingID>", methods=['PUT'])
+### Update a listing by listingID ###
+@app.route("/listing/update/<int:listingID>", methods=['PUT'])
 def update_listing(listingID):
     try:
         listing = ListingModel.query.filter_by(listingID=listingID).first()
@@ -204,7 +203,7 @@ def update_listing(listingID):
             }
         ), 500
 
-#Create a new listing in db
+### Create a new listing ###
 @app.route("/listing/new", methods=["POST"])
 def create_new():
     try:
@@ -247,5 +246,5 @@ def create_new():
     ), 201
 
 if __name__ == '__main__':
-    print("This is flask for " + os.path.basename(__file__) + ": manage listing ...")
+    print("This is flask for " + os.path.basename(__file__) + ": Managing Listing ...")
     app.run(host='0.0.0.0', port=5001, debug=True)

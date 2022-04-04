@@ -5,7 +5,7 @@ from flask_cors import CORS
 from os import environ
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://root:root@localhost:3306/talent' #Specify database URL & use mysql+mysqlconnector prefix to instruct which database engine and connector to use
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://is213@localhost:3306/talent' #Specify database URL & use mysql+mysqlconnector prefix to instruct which database engine and connector to use
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
@@ -31,7 +31,7 @@ class Talent(db.Model):
     def json(self):
         return {"name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail}
 
-#View All Talent Data - CONVERT TO GRAPHQL TO
+### Get all talent details ###
 @app.route("/talent")
 def get_all_talents():
     talentsList = Talent.query.all()
@@ -51,8 +51,8 @@ def get_all_talents():
         }
     ), 404
 
-#View One Talent Data By talentID - CONVERT TO GRAPHQL
-@app.route("/talent/<string:talentID>") #Map URL route /book/isbn13 to find_by_isbn13 function, where isbn13 is a path variable of string type
+### Get one talent detail by talentID ###
+@app.route("/talent/<int:talentID>") #Map URL route /book/isbn13 to find_by_isbn13 function, where isbn13 is a path variable of string type
 def find_by_talentID(talentID):
     talent = Talent.query.filter_by(talentID=talentID).first() #Retrieve only the book with isbn13 specified in the path variable (similar to WHERE clause in SQL SELECT expression). since it returns a list of 1 book, first() is used to return 1 book/None (if no matching), which is similar to LIMIT 1 clause in SQL
     if talent: #IF book found (not None), return JSON representation
@@ -69,8 +69,8 @@ def find_by_talentID(talentID):
         }
     ), 404
 
-#Authenticate - REMAIN AS FLASK
-@app.route("/talent/authenticate/<string:talentEmail>/<string:talentNumber>")
+### Authenticate talent who login ###
+@app.route("/talent/authenticate/<string:talentEmail>/<int:talentNumber>")
 def authenticate(talentEmail,talentNumber):
     talent = Talent.query.filter(Talent.contactEmail == talentEmail).filter(Talent.contactNumber == talentNumber).first()
     if talent:
@@ -87,7 +87,7 @@ def authenticate(talentEmail,talentNumber):
         }
     ), 404
 
-#Create a New talent Record - CONVERT TO GRAPHQL
+### Create a new talent record ###
 @app.route("/talent", methods=['POST'])  
 def create_talent():
 

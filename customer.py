@@ -5,7 +5,7 @@ from flask_cors import CORS
 from os import environ
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://root:root@localhost:3306/customer' #Specify database URL & use mysql+mysqlconnector prefix to instruct which database engine and connector to use
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://is213@localhost:3306/customer' #Specify database URL & use mysql+mysqlconnector prefix to instruct which database engine and connector to use
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
@@ -30,7 +30,7 @@ class CustomerModel(db.Model):
     def json(self):
         return {"name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail}
 
-#View All Customer Data
+### Get all talent details ###
 @app.route("/customer")
 def get_all_customer():
     customerlist = CustomerModel.query.all()
@@ -50,8 +50,8 @@ def get_all_customer():
         }
     ), 404
 
-#View One Customer Data By CustomerID
-@app.route("/customer/<string:customerID>") #Map URL route /book/isbn13 to find_by_isbn13 function, where isbn13 is a path variable of string type
+### Get one talent detail by a customerID ###
+@app.route("/customer/<int:customerID>") #Map URL route /book/isbn13 to find_by_isbn13 function, where isbn13 is a path variable of string type
 def find_by_customerID(customerID):
     customer = CustomerModel.query.filter_by(customerID=customerID).first() #Retrieve only the book with isbn13 specified in the path variable (similar to WHERE clause in SQL SELECT expression). since it returns a list of 1 book, first() is used to return 1 book/None (if no matching), which is similar to LIMIT 1 clause in SQL
     if customer: #IF book found (not None), return JSON representation
@@ -68,7 +68,7 @@ def find_by_customerID(customerID):
         }
     ), 404
 
-#Create a New Customer Record
+### Create a new customer record ###
 @app.route("/customer", methods=['POST'])  
 def create_customer():
 
@@ -108,6 +108,6 @@ def create_customer():
     ), 201    
 
 if __name__ == '__main__':
-    print("This is flask for " + os.path.basename(__file__) + ": manage customers ...")
+    print("This is flask for " + os.path.basename(__file__) + ": Managing Customers ...")
     app.run(host='0.0.0.0', port=5010, debug=True)
    

@@ -14,7 +14,8 @@ CORS(app)
 listing_url = environ.get('listing_url') or "http://localhost:5001/listing/"
 talent_url = environ.get('talent_url')  or "http://localhost:5011/talent"
 
-@app.route("/check/<string:customer_id>")
+### Get all listings created by a customerID using this Complex Microservice ###
+@app.route("/check/<int:customer_id>")
 def retrieve(customer_id):
     results = []
 
@@ -26,7 +27,6 @@ def retrieve(customer_id):
     if code in range (200, 300):
 
         for ele in listing["data"]:
-
             listing_id = ele["listingID"]
             talent_id = ele["talentID"]
             price = ele["price"]

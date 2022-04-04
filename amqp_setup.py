@@ -57,7 +57,6 @@ def check_setup():
         channel = connection.channel()
         channel.exchange_declare(exchange=exchangename, exchange_type=exchangetype, durable=True)
 
-
 def is_connection_open(connection):
     # For a BlockingConnection in AMQP clients,
     # when an exception happens when an action is performed,
