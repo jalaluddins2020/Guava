@@ -22,9 +22,9 @@
 
 <body>
     <script>
-        const codedCustomerID = 1;
+        var loggedInCustomerID = sessionStorage.getItem('loggedInCustomerID');
         $(async () => {
-            var customerURL = "http://localhost:5010/customer/" + codedCustomerID
+            var customerURL = "http://localhost:8000/api/v1/customer/" + loggedInCustomerID
             try {
                 const response =
                     await fetch(
@@ -50,7 +50,7 @@
                     $("#customerName").text(customerName);
                     $("#customerNumber").text(customerNumber);
                     $("#customerEmail").text(customerEmail);
-                    $("#imageURL").attr("src", "./../resources/customer" + codedCustomerID + ".png")
+                    $("#imageURL").attr("src", "./../resources/customer" + loggedInCustomerID + ".png")
 
                 }
             } catch (error) {
