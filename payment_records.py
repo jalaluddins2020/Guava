@@ -65,9 +65,9 @@ def get_all():
     ), 404   
 
 
-@app.route("/records/<int:param>")
-def find_by_listing_id(param):
-    payment = Payment_records.query.filter_by(listing_id=param).first()
+@app.route("/records/<int:listingID>")
+def find_by_listing_id(listingID):
+    payment = Payment_records.query.filter_by(listing_id=listingID).first()
 
     if payment:
         return jsonify(
@@ -81,7 +81,7 @@ def find_by_listing_id(param):
         {
             "code": 404,
             "data": {
-                "payment_id": param
+                "listing_id": listingID
             },
             "message": "Payment record not found."
         }

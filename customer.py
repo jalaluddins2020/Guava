@@ -30,7 +30,7 @@ class CustomerModel(db.Model):
     def json(self):
         return {"customerID": self.customerID, "name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail}
 
-### Get all talent details ###
+### Get all customer details ###
 @app.route("/customer")
 def get_all_customer():
     customerlist = CustomerModel.query.all()
@@ -50,7 +50,7 @@ def get_all_customer():
         }
     ), 404
 
-### Get one talent detail by a customerID ###
+### Get one customer detail by a customerID ###
 @app.route("/customer/<int:customerID>") #Map URL route /book/isbn13 to find_by_isbn13 function, where isbn13 is a path variable of string type
 def find_by_customerID(customerID):
     customer = CustomerModel.query.filter_by(customerID=customerID).first() #Retrieve only the book with isbn13 specified in the path variable (similar to WHERE clause in SQL SELECT expression). since it returns a list of 1 book, first() is used to return 1 book/None (if no matching), which is similar to LIMIT 1 clause in SQL
@@ -107,7 +107,7 @@ def create_customer():
         }
     ), 201    
 
-### Authenticate talent who login ###
+### Authenticate customer who login ###
 @app.route("/customer/authenticate/<string:customerEmail>/<int:customerNumber>")
 def authenticate(customerEmail,customerNumber):
     customer = CustomerModel.query.filter(CustomerModel.contactEmail == customerEmail).filter(CustomerModel.contactNumber == customerNumber).first()
