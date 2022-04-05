@@ -23,9 +23,9 @@
 <body>
     <!--header-->
     <script>
-        /*var loggedInCustomerID = sessionStorage.getItem('customerID');
-        console.log(sessionStorage)*/
-        const loggedInCustomerID = 1;
+        const loggedInCustomerID = sessionStorage.getItem('loggedInCustomerID');
+        console.log(sessionStorage)
+
         $(async () => {
 //             var listingURL = "http://localhost:5007/check/" + loggedInCustomerID
             var listingURL = "http://localhost:8000/api/v1/check/" + loggedInCustomerID

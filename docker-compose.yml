@@ -94,10 +94,12 @@ services:
     image: ryanyak/notification:esd
     restart: always
     depends_on:
+      - accept_listing
       - rabbitmq
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
+      customer_url: http://customer:5010/customer
       PYTHONUNBUFFERED: 1
 
   ###############################################
@@ -155,10 +157,10 @@ services:
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
-      listing_url: http://listing:5001/listing/update
+      listing_url: http://listing:5001/listing/update/
       PYTHONUNBUFFERED: 1
     ports:
-      - "5100:5100"
+      - "5008:5008"
 
   #######################################
   # Postgres: The database used by Kong

@@ -103,7 +103,6 @@
                         const authenticatedTalent = await response.json();
                         var talentDetail = authenticatedTalent["data"];
                         sessionStorage.setItem("loggedInTalentID", talentDetail["talentID"]);
-                        sessionStorage.setItem("loggedInCustomerId", "1");
                         // console.log(sessionStorage);
                         // console.log(sessionStorage.getItem("loggedInTalentID"));
                         window.location.href = "./listings.html";

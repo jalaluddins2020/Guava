@@ -5,6 +5,7 @@ import requests
 import amqp_setup
 from invokes import invoke_http
 from dotenv import load_dotenv  
+from os import environ
 load_dotenv()
 
 twilioAccountSID = os.getenv("TWILIO_ACCOUNT_SID")
@@ -12,7 +13,7 @@ twilioAuthToken = os.getenv("TWILIO_AUTH_TOKEN")
 twilioUrl = "https://"+twilioAccountSID+":"+twilioAuthToken+"@api.twilio.com/2010-04-01/Accounts/"+twilioAccountSID+"/Messages.json"
 monitorBindingKey='*.notification'
 
-customer_URL = "http://localhost:5010/customer"
+customer_URL = environ.get('customer_url') or "http://localhost:5010/customer"
 
 def receiveNotification():
     amqp_setup.check_setup()
@@ -64,7 +65,7 @@ def sendSMS(customerNumber,acceptedListingID):
         print("\nSMS sent successfully!")
     else:
         print("\nIssue with sending the SMS...")
-        print(response)
+        print(response.json())
 
 ### Retrieves the contact number of customer who created the engaged listing ###
 def getCustomerNumber(customerID):
@@ -73,6 +74,7 @@ def getCustomerNumber(customerID):
         return False
     else:
         customerNumber = response["data"]["contactNumber"]
+        print(customerNumber)
         return "+65"+str(customerNumber)
 
 if __name__ == "__main__":  # execute this program only if it is run as a script (not by 'import')    

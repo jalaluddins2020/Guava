@@ -106,7 +106,7 @@ def execute(listing_id):
         record_status = invoke_http(payment_records_url, method="post", json=body)
 
         #update listing payment status
-        update_status = invoke_http(listing_url + "/update/" + listing_id, method="put",json={"change": "payment", "status": "", "talentID": "", "payment": "paid"})
+        update_status = invoke_http(listing_url + "/update/" + str(listing_id), method="put",json={"change": "payment", "status": "", "talentID": "", "payment": "Paid"})
         if update_status["code"] in range (200, 300):
             print("Updated listing microservice")
 
