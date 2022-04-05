@@ -3,7 +3,7 @@
 
 <head>
     <!-- Required meta tags -->
-    <title>Talent UI</title>
+    <title>Customer UI</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" sizes="16x16" href="./../resources/favicon-96x96.png">
@@ -90,11 +90,11 @@
             var loginEmail = $("#loginEmail").val()
             var loginNumber = $("#loginNumber").val()
             $(async () => {
-                var talentURL = "http://localhost:5010/customer/authenticate/" + loginEmail + "/" + loginNumber
+                var customerURL = "http://localhost:5010/customer/authenticate/" + loginEmail + "/" + loginNumber
                 try {
                     const response =
                         await fetch(
-                            talentURL, { method: 'GET' }
+                            customerURL, { method: 'GET' }
                         );
                     if (!response.ok) {
                         alert("Failed to log in. Please try again. (1)")
@@ -103,7 +103,6 @@
                         const authenticatedCustomer = await response.json();
                         var customerDetail = authenticatedCustomer["data"];
                         sessionStorage.setItem("loggedInCustomerID", customerDetail["customerID"]);
-                        sessionStorage.setItem("loggedInCustomerId", "1");
                         // console.log(sessionStorage);
                         // console.log(sessionStorage.getItem("loggedInTalentID"));
                         window.location.href = "./listings.html";
