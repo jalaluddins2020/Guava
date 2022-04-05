@@ -108,11 +108,11 @@
     <hr>
     <!--content-->
     <div class="content container-fluid">
-        <div class="listing row" id="app">
+        <div class="listing row justify-content-center" id="app">
 
             <div class="card col-6 p-2 m-2" v-for="oneListing in listings">
                     <img class="card-img-top" :src="images(oneListing)" alt="Card image cap">
-                    <h3 class="card-title">Accepted: {{oneListing.name}}</h3>
+                    <h3 class="card-title">{{oneListing.name}}</h3>
                     <table class="table table-bordered">
                         <tbody>
                             <tr>
@@ -128,8 +128,8 @@
                                 <td>SGD $ <span>{{oneListing.price}}</span>.00</td>
                             </tr>
                             <tr>
-                                <th>Customer</th>
-                                <td><span>{{oneListing.customerID}}</span></td>
+                                <th>Status</th>
+                                <td><span class="badge bg-primary">{{oneListing.status}}</span></td>
                             </tr>
                         </tbody>
                     </table>
