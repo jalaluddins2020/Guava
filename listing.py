@@ -226,13 +226,13 @@ def create_new():
         #         }
         #     ), 201
 
-        # graph = facebook.GraphAPI(access_token='EAAJpiCZBvAF4BAE7ElxxwRAkErKtvGRG2tsVWwtwfC00eCldv9pNdmxw9LqNTIFnN1oEBCxALhvVEUUc9tXLzVU8dosbWHIaL6k2W5cTE4ZCztiLJuZAuOnQOrASXKQPHk5ZBTmL2DSRVIurNdZC9dMhd3JdUj4l5BZCHpiUjWCp50ZAaVEpXRoRWZAPMvItqlkZD', version="3.0")
+        graph = facebook.GraphAPI(access_token='EAAJpiCZBvAF4BANyuQZAZCZB2MHZChJP2RN0nsS5qsD98IiNuXKv4ZBMt5buLDOC1VSuXhIOcxI8znuUlWFlYfiI47vZAOwBaODzs1E67NV6n1tZBdRZCIw8fZC38ZAZAJ6QGZAsZBgOzZB8NRIKoXUxbr16a9CuR1YfPlpXk6iSEZAbxcb7ZAsXoACEWSlB3fW3Qrj0l7zoZD', version="3.0")
 
-        # graph.put_object(
-        #     parent_object=108952705097678,
-        #     connection_name="feed",
-        #     message = f"NEW LISTING! \nCustomerID: {listing.customerID} \nRequired: {listing.name} \nDetails: {listing.details} \nPrice: ${listing.price}"
-        # )
+        graph.put_object(
+            parent_object=108952705097678,
+            connection_name="feed",
+            message = f"NEW LISTING! \nCustomerID: {customerID} \nRequired: {name} \nDetails: {details} \nPrice: ${price}"
+        )
 
     except Exception as e: 
         return jsonify(
