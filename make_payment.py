@@ -33,7 +33,7 @@ def create(listing_id):
     print(listing_id)
 
     #invoke listing microservice
-    listing = invoke_http(listing_url + "/" + listing_id, method='GET')
+    listing = invoke_http(listing_url + "/" + str(listing_id), method='GET')
     code = listing["code"]
     print(code)
 
