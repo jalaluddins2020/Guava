@@ -37,7 +37,8 @@
         var loggedInTalentID = sessionStorage.getItem("loggedInTalentID")
         console.log("Logged in talent's ID (LINE 36): " + loggedInTalentID)
         $(async () => {
-            var talentURL = "http://localhost:5011/talent/" + loggedInTalentID
+//             var talentURL = "http://localhost:5011/talent/" + loggedInTalentID
+               var talentURL = "http://localhost:8000/api/v1/talent/" + loggedInTalentID
             try {
                 const response =
                     await fetch(
