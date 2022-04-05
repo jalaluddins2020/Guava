@@ -28,7 +28,7 @@ class CustomerModel(db.Model):
         self.contactEmail = contactEmail
 
     def json(self):
-        return {"name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail}
+        return {"customerID": self.customerID, "name": self.name, "contactNumber": self.contactNumber, "contactEmail": self.contactEmail}
 
 ### Get all talent details ###
 @app.route("/customer")
@@ -121,7 +121,7 @@ def authenticate(customerEmail,customerNumber):
     return jsonify(
         {
             "code": 404,
-            "message": "Talent not found."
+            "message": "Customer not found."
         }
     ), 404
 
