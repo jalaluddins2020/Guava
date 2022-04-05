@@ -27,7 +27,8 @@
         console.log(sessionStorage)*/
         const loggedInCustomerID = 1;
         $(async () => {
-            var listingURL = "http://localhost:5007/check/" + loggedInCustomerID
+//             var listingURL = "http://localhost:5007/check/" + loggedInCustomerID
+            var listingURL = "http://localhost:8000/api/v1/check/" + loggedInCustomerID
             try {
                 const response =
                     await fetch(
