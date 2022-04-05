@@ -107,6 +107,24 @@ def create_customer():
         }
     ), 201    
 
+### Authenticate talent who login ###
+@app.route("/customer/authenticate/<string:customerEmail>/<int:customerNumber>")
+def authenticate(customerEmail,customerNumber):
+    customer = CustomerModel.query.filter(CustomerModel.contactEmail == customerEmail).filter(CustomerModel.contactNumber == customerNumber).first()
+    if customer:
+        return jsonify(
+            {
+                "code": 200,
+                "data": customer.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Talent not found."
+        }
+    ), 404
+
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": Managing Customers ...")
     app.run(host='0.0.0.0', port=5010, debug=True)
