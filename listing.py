@@ -44,13 +44,14 @@ class ListingModel(db.Model):
     paymentStatus = db.Column(db.String(300), nullable=True)
     dateCreated = db.Column(db.DateTime(), nullable=False)
 
-    def __init__(self, customerID, name, details, status, price, paymentStatus):
+    def __init__(self, customerID, name, details, status, price, paymentStatus, dateCreated):
         self.customerID = customerID
         self.name = name
         self.details = details
         self.status = status
         self.price = price
         self.paymentStatus = paymentStatus
+        self.dateCreated = dateCreated
 
     def json(self):
         return {"listingID": self.listingID, 
@@ -207,8 +208,14 @@ def update_listing(listingID):
 @app.route("/listing/new", methods=["POST"])
 def create_new():
     try:
-        data = request.get_json()
-        listing = ListingModel(**data) 
+        customerID = request.json.get("customerID")
+        name = request.json.get("name")
+        details = request.json.get("details")
+        status = request.json.get("status")
+        price = request.json.get("price")
+        paymentStatus = request.json.get("paymentStatus")
+
+        listing = ListingModel(customerID, name, details, status, price, paymentStatus, datetime.now()) 
         db.session.add(listing)
         db.session.commit()
 
@@ -219,13 +226,13 @@ def create_new():
         #         }
         #     ), 201
 
-        graph = facebook.GraphAPI(access_token='EAAJpiCZBvAF4BAE7ElxxwRAkErKtvGRG2tsVWwtwfC00eCldv9pNdmxw9LqNTIFnN1oEBCxALhvVEUUc9tXLzVU8dosbWHIaL6k2W5cTE4ZCztiLJuZAuOnQOrASXKQPHk5ZBTmL2DSRVIurNdZC9dMhd3JdUj4l5BZCHpiUjWCp50ZAaVEpXRoRWZAPMvItqlkZD', version="3.0")
+        # graph = facebook.GraphAPI(access_token='EAAJpiCZBvAF4BAE7ElxxwRAkErKtvGRG2tsVWwtwfC00eCldv9pNdmxw9LqNTIFnN1oEBCxALhvVEUUc9tXLzVU8dosbWHIaL6k2W5cTE4ZCztiLJuZAuOnQOrASXKQPHk5ZBTmL2DSRVIurNdZC9dMhd3JdUj4l5BZCHpiUjWCp50ZAaVEpXRoRWZAPMvItqlkZD', version="3.0")
 
-        graph.put_object(
-            parent_object=108952705097678,
-            connection_name="feed",
-            message = f"NEW LISTING! \nCustomerID: {listing.customerID} \nRequired: {listing.name} \nDetails: {listing.details} \nPrice: ${listing.price}"
-        )
+        # graph.put_object(
+        #     parent_object=108952705097678,
+        #     connection_name="feed",
+        #     message = f"NEW LISTING! \nCustomerID: {listing.customerID} \nRequired: {listing.name} \nDetails: {listing.details} \nPrice: ${listing.price}"
+        # )
 
     except Exception as e: 
         return jsonify(
