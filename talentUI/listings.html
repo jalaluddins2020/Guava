@@ -24,7 +24,8 @@
 <script>
     const loggedInTalentID = sessionStorage.getItem("loggedInTalentID");
     $(async () => {
-        var listingURL = "http://localhost:5001/listing/Available"
+//         var listingURL = "http://localhost:5001/listing/Available"
+        var listingURL = "http://localhost:8000/api/v1/listing/Available"
         try {
             const response =
                 await fetch(
